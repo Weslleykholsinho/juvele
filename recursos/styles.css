@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -42,12 +44,13 @@ nav {
 
 .logo {
     color: #fff;
+    font-size: 24px;
 
 }
 
 nav .logo h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
+    font-family: 'Bebas Neue', cursive;
+    font-weight: 400;
     /* ajustar conforme necessário: 400, 600, 700, etc. */
     margin: 0;
 }
@@ -105,7 +108,7 @@ nav ul li a {
     padding: 10px;
     background: #fff;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    z-index: 9;
+    z-index: 99;
     transform-origin: top right;
     transform: scaleY(0);
     opacity: 0;
@@ -130,13 +133,13 @@ nav ul li a {
 }
 
 .search-bar button {
-    border: 0;
-    background: #FF5C8A;
-    color: #fff;
+    border: #FF5C8A 1px solid;
+    background: #ffffff;
+    color: #FF5C8A;
     padding: 8px 10px;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 300;
 }
 
 .search-results {
@@ -193,7 +196,10 @@ nav ul li a {
 
     nav ul li {
         padding: 20px;
-        padding-top: 0;
+        padding-top: 10px;
+    }
+    nav ul li a {
+        color: #e0e0e0;
     }
 
     /* ícones à direita e alinhados verticalmente no mobile */
@@ -244,7 +250,7 @@ nav ul li a {
     /* opcional: suaviza o aparecimento dos itens */
     nav ul li {
         opacity: 0;
-        transform: translateY(-6px);
+        transform: translateX(-30px);
         transition: opacity 0.25s ease, transform 0.25s ease;
     }
 
@@ -382,6 +388,7 @@ nav ul li a {
 }
 
 .faixatop p {
+    font-weight: 100;
     white-space: nowrap;
     /* impede quebra de linha */
     font-size: 10px;
