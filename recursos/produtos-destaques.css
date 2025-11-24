@@ -1,10 +1,9 @@
 .produtos-destaque h2 {
     font-weight: 200;
-    white-space: nowrap;
     text-align: center;
     font-size: 29px;
     letter-spacing: 0.5px;
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 /*
