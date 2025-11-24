@@ -1,10 +1,12 @@
-#destaques-title {
+.produtos-destaque h2{
+   font-weight: 100;
+    white-space: nowrap;
     text-align: center;
-    margin-top: 5px;
-    font-size: 28px;
-    color: #cf5f79;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
+    /* impede quebra de linha */
+    font-size: 30px;
+    /* tamanho responsivo */
+    letter-spacing: 0.5px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .produtos-container {
@@ -123,9 +125,43 @@
 }
 
 /* Responsivo para mobile */
-@media (max-width: 480px) {
+@media (max-width: 580px) {
     .produtos-container {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+        padding: 20px 12px;
+    }
+
+    .produto-nome {
+        font-size: 12px;
+    }
+
+    .produto-preco-original {
+        font-size: 11px;
+    }
+
+    .produto-preco-atual {
+        font-size: 14px;
+    }
+
+    .produto-botao {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .desconto-badge {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+#destaques {
+    margin-top: 20px;
+}
+
+@media (max-width: 400px) {
+    .produtos-container {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 12px;
         padding: 20px 12px;
     }
