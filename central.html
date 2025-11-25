@@ -59,15 +59,25 @@
             }
 
             .categorias {
-                /* centraliza o conteúdo e impede o overflow horizontal em telas maiores */
-                justify-content: center;
-                overflow-x: visible;
-                -webkit-overflow-scrolling: auto;
-                scroll-snap-type: none;
+                /* permite scroll horizontal mesmo em telas maiores */
+                justify-content: flex-start;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
                 padding: 12px 16px;
                 max-width: 1000px;
-                /* ajuste conforme necessário */
                 margin: 0 auto;
+                gap: 12px;
+            }
+
+            /* opcional: mostrar uma barra fina em navegadores WebKit (ou remover se preferir esconder) */
+            .categorias::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .categorias::-webkit-scrollbar-thumb {
+                background: rgba(0, 0, 0, 0.15);
+                border-radius: 8px;
             }
 
             .categoria {
