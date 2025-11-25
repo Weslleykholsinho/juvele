@@ -13,6 +13,44 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <style>
+        /* Faixa de categorias deslizável (touch + drag) */
+        .categorias-wrapper {
+            margin: 0 0 16px 0;
+        }
+
+        .categorias {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            padding: 8px 4px;
+        }
+
+        .categorias::-webkit-scrollbar {
+            display: none;
+        }
+
+        .categoria {
+            scroll-snap-align: start;
+            white-space: nowrap;
+            padding: 8px 12px;
+            background: #f4f4f4;
+            border-radius: 4px;
+            border: 1px solid #e6e6e6;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            flex: 0 0 auto;
+        }
+
+        .categoria:focus,
+        .categoria:hover {
+            background: #e9e9e9;
+            outline: none;
+        }
+    </style>
 
 </head>
 
@@ -57,7 +95,7 @@
                 <small>Descubra a nova coleção primavera-verão 25</small>
         </div>
     </div>
- <div class="faixatop">
+    <div class="faixatop">
         <p class="faixa-item active">PAGUE PARCELADO EM ATÉ 6X SEM JUROS</p>
         <p class="faixa-item">FRETE GRÁTIS PARA TODOS OS PRODUTOS DA LOJA.</p>
         <p class="faixa-item">COMPRA 100% SEGURA</p>
@@ -68,7 +106,21 @@
          Será preenchida dinamicamente a partir de produtos.json
          ============================ -->
     <section id="destaques" class="produtos-destaque" aria-labelledby="destaques-title">
-          <h2 id="destaques-title">Produtos em Destaque</h2>
+        <!-- Faixa de categorias deslizável -->
+        <div class="categorias-wrapper" aria-label="Categorias de produtos">
+            <div id="categoriasList" class="categorias" role="list" tabindex="0"
+                aria-label="Categorias (deslize para ver mais)">
+                <a class="categoria" role="listitem" href="categoria-blazer.html">BLAZER</a>
+                <a class="categoria" role="listitem" href="categoria-blusa.html">BLUSA</a>
+                <a class="categoria" role="listitem" href="categoria-body.html">BODY</a>
+                <a class="categoria" role="listitem" href="categoria-bolsa.html">BOLSA</a>
+                <a class="categoria" role="listitem" href="categoria-calcado.html">CALÇADO</a>
+                <a class="categoria" role="listitem" href="categoria-cinto.html">CINTO</a>
+                <a class="categoria" role="listitem" href="categoria-conjunto.html">CONJUNTO</a>
+                <!-- Adicione novas categorias aqui -->
+            </div>
+        </div>
+        <h2 id="destaques-title">Produtos em Destaque</h2>
         <div class="container">
             <div id="produtosContainer" class="produtos-container" role="list"></div>
             <div id="produtosErro" class="produtos-erro" role="status" aria-live="polite" hidden>

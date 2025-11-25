@@ -1,9 +1,9 @@
 .produtos-destaque h2 {
-    font-weight: 200;
+    font-weight: 100;
     text-align: center;
     font-size: 29px;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    color: #d06089;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #000000;
 }
 
 /*
