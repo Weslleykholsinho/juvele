@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Menu elements
     const menuIcon = document.querySelector('.menu-icon');
     const menuList = document.getElementById('menuList') || document.querySelector('nav ul');
+    // Adiciona referência ao overlay
+    const menuOverlay = document.getElementById('menuOverlay');
 
     // Search elements
     const searchIcon = document.querySelector('.search-icon');
@@ -53,6 +55,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const isOpen = menuList.classList.toggle('open');
         setIconOpen(isOpen);
 
+        // Mostra ou esconde overlay em mobile
+        if (menuOverlay) {
+            if (isOpen && window.innerWidth <= 700) {
+                menuOverlay.classList.add('menu-open');
+            } else {
+                menuOverlay.classList.remove('menu-open');
+            }
+        }
+
         if (isOpen) {
             // close search if open
             if (form) {
@@ -65,13 +76,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Close menu when a menu link is clicked
+    // Fecha menu ao clicar em um link
     menuList.addEventListener('click', (e) => {
         if (e.target.tagName.toLowerCase() === 'a') {
             menuList.classList.remove('open');
             setIconOpen(false);
+            // Esconde overlay
+            if (menuOverlay) menuOverlay.classList.remove('menu-open');
         }
     });
+
+    // Fecha menu ao clicar no overlay
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', () => {
+            menuList.classList.remove('open');
+            setIconOpen(false);
+            menuOverlay.classList.remove('menu-open');
+        });
+    }
 
     // Initialize search handlers (also used if menu elements missing)
     function initSearch() {
@@ -113,10 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Escape') {
                 form.classList.remove('open');
                 results.classList.remove('open');
-                // also close menu on Escape
                 if (menuList) {
                     menuList.classList.remove('open');
                     setIconOpen(false);
+                    // Esconde overlay
+                    if (menuOverlay) menuOverlay.classList.remove('menu-open');
                 }
             }
         });
