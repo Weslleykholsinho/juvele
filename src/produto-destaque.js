@@ -1,6 +1,6 @@
 async function carregarProdutos() {
     try {
-        const response = await fetch('./recursos/produtos.json');
+        const response = await fetch('./data/produtos.json');
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         const produtos = await response.json();

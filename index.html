@@ -7,8 +7,8 @@
     <title>JUVELE - Moda Feminina</title>
     <!--ICONE DA PÁGINA -->
     <link rel="shortcut icon" href="fav.ico" />
-    <link rel="stylesheet" href="recursos/styles.css" />
-    <link rel="stylesheet" href="recursos/produtos-destaques.css" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/produtos-destaques.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
@@ -102,6 +102,11 @@
         .menu-aberto .menu-overlay {
             display: block;
         }
+
+        /* Centralizar categorias se houver poucas (<=5) mesmo em telas pequenas */
+        .categorias.few-categories {
+            justify-content: center;
+        }
     </style>
 
 </head>
@@ -114,7 +119,7 @@
                 <h1>JUVELE</h1>
             </div>
             <ul id="menuList">
-                <li><a href="./central.html" id="op1"></a></li>
+                <li><a href="./index.html" id="op1"></a></li>
                 <li><a href="" id="op2"></a></li>
                 <li><a href="" id="op3"></a></li>
                 <li><a href="" id="op4"></a></li>
@@ -164,14 +169,7 @@
         <div class="categorias-wrapper" aria-label="Categorias de produtos">
             <div id="categoriasList" class="categorias" role="list" tabindex="0"
                 aria-label="Categorias (deslize para ver mais)">
-                <a class="categoria" role="listitem" href="categoria-blazer.html">BLAZER</a>
-                <a class="categoria" role="listitem" href="categoria-blusa.html">BLUSA</a>
-                <a class="categoria" role="listitem" href="categoria-body.html">BODY</a>
-                <a class="categoria" role="listitem" href="categoria-bolsa.html">BOLSA</a>
-                <a class="categoria" role="listitem" href="categoria-calcado.html">CALÇADO</a>
-                <a class="categoria" role="listitem" href="categoria-cinto.html">CINTO</a>
-                <a class="categoria" role="listitem" href="categoria-conjunto.html">CONJUNTO</a>
-                <!-- Adicione novas categorias aqui -->
+                <!-- Categorias serão inseridas dinamicamente -->
             </div>
         </div>
         <h2 id="destaques-title">Produtos em Destaque</h2>
@@ -185,10 +183,39 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity=""
         crossorigin="anonymous">
-    <script src="./recursos/nav.js"></script>
-    <script src="./recursos/produto-destaque.js"></script>
-    <script src="./pr-def.js"></script>
-    <script src="./recursos/faixatop.js"></script>
+    <script src="./src/nav.js"></script>
+    <script src="./src/produto-destaque.js"></script>
+    <script src="./src/pr-def.js"></script>
+    <script src="./src/faixatop.js"></script>
+    <script>
+        // Carregar categorias dinamicamente de categorias.json
+        fetch('./data/categorias.json')
+            .then(response => response.json())
+            .then(data => {
+                const categoriasList = document.getElementById('categoriasList');
+                categoriasList.innerHTML = '';
+                data.categorias.forEach(cat => {
+                    const nomeLimpo = cat.nome.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const href = `categoria-${nomeLimpo}.html`;
+                    const a = document.createElement('a');
+                    a.className = 'categoria';
+                    a.setAttribute('role', 'listitem');
+                    a.href = href;
+                    a.textContent = cat.nome.trim().toUpperCase();
+                    categoriasList.appendChild(a);
+                });
+                // Centralizar se poucas categorias
+                if (data.categorias.length <= 5) {
+                    categoriasList.classList.add('few-categories');
+                } else {
+                    categoriasList.classList.remove('few-categories');
+                }
+            })
+            .catch(() => {
+                const categoriasList = document.getElementById('categoriasList');
+                categoriasList.innerHTML = '<span style="color:red;">Não foi possível carregar as categorias.</span>';
+            });
+    </script>
 </body>
 
 </html>

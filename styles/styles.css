@@ -316,7 +316,7 @@ nav ul li a {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url('../recursos/image.png');
+    background-image: url('../assets/image.png');
     background-repeat: repeat;
     background-position: top center;
     background-size: 420px;
