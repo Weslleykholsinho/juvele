@@ -1,7 +1,7 @@
 /* Início da definição dos valores das opções do Menu*/
 const valor1 = "Início";
 document.getElementById("op1").innerText = valor1;
-const valor2 = "Sobre";
+const valor2 = "Produtos em Destaque";
 document.getElementById("op2").innerText = valor2;
 const valor3 = "Serviços";
 document.getElementById("op3").innerText = valor3;

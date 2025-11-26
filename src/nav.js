@@ -58,9 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mostra ou esconde overlay em mobile
         if (menuOverlay) {
             if (isOpen && window.innerWidth <= 700) {
+                // Sempre mostra overlay quando menu é aberto, mesmo se foi fechado antes
                 menuOverlay.classList.add('menu-open');
+                menuOverlay.style.display = 'block';
             } else {
                 menuOverlay.classList.remove('menu-open');
+                menuOverlay.style.display = 'none';
             }
         }
 
@@ -303,4 +306,28 @@ document.addEventListener('DOMContentLoaded', () => {
             t = setTimeout(() => fn.apply(this, args), ms);
         };
     }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (menuList.classList.contains('open') && !menuList.contains(e.target) && !menuIcon.contains(e.target)) {
+            menuList.classList.remove('open');
+            setIconOpen(false);
+            if (menuOverlay) {
+                menuOverlay.classList.remove('menu-open');
+                menuOverlay.style.display = 'none';
+            }
+        }
+    });
+
+    // Close menu when scrolling
+    window.addEventListener('scroll', () => {
+        if (menuList.classList.contains('open')) {
+            menuList.classList.remove('open');
+            setIconOpen(false);
+            if (menuOverlay) {
+                menuOverlay.classList.remove('menu-open');
+                menuOverlay.style.display = 'none';
+            }
+        }
+    });
 });

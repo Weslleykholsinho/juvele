@@ -35,9 +35,7 @@ Este projeto é um site de moda feminina com busca de produtos, categorias dinâ
 - Edite estilos em [`styles/`](styles/).
 
 ## Licença
-
-Projeto aberto para fins educacionais.
+ 
+Todos direitos reservados. A venda ou cópia deste site não é permitida.
 
 ---
-
-Dúvidas ou sugestões? Abra uma issue!

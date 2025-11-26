@@ -120,7 +120,7 @@
             </div>
             <ul id="menuList">
                 <li><a href="./index.html" id="op1"></a></li>
-                <li><a href="" id="op2"></a></li>
+                <li><a href="#categoriasList" id="op2"></a></li>
                 <li><a href="" id="op3"></a></li>
                 <li><a href="" id="op4"></a></li>
                 <li><a href="" id="op5"></a></li>
@@ -188,6 +188,9 @@
     <script src="./src/pr-def.js"></script>
     <script src="./src/faixatop.js"></script>
     <script>
+        // Estado para controlar se a barra de pesquisa está aberta
+        let searchBarOpen = false;
+
         // Carregar categorias dinamicamente de categorias.json
         fetch('./data/categorias.json')
             .then(response => response.json())
@@ -215,6 +218,73 @@
                 const categoriasList = document.getElementById('categoriasList');
                 categoriasList.innerHTML = '<span style="color:red;">Não foi possível carregar as categorias.</span>';
             });
+
+        // Função para abrir/fechar o menu
+        function toggleMenu() {
+            // Se a barra de pesquisa estiver aberta, feche-a antes de abrir o menu
+            if (searchBarOpen) {
+                searchBarOpen = false;
+                searchInput.blur();
+                document.getElementById('searchResults').setAttribute('aria-hidden', 'true');
+            }
+            // Alterna a classe do body para abrir/fechar o menu
+            document.body.classList.toggle('menu-aberto');
+            // Atualiza overlay conforme estado do menu
+            if (document.body.classList.contains('menu-aberto')) {
+                // Se o menu foi aberto, overlay deve aparecer SEMPRE
+                menuOverlay.style.display = 'block';
+            } else {
+                menuOverlay.style.display = 'none';
+            }
+        }
+
+        // Fecha o menu automaticamente ao clicar fora ou rolar a página
+        document.addEventListener('click', (e) => {
+            if (
+                document.body.classList.contains('menu-aberto') &&
+                !e.target.closest('nav') &&
+                !e.target.closest('.menu-icon')
+            ) {
+                document.body.classList.remove('menu-aberto');
+                menuOverlay.style.display = 'none';
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            if (document.body.classList.contains('menu-aberto')) {
+                document.body.classList.remove('menu-aberto');
+                menuOverlay.style.display = 'none';
+            }
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        const searchBar = document.getElementById('siteSearch');
+        const searchSubmit = document.getElementById('searchSubmit');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        // Quando a barra de pesquisa é focada, feche o menu e o overlay
+        searchInput.addEventListener('focus', () => {
+            searchBarOpen = true;
+            document.body.classList.remove('menu-aberto');
+            // Situação específica: se o menu estava aberto, o overlay deve sumir imediatamente
+            menuOverlay.style.display = 'none';
+        });
+
+        // Quando o botão de busca é clicado, feche o menu e o overlay
+        searchSubmit.addEventListener('click', () => {
+            searchBarOpen = false;
+            document.body.classList.remove('menu-aberto');
+            // Situação específica: se o menu estava aberto, o overlay deve sumir imediatamente
+            menuOverlay.style.display = 'none';
+        });
+
+        // ATENÇÃO PARA O OVERLAY:
+        // Quando a barra de pesquisa está aberta e o usuário chama o menu,
+        // o sistema automaticamente fecha a barra de pesquisa e abre o menu.
+        // Nessa situação, o overlay pode aparecer normalmente, sem medo:
+        // isso significa que o menu está realmente aberto e a pesquisa foi fechada.
+        // O overlay só deve sumir imediatamente quando a pesquisa for ativada
+        // enquanto o menu estava aberto (caso inverso).
     </script>
 </body>
 
