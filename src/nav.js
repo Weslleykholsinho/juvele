@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Products (loaded from produtos.json)
     let products = [];
     let productsLoaded = false;
+    let menuJustOpened = false; // NOVO: flag para ignorar scroll logo após abrir menu
 
     async function loadProducts() {
         try {
@@ -76,6 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 results.classList.remove('open');
                 results.setAttribute('aria-hidden', 'true');
             }
+            menuJustOpened = true; // Sinaliza que menu foi aberto manualmente
+            setTimeout(() => { menuJustOpened = false; }, 500); // Reseta após 500ms
         }
     });
 
@@ -321,6 +324,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close menu when scrolling
     window.addEventListener('scroll', () => {
+        if (menuJustOpened) {
+            menuJustOpened = false;
+            return;
+        }
         if (menuList.classList.contains('open')) {
             menuList.classList.remove('open');
             setIconOpen(false);

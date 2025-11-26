@@ -190,6 +190,7 @@
     <script>
         // Estado para controlar se a barra de pesquisa está aberta
         let searchBarOpen = false;
+        let menuJustOpened = false; // NOVO: flag para ignorar scroll logo após abrir menu
 
         // Carregar categorias dinamicamente de categorias.json
         fetch('./data/categorias.json')
@@ -224,24 +225,16 @@
             // Se a barra de pesquisa estiver aberta, feche-a antes de abrir o menu
             if (searchBarOpen) {
                 searchBarOpen = false;
-                // Remova o blur imediato, pois em mobile pode não funcionar corretamente
-                // Adicione um pequeno delay para garantir que o teclado feche antes de abrir o menu
-                setTimeout(() => {
-                    document.body.classList.toggle('menu-aberto');
-                    if (document.body.classList.contains('menu-aberto')) {
-                        menuOverlay.style.display = 'block';
-                    } else {
-                        menuOverlay.style.display = 'none';
-                    }
-                }, 200); // 200ms é suficiente para a maioria dos dispositivos
-                searchInput.blur(); // opcional: tenta fechar o teclado, mas não depende disso
+                searchInput.blur();
                 document.getElementById('searchResults').setAttribute('aria-hidden', 'true');
-                return;
             }
-            // Alterna a classe do body para abrir/fechar o menu normalmente
+            // Alterna a classe do body para abrir/fechar o menu
             document.body.classList.toggle('menu-aberto');
+            // Atualiza overlay conforme estado do menu
             if (document.body.classList.contains('menu-aberto')) {
                 menuOverlay.style.display = 'block';
+                menuJustOpened = true; // Sinaliza que menu foi aberto manualmente
+                setTimeout(() => { menuJustOpened = false; }, 500); // Reseta após 500ms
             } else {
                 menuOverlay.style.display = 'none';
             }
@@ -260,6 +253,11 @@
         });
 
         window.addEventListener('scroll', () => {
+            if (menuJustOpened) {
+                // Ignora o primeiro scroll após abrir menu
+                menuJustOpened = false;
+                return;
+            }
             if (document.body.classList.contains('menu-aberto')) {
                 document.body.classList.remove('menu-aberto');
                 menuOverlay.style.display = 'none';
