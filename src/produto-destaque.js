@@ -29,7 +29,7 @@ function renderizarProdutos(produtos) {
             <div class="produto-info">
                 <h3 class="produto-nome">${produto.nome}</h3>
                 <div class="produto-preco-wrapper">
-                    ${produto.precoOriginal ? `<div class="produto-preco-original">R$ ${formatarPreco(produto.precoOriginal)}</div>` : ''}
+                    ${produto.oldprice ? `<div class="produto-preco-original">R$ ${formatarPreco(produto.oldprice)}</div>` : ''}
                     <div class="produto-preco-atual">R$ ${formatarPreco(produto.preco)}</div>
                 </div>
                 <button class="produto-botao" onclick="adicionarAoCarrinho('${produto.id}')">

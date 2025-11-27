@@ -369,12 +369,27 @@
         // O overlay só deve sumir imediatamente quando a pesquisa for ativada
         // enquanto o menu estava aberto (caso inverso).
 
-        // Status da loja (aberta/fechada) - horário: 9h às 18h
+        // Lista de exceções: dias da semana em que a loja está fechada
+        // 0 = Domingo, 6 = Sábado (exemplo: fechado aos domingos)
+        const diasFechados = [0, 4]; // Adicione outros dias se necessário, ex: [0, 6] para domingo e sábado
+
+        // Status da loja (aberta/fechada) - horário: 8h às 18h, exceto dias fechados
         function atualizarStatusLoja() {
             const agora = new Date();
             const hora = agora.getHours();
-            const aberto = hora >= 8 && hora < 18;
+            const diaSemana = agora.getDay(); // 0 = domingo, 1 = segunda, ..., 6 = sábado
             const statusText = document.getElementById('statusText');
+            // Verifica se hoje é um dia fechado
+            if (diasFechados.includes(diaSemana)) {
+                statusText.innerHTML =
+                    '<div id="closestatustext">' +
+                    '<span id="statusDot" class="fechado"></span>' +
+                    'Fechado</div>' +
+                    '<b>(Horário de funcionamento: 8h às 18h).</b>';
+                return;
+            }
+            // Verifica horário normal
+            const aberto = hora >= 8 && hora < 18;
             if (aberto) {
                 statusText.innerHTML =
                     '<div id="openstatustext">' +
