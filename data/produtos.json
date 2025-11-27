@@ -55,61 +55,6 @@
         "destaque": false,
         "categoria": "Macacões",
         "desconto": 10
-    },
-    {
-        "id": 7,
-        "nome": "Camisa Social Branca",
-        "descricao": "Camisa social branca clássica, versátil para o trabalho ou eventos formais.",
-        "preco": 139.90,
-        "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x07.png",
-        "destaque": true,
-        "categoria": "Camisas"
-    },
-    {
-        "id": 8,
-        "nome": "Shorts de Alfaiataria",
-        "descricao": "Shorts de alfaiataria em tecido estruturado, ideal para um look sofisticado.",
-        "preco": 119.00,
-        "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x08.png",
-        "destaque": false,
-        "categoria": "Shorts"
-    },
-    {
-        "id": 9,
-        "nome": "Trench Coat Bege",
-        "descricao": "Trench coat clássico em tom bege, perfeito para dias mais frios e chuvosos.",
-        "preco": 299.90,
-        "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x09.png",
-        "destaque": true,
-        "categoria": "Casacos",
-        "desconto": 20
-    },
-    {
-        "id": 10,
-        "nome": "Cropped de Malha",
-        "descricao": "Cropped de malha canelada, confortável e estiloso para o dia a dia.",
-        "preco": 89.90,
-        "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x10.png",
-        "destaque": false,
-        "categoria": "Cropped"
-    },
-    {
-        "id": 11,
-        "nome": "Vestido de Festa Longo",
-        "descricao": "Vestido longo elegante, ideal para eventos formais e festas à noite.",
-        "preco": 349.90,
-        "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x11.png",
-        "destaque": true,
-        "categoria": "Vestidos",
-        "desconto": 25
-    },
-    {
-        "id": 12,
-        "nome": "Blazer Xadrez",
-        "descricao": "Blazer xadrez em tons neutros, perfeito para um look sofisticado e moderno.",
-        "preco": 229.90,
-        "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x12.png",
-        "destaque": false,
-        "categoria": "Blazers"
     }
+
 ]

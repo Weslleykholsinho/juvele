@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadProducts() {
         try {
             // ajuste o caminho se necessário
-            const resp = await fetch('recursos/produtos.json', { cache: 'no-store' });
+            const resp = await fetch('data/produtos.json', { cache: 'no-store' });
             if (!resp.ok) throw new Error('fetch error ' + resp.status);
             const data = await resp.json();
             // aceita array raiz ou { products: [...] }
@@ -157,6 +157,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // fechar menu / search ao rolar a página
 
     /* ---------- product-only search implementation (substituir por este) ---------- */
+    // Função para normalizar para singular (simples, para português)
+    function toSingular(word) {
+        // Remove 's' ou 'es' finais, se houver, exceto palavras curtas
+        if (word.length > 3) {
+            if (word.endsWith('es')) return word.slice(0, -2);
+            if (word.endsWith('s')) return word.slice(0, -1);
+        }
+        return word;
+    }
+
     function normalizeText(s) {
         return (s || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     }
@@ -185,7 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const qRaw = query.trim();
-        const q = normalizeText(qRaw);
+        const qNorm = normalizeText(qRaw);
+
+        // Dividir a pesquisa em termos, normalizar e singularizar
+        const searchTerms = qNorm.split(/\s+/).filter(Boolean).map(toSingular);
 
         if (!productsLoaded) {
             results.innerHTML = '<div class="search-item">Carregando produtos...</div>';
@@ -199,33 +212,36 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // coletar matches ponderados por posição da palavra e se é prefixo
-        const foundMap = new Map(); // product -> bestMatchObj
+        // Busca: todos os termos devem estar presentes em qualquer ordem, considerando singular/plural
+        const foundMap = new Map();
 
         products.forEach((p, idx) => {
             const { raw, norm } = normalizeName(p);
             if (!norm) return;
 
-            const words = norm.split(/\s+/).filter(Boolean);
-            // procurar em cada palavra na ordem (prioriza palavra 0, depois 1, ...)
-            for (let wi = 0; wi < words.length; wi++) {
-                const w = words[wi];
-                const pos = w.indexOf(q);
-                if (pos === -1) continue; // não encontrado nesta palavra
+            // Dividir nome do produto em palavras, normalizar e singularizar
+            const productWords = norm.split(/\s+/).filter(Boolean).map(toSingular);
 
-                // score: menor é melhor. Prioriza palavras com menor índice e prefixos (pos === 0)
-                const score = wi * 100 + (pos === 0 ? 0 : 20 + pos);
-                const prev = foundMap.get(p);
-                if (!prev || score < prev.score) {
-                    foundMap.set(p, { p, rawName: raw, score, wordIndex: wi, pos });
+            // Verifica se todos os termos da pesquisa estão presentes nas palavras do produto
+            let allTermsFound = true;
+            let bestScore = 0;
+            searchTerms.forEach((term) => {
+                // Busca o termo em qualquer palavra do produto
+                const wordMatchIndex = productWords.findIndex(w => w.includes(term));
+                if (wordMatchIndex === -1) {
+                    allTermsFound = false;
+                } else {
+                    // Score: soma do índice da palavra encontrada (menor é melhor)
+                    bestScore += wordMatchIndex;
                 }
-                // como usuário quer buscar palavra por palavra, se encontramos na palavra atual
-                // podemos parar de checar palavras subsequentes? Não: pode haver ocorrência em palavra anterior
-                // porém iterando em ordem, primeiras palavras tem melhor score; continuar para obter melhor pos (rare)
+            });
+
+            if (allTermsFound) {
+                // Score: menor soma de índices é melhor, desempate pelo idx
+                foundMap.set(p, { p, rawName: raw, score: bestScore * 100 + idx });
             }
         });
 
-        // se não há matches, informar sem resultados
         if (foundMap.size === 0) {
             results.innerHTML = '<div class="search-item">Nenhum resultado</div>';
             results.classList.add('open');
@@ -244,17 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
             div.tabIndex = 0;
             div.innerHTML = highlight(m.rawName, qRaw);
             const link = getProductLink(m.p);
+            // Altera: ao clicar, redireciona para search.html com o termo da sugestão
             div.addEventListener('click', () => {
-                if (link) {
-                    window.location.href = link;
-                } else {
-                    const el = Array.from(document.querySelectorAll('*')).find(elm => (elm.textContent || '').includes(m.rawName));
-                    if (el) {
-                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        form.classList.remove('open');
-                        results.classList.remove('open');
-                    }
-                }
+                window.location.href = `./search.html?q=${encodeURIComponent(m.rawName)}`;
             });
             results.appendChild(div);
         });
@@ -264,38 +272,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function highlight(text, qRaw) {
         if (!text) return '';
-        // destacar a primeira ocorrência do texto digitado (sem alterar acentos/maiúsculas)
-        const normText = normalizeText(text);
-        const normQ = normalizeText(qRaw);
-        const idx = normText.indexOf(normQ);
-        if (idx === -1) return escapeHtml(text.slice(0, 120));
-        // usar posições no texto original: calcular offset aproximado
-        // estratégia: localizar a substring equivalente no texto original por comparações
-        let start = 0, foundAt = -1;
-        // percorrer janelas no texto original para achar trecho cuja normalização casa com normQ
-        for (let i = 0; i <= text.length - qRaw.length; i++) {
-            const slice = text.substr(i, qRaw.length);
-            if (normalizeText(slice) === normQ) {
-                foundAt = i;
-                break;
+        // destacar todas as ocorrências dos termos da pesquisa
+        let result = escapeHtml(text);
+        const terms = qRaw.split(/\s+/).filter(Boolean);
+        terms.forEach(term => {
+            if (!term) return;
+            // Regex para destacar ignorando acentos/maiúsculas
+            const normTerm = normalizeText(term);
+            result = result.replace(new RegExp(`(${term})`, 'gi'), '<mark>$1</mark>');
+            // Se não encontrar, tenta destacar versão sem acento
+            if (!result.includes('<mark>')) {
+                result = result.replace(new RegExp(normTerm, 'gi'), '<mark>$&</mark>');
             }
-        }
-        if (foundAt === -1) {
-            // fallback: achar por posição estimada usando idx na versão normalizada
-            // mapear caracteres: percorre e conta equivalência
-            let ni = 0, oi = 0;
-            while (ni < idx && oi < text.length) {
-                if (normalizeText(text[oi])) {
-                    ni++;
-                }
-                oi++;
-            }
-            foundAt = oi;
-        }
-        const before = escapeHtml(text.slice(Math.max(0, foundAt - 40), foundAt));
-        const match = escapeHtml(text.substr(foundAt, qRaw.length));
-        const after = escapeHtml(text.substr(foundAt + qRaw.length, 120));
-        return `${before}<mark>${match}</mark>${after}`;
+        });
+        return result;
     }
 
     function escapeHtml(s) {

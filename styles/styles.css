@@ -72,6 +72,12 @@ nav ul li a {
     cursor: pointer;
 }
 
+nav ul li a:hover {
+    color: #94d1f4;
+    transition: color 0.3s ease;
+    text-decoration: underline;
+}
+
 .menu-icon {
     display: none;
     /* oculto por padrão em desktop */
