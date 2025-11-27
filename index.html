@@ -107,6 +107,30 @@
         .categorias.few-categories {
             justify-content: center;
         }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(43, 89, 43, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(0, 255, 0, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+            }
+        }
+
+        #statusDot.aberto {
+            background: #32ff4a;
+            animation-name: pulse;
+        }
+
+        #statusDot.fechado {
+            background: #ff4136;
+            animation-name: pulse;
+        }
     </style>
 
 </head>
@@ -165,6 +189,12 @@
          Será preenchida dinamicamente a partir de produtos.json
          ============================ -->
     <section id="destaques" class="produtos-destaque" aria-labelledby="destaques-title">
+        <!-- Indicador de status da loja (agora acima das categorias) -->
+        <p id="lojaStatus" style="display:flex;align-items:center;justify-content:center;margin:8px 0;font-size:15px;">
+            <span id="statusDot"
+                style="display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;animation:pulse 1.2s infinite;"></span>
+            <span id="statusText"></span>
+        </p>
         <!-- Faixa de categorias deslizável -->
         <div class="categorias-wrapper" aria-label="Categorias de produtos">
             <div id="categoriasList" class="categorias" role="list" tabindex="0"
@@ -292,6 +322,25 @@
         // isso significa que o menu está realmente aberto e a pesquisa foi fechada.
         // O overlay só deve sumir imediatamente quando a pesquisa for ativada
         // enquanto o menu estava aberto (caso inverso).
+
+        // Status da loja (aberta/fechada) - horário: 9h às 18h
+        function atualizarStatusLoja() {
+            const agora = new Date();
+            const hora = agora.getHours();
+            const aberto = hora >= 9 && hora < 18;
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            if (aberto) {
+                statusDot.className = 'aberto';
+                statusText.textContent = 'Loja aberta agora.';
+            } else {
+                statusDot.className = 'fechado';
+                statusText.textContent = 'Loja fechada no momento.';
+            }
+        }
+        atualizarStatusLoja();
+        // Atualizar status a cada segundo para evitar qualquer atraso
+        setInterval(atualizarStatusLoja, 2000);
     </script>
 </body>
 

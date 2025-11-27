@@ -149,6 +149,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+
+        // NOVO: fecha barra de pesquisa ao clicar fora dela, do input ou das sugestões
+        document.addEventListener('click', (e) => {
+            if (
+                form.classList.contains('open') &&
+                !form.contains(e.target) &&
+                !searchIcon.contains(e.target) &&
+                !results.contains(e.target)
+            ) {
+                form.classList.remove('open');
+                results.classList.remove('open');
+                results.setAttribute('aria-hidden', 'true');
+            }
+        });
+
+        // NOVO: fecha barra de pesquisa ao rolar fora dela
+        window.addEventListener('scroll', () => {
+            if (form.classList.contains('open')) {
+                form.classList.remove('open');
+                results.classList.remove('open');
+                results.setAttribute('aria-hidden', 'true');
+            }
+        });
     }
 
     // call to wire search handlers
