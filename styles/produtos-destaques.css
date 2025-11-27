@@ -67,11 +67,11 @@
     position: absolute;
     top: 6px;
     left: 1px;
-    background: #a83c5b;
+    background: #ff497d;
     color: #ffffff;
     padding: 8px 12px;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
     z-index: 10;
 }
 

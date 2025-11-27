@@ -179,11 +179,73 @@
             color: #fe665e;
             font-weight: bold;
         }
+
+        /* Tela de carregamento */
+        #loadingScreen {
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #FF5C8A;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s;
+        }
+
+        #loadingScreen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            font-family: 'Bebas Neue', cursive;
+            font-weight: 400;
+            font-size: 100px;
+            margin-bottom: 32px;
+            user-select: none;
+            color: #fff;
+        }
+
+        .loading-spinner {
+            width: 28px;
+            height: 28px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #fff;
+            border-radius: 50%;
+            animation: spin-grow 1s cubic-bezier(.6, .1, .6, .9) infinite;
+        }
+
+        @keyframes spin-grow {
+            0% {
+                transform: rotate(0deg) scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 
 </head>
 
 <body>
+    <!-- Tela de carregamento -->
+    <div id="loadingScreen">
+        <div class="loading-logo">JUVELE</div>
+        <div class="loading-spinner"></div>
+    </div>
+
     <!--PARTE DE CIMA Titulo, logotipo e Navbar-->
     <header>
         <nav>
@@ -407,6 +469,17 @@
         atualizarStatusLoja();
         // Atualizar status a cada segundo para evitar qualquer atraso
         setInterval(atualizarStatusLoja, 2000);
+
+        // Oculta tela de carregamento ao carregar tudo
+        window.addEventListener('load', function () {
+            const loading = document.getElementById('loadingScreen');
+            if (loading) {
+                setTimeout(() => {
+                    loading.classList.add('hide');
+                    setTimeout(() => loading.style.display = 'none', 500);
+                }, 2000); // Aguarda 2 segundos antes de iniciar o fade
+            }
+        });
     </script>
 </body>
 
