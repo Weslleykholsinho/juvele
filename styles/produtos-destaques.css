@@ -4,6 +4,9 @@
     font-size: 29px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: #000000;
+    margin-bottom: 8px;
+    /* Espaço mínimo abaixo do título */
+    /* Adiciona ou reduz o espaçamento abaixo do título */
 }
 
 /*
@@ -21,7 +24,9 @@
     grid-template-columns: repeat(3, minmax(240px, 1fr));
     /* 3 colunas por padrão (ajustável) */
     gap: 24px;
-    padding: 40px 20px;
+    padding: 8px 20px 40px 20px;
+    /* padding-top ainda menor */
+    /* Reduz o padding-top para aproximar os cards do título */
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -131,7 +136,9 @@
     .produtos-container {
         grid-template-columns: repeat(3, minmax(220px, 1fr));
         gap: 24px;
-        padding: 36px 20px;
+        padding: 6px 20px 36px 20px;
+        /* padding-top mínimo em telas grandes */
+        /* padding-top menor em telas grandes */
     }
 
     .produto-nome {
@@ -212,9 +219,4 @@
         font-size: clamp(11px, 3.6vw, 12px);
         padding: 8px 8px;
     }
-}
-
-/* pequenos ajustes finais */
-#destaques {
-    margin-top: 20px;
 }
