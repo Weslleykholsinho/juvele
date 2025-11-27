@@ -132,6 +132,42 @@
             background: #fe665e;
             animation-name: pulse;
         }
+
+        #lojaStatus {
+            font-size: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-left: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        #statusText {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: auto;
+        }
+
+        #openstatustext,
+        #closestatustext {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: auto;
+        }
+
+        #statusDot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 1.2s infinite;
+            margin-right: 0;
+        }
     </style>
 
 </head>
@@ -191,9 +227,7 @@
          ============================ -->
     <section id="destaques" class="produtos-destaque" aria-labelledby="destaques-title">
         <!-- Indicador de status da loja (agora acima das categorias) -->
-        <p id="lojaStatus" style="display:flex;align-items:center;justify-content:center;margin:8px 0;font-size:15px;">
-            <span id="statusDot"
-                style="display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;animation:pulse 1.2s infinite;"></span>
+        <p id="lojaStatus">
             <span id="statusText"></span>
         </p>
         <!-- Faixa de categorias deslizável -->
@@ -329,14 +363,19 @@
             const agora = new Date();
             const hora = agora.getHours();
             const aberto = hora >= 8 && hora < 18;
-            const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
             if (aberto) {
-                statusDot.className = 'aberto';
-                statusText.textContent = 'Loja aberta (Horário de funcionamento: 8h às 18h)';
+                statusText.innerHTML =
+                    '<div id="openstatustext">' +
+                    '<span id="statusDot" class="aberto"></span>' +
+                    'Aberto</div>' +
+                    '<b>(Horário de funcionamento: 8h às 18h)</b>';
             } else {
-                statusDot.className = 'fechado';
-                statusText.textContent = 'Fechado (Horário de funcionamento: 8h às 18h)';
+                statusText.innerHTML =
+                    '<div id="closestatustext">' +
+                    '<span id="statusDot" class="fechado"></span>' +
+                    'Fechado</div>' +
+                    '<b>(Horário de funcionamento: 8h às 18h)</b>';
             }
         }
         atualizarStatusLoja();

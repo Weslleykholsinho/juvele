@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('siteSearch');
     const input = document.getElementById('searchInput');
     const results = document.getElementById('searchResults');
+    // Restaurar referência ao botão submit
     const submit = document.getElementById('searchSubmit');
 
     // Products (loaded from produtos.json)
@@ -130,12 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        submit.addEventListener('click', (e) => {
-            const q = (input.value || '').trim();
-            if (!q) return;
-            // redireciona para a página de resultados com o termo como query param
-            window.location.href = `./search.html?q=${encodeURIComponent(q)}`;
-        });
+        // Restaurar evento do botão submit
+        if (submit) {
+            submit.addEventListener('click', (e) => {
+                const q = (input.value || '').trim();
+                if (!q) return;
+                window.location.href = `./search.html?q=${encodeURIComponent(q)}`;
+            });
+        }
+
         input.addEventListener('input', debounce(() => performProductSearch(input.value), 220));
 
         document.addEventListener('keydown', (e) => {
@@ -151,8 +155,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // REMOVIDO: fechamento ao clicar fora
-        // REMOVIDO: fechamento ao rolar a página
+        // Adiciona botão de fechar na barra de pesquisa
+        let closeBtn = form.querySelector('.search-close-btn');
+        if (!closeBtn) {
+            closeBtn = document.createElement('button');
+            closeBtn.type = 'button';
+            closeBtn.className = 'search-close-btn';
+            closeBtn.innerHTML = '✕';
+            closeBtn.title = 'Fechar pesquisa';
+            // Insere o botão no início ou onde preferir
+            form.appendChild(closeBtn);
+        }
+        closeBtn.addEventListener('click', () => {
+            form.classList.remove('open');
+            results.classList.remove('open');
+            results.setAttribute('aria-hidden', 'true');
+            input.blur();
+        });
     }
 
     // call to wire search handlers
