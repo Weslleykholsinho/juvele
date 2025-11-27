@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!opened) {
                 results.classList.remove('open');
                 results.setAttribute('aria-hidden', 'true');
+                input.blur(); // NOVO: força perder foco ao fechar, fecha teclado virtual
             } else {
                 results.setAttribute('aria-hidden', 'false');
                 input.focus();
@@ -141,16 +142,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Escape') {
                 form.classList.remove('open');
                 results.classList.remove('open');
+                input.blur(); // NOVO: força perder foco ao fechar, fecha teclado virtual
                 if (menuList) {
                     menuList.classList.remove('open');
                     setIconOpen(false);
-                    // Esconde overlay
                     if (menuOverlay) menuOverlay.classList.remove('menu-open');
                 }
             }
         });
 
-        // NOVO: fecha barra de pesquisa ao clicar fora dela, do input ou das sugestões
+        // Ajustado: fecha barra de pesquisa ao clicar fora dela, do input ou das sugestões
         document.addEventListener('click', (e) => {
             if (
                 form.classList.contains('open') &&
@@ -161,15 +162,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.classList.remove('open');
                 results.classList.remove('open');
                 results.setAttribute('aria-hidden', 'true');
+                input.blur();
             }
         });
 
-        // NOVO: fecha barra de pesquisa ao rolar fora dela
+        // NOVO: fecha barra de pesquisa ao rolar fora dela, fechando também o teclado
         window.addEventListener('scroll', () => {
             if (form.classList.contains('open')) {
                 form.classList.remove('open');
                 results.classList.remove('open');
                 results.setAttribute('aria-hidden', 'true');
+                input.blur();
             }
         });
     }
