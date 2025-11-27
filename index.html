@@ -110,25 +110,26 @@
 
         @keyframes pulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(43, 89, 43, 0.7);
+                box-shadow: 0 0 0 0 rgba(88, 224, 88, 0.7);
             }
 
-            70% {
-                box-shadow: 0 0 0 8px rgba(0, 255, 0, 0);
+            80% {
+                box-shadow: 0 0 0 10px rgba(88, 224, 88, 0);
             }
 
-            100% {
-                box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+
+            90% {
+                box-shadow: 0 0 0 0 rgba(76, 238, 76, 0);
             }
         }
 
         #statusDot.aberto {
-            background: #32ff4a;
+            background: #16c82b;
             animation-name: pulse;
         }
 
         #statusDot.fechado {
-            background: #ff4136;
+            background: #fe665e;
             animation-name: pulse;
         }
     </style>
@@ -327,15 +328,15 @@
         function atualizarStatusLoja() {
             const agora = new Date();
             const hora = agora.getHours();
-            const aberto = hora >= 9 && hora < 18;
+            const aberto = hora >= 8 && hora < 18;
             const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
             if (aberto) {
                 statusDot.className = 'aberto';
-                statusText.textContent = 'Loja aberta agora.';
+                statusText.textContent = 'Loja aberta (Horário de funcionamento: 8h às 18h)';
             } else {
                 statusDot.className = 'fechado';
-                statusText.textContent = 'Loja fechada no momento.';
+                statusText.textContent = 'Fechado (Horário de funcionamento: 8h às 18h)';
             }
         }
         atualizarStatusLoja();
