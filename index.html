@@ -179,6 +179,265 @@
             color: #fe665e;
             font-weight: bold;
         }
+
+        /* Footer responsivo - atualizado: mantém background #111 e posição da logo */
+        .site-footer {
+            background: #000000;
+            color: #fff;
+            padding: 32px 16px 24px;
+            margin-top: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .site-footer .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+
+        .site-footer .footer-logo h1 {
+            font-family: Bebas Neue, sans-serif;
+            font-size: 3.5rem;
+            color: #FF5C8A;
+            margin: 0;
+        }
+
+        /* Novo container que agrupa o conteúdo do footer (redes, contato, local) */
+        .site-footer .footer-body {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            align-items: start;
+            justify-items: center;
+            text-align: center;
+        }
+
+        .site-footer .footer-social,
+        .site-footer .footer-contact,
+        .site-footer .footer-location {
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .site-footer .footer-social a {
+            color: #fff;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: background .18s ease, transform .12s ease;
+        }
+
+        .site-footer .footer-social a:hover {
+            background: rgba(255, 92, 138, 0.08);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .site-footer .footer-contact i,
+        .site-footer .footer-location i,
+        .site-footer .footer-social i {
+            width: 18px;
+            color: #FF5C8A;
+        }
+
+        .site-footer .footer-copyright {
+            font-size: 14px;
+            opacity: 0.6;
+            margin-top: 6px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* NOVO: bloco do desenvolvedor (logo + nome) */
+        .site-footer .footer-dev {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #fff;
+            flex-wrap: wrap;
+        }
+
+        .site-footer .footer-dev .dev-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .site-footer .footer-dev .dev-brand img {
+            width: 230px;
+            height: 100px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #fff;
+        }
+
+        /* Em telas muito pequenas, empilha o texto "Desenvolvido por" acima da logo */
+        @media (max-width: 420px) {
+            .site-footer .footer-dev {
+                flex-direction: column;
+                /* coloca a logo abaixo do texto */
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .site-footer .footer-dev .dev-brand {
+                width: 100%;
+            }
+
+            /* Mantém o tamanho da imagem do desenvolvedor igual ao definido fora da media query.
+               Não alterar width/height aqui conforme solicitado. */
+        }
+
+        /* Desktop / telas maiores: posição mais "chic" com grid */
+        @media (min-width: 900px) {
+            .site-footer {
+                padding: 40px 48px;
+                display: grid;
+                grid-template-columns: auto 1fr;
+                gap: 28px;
+                align-items: start;
+                text-align: left;
+            }
+
+            /* força a logo à esquerda (mantendo a posição original da logo no DOM) */
+            .site-footer .footer-logo {
+                justify-self: start;
+                margin-bottom: 0;
+            }
+
+            /* corpo do footer se transforma em 3 colunas */
+            .site-footer .footer-body {
+                justify-items: start;
+                grid-template-columns: repeat(3, minmax(180px, 1fr));
+                gap: 18px 36px;
+                align-items: start;
+                text-align: left;
+            }
+
+            .site-footer .footer-social,
+            .site-footer .footer-contact,
+            .site-footer .footer-location {
+                align-items: start;
+            }
+
+            .site-footer .footer-copyright {
+                grid-column: 1 / -1;
+                text-align: left;
+                margin-top: 12px;
+            }
+        }
+
+        /* Novas regras para tamanhos intermediários (tablet / small desktop)
+           Alinha o corpo do footer à esquerda sem mexer no layout desktop já existente */
+        @media (min-width: 601px) and (max-width: 899px) {
+            .site-footer {
+                padding: 28px 28px;
+                align-items: center;
+                /* mantém a logo centralizada */
+            }
+
+            /* Corpo do footer fica com itens alinhados à esquerda para leitura */
+            .site-footer .footer-body {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+                align-items: start;
+                justify-items: start;
+                /* força alinhamento à esquerda em telas intermediárias */
+                text-align: left;
+                padding: 0 12px;
+                max-width: 1024px;
+                margin: 0 auto;
+            }
+
+            .site-footer .footer-social,
+            .site-footer .footer-contact,
+            .site-footer .footer-location {
+                align-items: flex-start;
+            }
+
+            .site-footer .footer-copyright {
+                text-align: center;
+                font-size: 13px;
+                opacity: 0.8;
+                margin-top: 8px;
+            }
+        }
+
+        /* Substituir a media query (max-width: 600px) existente por esta versão melhorada para mobile */
+        @media (max-width: 600px) {
+            .site-footer {
+                padding: 20px 12px 16px;
+            }
+
+            .site-footer .footer-logo h1 {
+                font-size: 2.6rem;
+                margin: 0 0 8px 0;
+            }
+
+            /* Corpo do footer: deixa itens alinhados à esquerda em mobile para melhor leitura */
+            .site-footer .footer-body {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+                align-items: start;
+                justify-items: start;
+                text-align: left;
+                padding: 0 6px;
+            }
+
+            /* Transforma cada bloco (redes, contato, localização) em cards sutis */
+            .site-footer .footer-social,
+            .site-footer .footer-contact,
+            .site-footer .footer-location {
+                font-size: 14px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+                width: 100%;
+                max-width: 680px;
+                padding: 10px 12px;
+                border-radius: 10px;
+            }
+
+            .site-footer .footer-social a {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 6px 8px;
+                border-radius: 8px;
+            }
+
+            .site-footer .footer-contact i,
+            .site-footer .footer-location i,
+            .site-footer .footer-social i {
+                width: 18px;
+                color: #FF5C8A;
+            }
+
+            .site-footer .footer-copyright {
+                font-size: 13px;
+                opacity: 0.75;
+                margin-top: 8px;
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 
 </head>
@@ -192,7 +451,7 @@
             </div>
             <ul id="menuList">
                 <li><a href="./index.html" id="op1"></a></li>
-                <li><a href="#faixatopposition" id="op2"></a></li>
+                <li><a href="#ProdutosDestaque" id="op2"></a></li>
                 <li><a href="" id="op3"></a></li>
                 <li><a href="" id="op4"></a></li>
                 <li><a href="" id="op5"></a></li>
@@ -226,7 +485,7 @@
             <small>Descontos exclusivos em toda a loja. Aproveite agora!</small>
         </div>
     </div>
-    <div class="faixatop" id="faixatopposition">
+    <div class="faixatop" id="ProdutosDestaque">
         <p class="faixa-item active">PAGUE PARCELADO EM ATÉ 6X SEM JUROS</p>
         <p class="faixa-item">FRETE GRÁTIS PARA TODOS OS PRODUTOS DA LOJA.</p>
         <p class="faixa-item">COMPRA 100% SEGURA</p>
@@ -408,6 +667,54 @@
         // Atualizar status a cada segundo para evitar qualquer atraso
         setInterval(atualizarStatusLoja, 2000);
     </script>
+
+    <!-- Footer responsivo -->
+    <footer class="site-footer">
+        <div class="footer-logo">
+            <h1>JUVELE</h1>
+        </div>
+
+        <!-- Agrupei o resto do conteúdo em .footer-body (sem tocar na logo) -->
+        <div class="footer-body">
+            <div class="footer-social">
+                <strong>Redes Sociais:</strong>
+                <span>
+                    <a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i> @lojajuvele_
+                    </a>
+                </span>
+                <span>
+                    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i> Nosso WhatsApp
+                    </a>
+                </span>
+            </div>
+
+            <div class="footer-contact">
+                <strong>Contato:</strong>
+                <span><i class="fa fa-phone"></i> (11) 99999-9999</span>
+                <span><i class="fa fa-envelope"></i> contato@juvele.com.br</span>
+            </div>
+
+            <div class="footer-location">
+                <strong>Localização:</strong>
+                <span><i class="fa fa-map-marker-alt"></i> Rua Exemplo, 123 - São Paulo, SP</span>
+            </div>
+
+            <!-- ADICIONADO: bloco com logo e nome da empresa desenvolvedora -->
+            <div class="footer-dev" aria-label="Desenvolvido por">
+                <strong>Desenvolvido por:</strong>
+                <div class="dev-brand">
+                    <!-- Substitua images/dev-logo.png pela imagem real da sua agência -->
+                    <img src="assets/dev-logo.png" alt="Logo Desenvolvedor" />
+                </div>
+            </div>
+
+            <div class="footer-copyright">
+                &copy; 2025 JUVELE. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
