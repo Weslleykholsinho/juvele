@@ -1,0 +1,71 @@
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(88, 224, 88, 0.7);
+    }
+
+    80% {
+        box-shadow: 0 0 0 10px rgba(88, 224, 88, 0);
+    }
+
+
+    90% {
+        box-shadow: 0 0 0 0 rgba(76, 238, 76, 0);
+    }
+}
+
+#statusDot.aberto {
+    background: #16c82b;
+    animation-name: pulse;
+}
+
+#statusDot.fechado {
+    background: #fe665e;
+    animation-name: pulse;
+}
+
+#lojaStatus {
+    font-size: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 0;
+    text-align: center;
+    width: 100%;
+}
+
+#statusText {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+}
+
+#openstatustext,
+#closestatustext {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: auto;
+    margin-top: 15px;
+}
+
+#statusDot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    animation: pulse 1.2s infinite;
+    margin-right: 0;
+}
+
+#openstatustext {
+    color: #16c82b;
+    font-weight: bold;
+}
+
+#closestatustext {
+    color: #fe665e;
+    font-weight: bold;
+}
