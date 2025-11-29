@@ -14,6 +14,7 @@
     <!-- CORREÇÃO: apontar para o arquivo correto de estilos da página de busca -->
     <link rel="stylesheet" href="./assets/styles/searchpage.css">
     <link rel="stylesheet" href="./assets/styles/footer(global).css">
+    <link rel="stylesheet" href="./assets/styles/categorias0x1.css">
 
     <!-- mover Font Awesome para o head -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -28,11 +29,14 @@
 
         <p class="search-description">Encontre os produtos perfeitos para você! Filtre por categoria ou navegue pelas
             sugestões abaixo.</p>
-        <!-- NAV removido: será injetado por ../nav(globalcode).js -->
+        <div class="categorias-wrapper" aria-label="Categorias de produtos">
+            <div id="categoriasList" class="categorias" role="list" tabindex="0"
+                aria-label="Categorias (deslize para ver mais)">
+                <div class="search-icon" aria-hidden="true">
+                    <!-- NAV removido: será injetado por ../nav(globalcode).js -->
     </header>
 
-    <div class="search-icon" aria-hidden="true">
-        <!-- mantenha seu ícone atual aqui (ex.: <i class="fa fa-search"></i>) -->
+    <!-- mantenha seu ícone atual aqui (ex.: <i class="fa fa-search"></i>) -->
     </div>
 
     <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site" onsubmit="return false;">
@@ -113,7 +117,7 @@
             gap: 1.5rem;
             padding: 2rem 1rem;
             max-width: 1100px;
-            margin: -20px;
+            margin-top: -70px;
         }
 
         /* ...adapte estilos dos cards conforme necessário... */
@@ -137,20 +141,26 @@
             }
         }
 
-        // Atualiza enquanto o usuário digita
-        searchInput.addEventListener('input', (e) => updateSearchText(e.target.value));
-
-        // Também atualiza ao clicar no botão Buscar
+        // Atualiza apenas ao clicar no botão Buscar
         searchSubmit.addEventListener('click', () => updateSearchText(searchInput.value));
+
+        // Evita que a tecla Enter dispare alguma atualização (somente botão deve atualizar)
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
 
         // Preenche a busca a partir da query string (ex.: ?q=vestido) ao carregar a página
         const params = new URLSearchParams(window.location.search);
         if (params.has('q')) {
             const q = params.get('q');
             searchInput.value = q;
+            // Mantém a atualização inicial quando a página é aberta com ?q=
             updateSearchText(q);
         }
     </script>
+    <script src="./assets/javascript/categorias0x1.js"></script>
 </body>
 
 </html>
