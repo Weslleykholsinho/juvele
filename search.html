@@ -10,9 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="./assets/styles/produtos-destaques.css">
+    <link rel="stylesheet" href="./assets/styles/search-produto-card.css">
     <!-- CORREÇÃO: apontar para o arquivo correto de estilos da página de busca -->
     <link rel="stylesheet" href="./assets/styles/searchpage.css">
+    <link rel="stylesheet" href="./assets/styles/footer(global).css">
 
     <!-- mover Font Awesome para o head -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -22,9 +23,11 @@
 <body>
 
     <!--PARTE DE CIMA Titulo, logotipo e Navbar-->
-    <header>
-        <a href="./index.html">Voltar</a>
-        <h1>Resultados da busca</h1>
+    <header class="search-header">
+        <h1 class="search-title">Resultados da busca</h1>
+
+        <p class="search-description">Encontre os produtos perfeitos para você! Filtre por categoria ou navegue pelas
+            sugestões abaixo.</p>
         <!-- NAV removido: será injetado por ../nav(globalcode).js -->
     </header>
 
@@ -45,6 +48,9 @@
         </div>
     </div>
 
+    <!-- Container para os cartões de produto (será preenchido pelo script abaixo) -->
+    <main id="searchResultsContainer" class="products-grid" aria-live="polite"></main>
+
     <!-- pr-def deve ser carregado antes de nav.js -->
     <script src="./assets/javascript/pr-def.js"></script>
     <!-- injeta o markup da nav (com ajustes de href e estilos injetados) -->
@@ -52,11 +58,99 @@
     <!-- lógica do menu/search que depende de pr-def.js -->
     <script src="./assets/javascript/nav.js"></script>
     <script src="./assets/javascript/produto-destaque.js"></script>
-
-    <!-- Container para os cartões de produto (será preenchido pelo script abaixo) -->
-    <main id="searchResultsContainer" class="products-grid" aria-live="polite"></main>
     <script src="./assets/javascript/search-results.js"></script>
+    <script src="./assets/javascript/footer(global).js"></script>
 
+    <!-- Estilos adicionais para página de pesquisa -->
+    <style>
+        body {
+            background: #faf9f6;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .search-header {
+            text-align: center;
+            /* centraliza título e descrição */
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .search-title {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #5b3142;
+            margin: 0.5rem 0;
+            font-family: 'Montserrat', sans-serif;
+            margin-left: 0;
+            /* remove margem à esquerda */
+        }
+
+        .search-description {
+            color: #222222;
+            font-size: 0.9rem;
+            max-width: 600px;
+            /* aumenta largura para melhor leitura quando centralizado */
+            margin: 0.25rem auto 1.5rem;
+            /* centraliza horizontalmente */
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #d16e8d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link i {
+            margin-right: 6px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 1rem;
+            max-width: 1100px;
+            margin: -20px;
+        }
+
+        /* ...adapte estilos dos cards conforme necessário... */
+    </style>
+
+    <!-- Script para filtrar por categoria (exemplo básico) -->
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchSubmit = document.getElementById('searchSubmit');
+        const searchTitle = document.querySelector('.search-title');
+        const searchDescription = document.querySelector('.search-description');
+
+        function updateSearchText(q) {
+            const trimmed = (q || '').trim();
+            if (trimmed) {
+                searchTitle.textContent = `Resultados da busca`;
+                searchDescription.textContent = `Resultados encontrados para "${trimmed}". Filtre por categoria ou navegue pelas sugestões abaixo.`;
+            } else {
+                searchTitle.textContent = 'Resultados da busca';
+                searchDescription.textContent = 'Encontre os produtos perfeitos para você! Filtre por categoria ou navegue pelas sugestões abaixo.';
+            }
+        }
+
+        // Atualiza enquanto o usuário digita
+        searchInput.addEventListener('input', (e) => updateSearchText(e.target.value));
+
+        // Também atualiza ao clicar no botão Buscar
+        searchSubmit.addEventListener('click', () => updateSearchText(searchInput.value));
+
+        // Preenche a busca a partir da query string (ex.: ?q=vestido) ao carregar a página
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('q')) {
+            const q = params.get('q');
+            searchInput.value = q;
+            updateSearchText(q);
+        }
+    </script>
 </body>
 
 </html>

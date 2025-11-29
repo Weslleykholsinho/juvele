@@ -1,0 +1,230 @@
+.produtos-destaque h2 {
+    font-weight: 100;
+    text-align: center;
+    font-size: 29px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #000000;
+    margin-bottom: 0px;
+    /* reduzido para aproximar os cards do título/botão */
+    /* Espaço mínimo abaixo do título */
+    /* Adiciona ou reduz o espaçamento abaixo do título */
+}
+
+/*
+  Breakpoints fáceis de ajustar:
+  - Para mostrar 3 colunas: altere 769px (min-width) na query abaixo.
+  - Para mostrar 2 colunas em telas menores: altere 768px (max-width) na query abaixo.
+  Ex.: se quiser 3 colunas a partir de 1024px, troque 769px por 1024px e 768px por 1023px.
+*/
+
+/* Reset / base (mantém estilos existentes) */
+
+/* Layout principal: desktop padrão com 3 colunas */
+.produtos-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+    gap: 24px;
+    padding: 4px 20px 40px 20px;
+    /* padding-top reduzido */
+    max-width: 700px;
+    margin: 0 auto;
+    /* centrado em telas grandes */
+    /* alterado: antes era margin: 0 auto; — deixa o container centralizado */
+}
+
+/* Cards */
+.produto-card {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Imagem: usa aspect-ratio quando disponível; mantém fallback com padding-bottom */
+.produto-imagem-wrapper {
+    position: relative;
+    width: 100%;
+    /* Fallback para navegadores sem aspect-ratio: */
+    padding-bottom: 133%;
+    overflow: hidden;
+    background: #f5f5f5;
+    aspect-ratio: 3 / 4;
+    /* preferível e mais consistente */
+}
+
+.produto-imagem {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.desconto-badge {
+    position: absolute;
+    top: 6px;
+    left: 1px;
+    background: #ff497d;
+    color: #ffffff;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10;
+}
+
+.produto-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /* garante que o conteúdo ocupe o espaço e permita empurrar o botão para baixo */
+    justify-content: flex-start;
+}
+
+.produto-nome {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666666;
+    text-align: center;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.produto-preco-wrapper {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.produto-preco-original {
+    font-size: 13px;
+    color: #999999;
+    text-decoration: line-through;
+    margin-bottom: 4px;
+}
+
+.produto-preco-atual {
+    font-size: 18px;
+    font-weight: 600;
+    color: #48875a;
+}
+
+.produto-botao {
+    width: 100%;
+    padding: 12px 16px;
+    background: #000000;
+    color: #ededed;
+    border: none;
+    font-size: 14px;
+    font-weight: 200;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: auto;
+    /* empurra o botão para o final do card, alinhando todos */
+}
+
+/* -------------------------
+   Media queries simplificadas
+   ------------------------- */
+
+/* Forçar 3 colunas para tablets e notebooks
+   Ajuste o valor 769px para a largura mínima onde quer 3 colunas */
+@media (min-width: 769px) {
+    .produtos-container {
+        grid-template-columns: repeat(3, minmax(220px, 1fr));
+        gap: 24px;
+        padding: 4px 20px 36px 20px;
+        /* padding-top menor em telas grandes */
+        margin: 0 auto;
+        /* garante centralização em telas maiores */
+    }
+
+    .produto-nome {
+        font-size: 14px;
+    }
+
+    .produto-preco-atual {
+        font-size: 18px;
+    }
+
+    .produto-botao {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+}
+
+/* Para telas menores (mobile): sempre 2 colunas
+   Ajuste 768px se quiser trocar o ponto onde passa para 2 colunas */
+@media (max-width: 768px) {
+    .produtos-container {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+        gap: 12px;
+        padding: 8px 12px;
+        /* padding-top reduzido para mobile */
+    }
+
+    /* Imagem menor e mais quadrada em telas pequenas */
+    .produto-imagem-wrapper {
+        padding-bottom: 0;
+        /* remove fallback para usar aspect-ratio */
+        aspect-ratio: 3 / 4;
+    }
+
+    /* Tamanhos proporcionais com clamp para manter proporção */
+    .produto-nome {
+        font-size: clamp(12px, 2.6vw, 13px);
+    }
+
+    .produto-preco-original {
+        font-size: clamp(11px, 2.4vw, 12px);
+    }
+
+    .produto-preco-atual {
+        font-size: clamp(14px, 4vw, 16px);
+    }
+
+    .produto-botao {
+        padding: clamp(8px, 2.6vw, 10px) clamp(10px, 3.2vw, 12px);
+        font-size: clamp(12px, 3.2vw, 13px);
+    }
+
+    .desconto-badge {
+        padding: clamp(6px, 2.4vw, 8px) clamp(8px, 3vw, 10px);
+        font-size: clamp(11px, 2.6vw, 12px);
+    }
+}
+
+/* Ajuste extra para telas muito estreitas */
+@media (max-width: 360px) {
+    .produtos-container {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+        gap: 8px;
+        padding: 8px 8px;
+        /* padding-top reduzido em telas muito estreitas */
+    }
+
+    .produto-imagem-wrapper {
+        aspect-ratio: 4 / 5;
+    }
+
+    .produto-nome {
+        font-size: clamp(11px, 3.2vw, 12px);
+    }
+
+    .produto-preco-atual {
+        font-size: clamp(13px, 4.2vw, 15px);
+    }
+
+    .produto-botao {
+        font-size: clamp(11px, 3.6vw, 12px);
+        padding: 8px 8px;
+    }
+}

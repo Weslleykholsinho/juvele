@@ -11,19 +11,35 @@ async function carregarProdutos() {
     }
 }
 
-// Nova função para buscar produtos por termo
+// Função para normalizar palavras (remove acentos, minúsculo, trata plural/singular simples)
+function normalizarPalavra(palavra) {
+    return palavra
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
+        .toLowerCase()
+        .replace(/(oes|aes|aos|is|ns|s)$/i, ''); // remove plurais comuns
+}
+
+// Nova função para buscar produtos por termo (singular/plural e ordem flexível)
 async function buscarProdutosPorTermo(termo) {
     try {
         const response = await fetch('./data/produtos.json');
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         const produtos = await response.json();
-        // Filtra produtos pelo termo (nome ou descrição)
-        const termoLower = termo.trim().toLowerCase();
-        const resultados = produtos.filter(produto =>
-            produto.nome.toLowerCase().includes(termoLower) ||
-            (produto.descricao && produto.descricao.toLowerCase().includes(termoLower))
-        );
+        // Divide termo em palavras e normaliza
+        const palavrasBusca = termo.trim().split(/\s+/).map(normalizarPalavra);
+
+        const resultados = produtos.filter(produto => {
+            // Normaliza apenas o nome/título do produto
+            const nomeProduto = (produto.nome || '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+            // Para cada palavra da busca, verifica se está presente no nome do produto
+            return palavrasBusca.every(palavra => {
+                return nomeProduto.includes(palavra) || nomeProduto.includes(palavra + 's');
+            });
+        });
+
         renderizarProdutos(resultados, true); // true indica que é resultado de busca
     } catch (erro) {
         console.error('Erro:', erro);
