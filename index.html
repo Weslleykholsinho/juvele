@@ -7,8 +7,8 @@
     <title>JUVELE - Moda Feminina</title>
     <!--ICONE DA PÁGINA -->
     <link rel="shortcut icon" href="fav.ico" />
-    <link rel="stylesheet" href="styles/styles.css" />
-    <link rel="stylesheet" href="styles/produtos-destaques.css" />
+    <link rel="stylesheet" href="assets/styles/styles.css" />
+    <link rel="stylesheet" href="assets/styles/produtos-destaques.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
@@ -276,7 +276,7 @@
         }
 
         .site-footer .footer-dev .dev-brand img {
-            width: 230px;
+            width: 200px;
             height: 100px;
             border-radius: 6px;
             object-fit: cover;
@@ -438,6 +438,44 @@
                 text-align: center;
             }
         }
+
+        /* Botão "Ver todos os produtos" (centralizado e responsivo) */
+        .ver-todos-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 18px 0 8px;
+            width: 100%;
+        }
+
+        .ver-todos-btn {
+            display: inline-block;
+            background: #ffffff;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            padding: 12px 36px;
+           
+            text-decoration: underline;
+            font-size: 14px;
+            transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+        }
+
+        .ver-todos-btn:hover,
+        .ver-todos-btn:focus {
+            outline: none;
+            opacity: 0.98;
+            background: #ff5e8920;
+        }
+
+        @media (max-width: 480px) {
+            .ver-todos-btn {
+                padding: 10px 18px;
+                font-size: 13px;
+                letter-spacing: 1.2px;
+            }
+        }
     </style>
 
 </head>
@@ -518,10 +556,10 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity=""
         crossorigin="anonymous">
-    <script src="./src/nav.js"></script>
-    <script src="./src/produto-destaque.js"></script>
-    <script src="./src/pr-def.js"></script>
-    <script src="./src/faixatop.js"></script>
+    <script src="./assets/javascript/nav.js"></script>
+    <script src="./assets/javascript/produto-destaque.js"></script>
+    <script src="./assets/javascript/pr-def.js"></script>
+    <script src="./assets/javascript/faixatop.js"></script>
     <script>
         // Estado para controlar se a barra de pesquisa está aberta
         let searchBarOpen = false;
@@ -668,6 +706,12 @@
         setInterval(atualizarStatusLoja, 2000);
     </script>
 
+    <!-- INSERIDO: botão "Ver todos os produtos" (colocar imediatamente antes do footer) -->
+    <div class="ver-todos-wrapper" aria-hidden="false">
+        <a href="#" class="ver-todos-btn" role="button" aria-label="Ver todos os produtos">VER TODOS
+            OS
+            PRODUTOS</a>
+    </div>
     <!-- Footer responsivo -->
     <footer class="site-footer">
         <div class="footer-logo">
@@ -703,10 +747,9 @@
 
             <!-- ADICIONADO: bloco com logo e nome da empresa desenvolvedora -->
             <div class="footer-dev" aria-label="Desenvolvido por">
-                <strong>Desenvolvido por:</strong>
                 <div class="dev-brand">
                     <!-- Substitua images/dev-logo.png pela imagem real da sua agência -->
-                    <img src="assets/dev-logo.png" alt="Logo Desenvolvedor" />
+                    <img src="assets/images/dev-logo.png" alt="Logo Desenvolvedor" />
                 </div>
             </div>
 
@@ -715,6 +758,7 @@
             </div>
         </div>
     </footer>
+
 </body>
 
 </html>

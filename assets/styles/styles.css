@@ -322,7 +322,7 @@ nav ul li a:hover {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url('../assets/image2.png');
+    background-image: url('../images/image2.png');
     background-repeat: repeat;
     background-position: top center;
     background-size: 420px;
