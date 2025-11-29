@@ -11,7 +11,27 @@ async function carregarProdutos() {
     }
 }
 
-function renderizarProdutos(produtos) {
+// Nova função para buscar produtos por termo
+async function buscarProdutosPorTermo(termo) {
+    try {
+        const response = await fetch('./data/produtos.json');
+        if (!response.ok) throw new Error('Erro ao carregar produtos');
+
+        const produtos = await response.json();
+        // Filtra produtos pelo termo (nome ou descrição)
+        const termoLower = termo.trim().toLowerCase();
+        const resultados = produtos.filter(produto =>
+            produto.nome.toLowerCase().includes(termoLower) ||
+            (produto.descricao && produto.descricao.toLowerCase().includes(termoLower))
+        );
+        renderizarProdutos(resultados, true); // true indica que é resultado de busca
+    } catch (erro) {
+        console.error('Erro:', erro);
+        mostrarErro();
+    }
+}
+
+function renderizarProdutos(produtos, isBusca = false) {
     const container = document.getElementById('produtosContainer');
     const erroDiv = document.getElementById('produtosErro');
 
@@ -24,7 +44,7 @@ function renderizarProdutos(produtos) {
         <article class="produto-card" role="listitem">
             <div class="produto-imagem-wrapper">
                 <img src="${produto.imagem}" alt="${produto.nome}" class="produto-imagem" loading="lazy" />
-                ${produto.desconto ? `<div class="desconto-badge">${produto.desconto}% OFF</div>` : ''}
+                ${!isBusca && produto.desconto ? `<div class="desconto-badge">${produto.desconto}% OFF</div>` : ''}
             </div>
             <div class="produto-info">
                 <h3 class="produto-nome">${produto.nome}</h3>
@@ -61,5 +81,18 @@ function adicionarAoCarrinho(produtoId) {
     // Implementar lógica do carrinho aqui
 }
 
-// Carregar produtos ao iniciar
-document.addEventListener('DOMContentLoaded', carregarProdutos);
+// Detecta a página e executa a função correta ao carregar
+document.addEventListener('DOMContentLoaded', function () {
+    const pathname = window.location.pathname;
+    if (pathname.endsWith('search.html')) {
+        // Pegue o termo de busca do input ou da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const termo = urlParams.get('q') || ''; // Exemplo: ?q=camisa
+        buscarProdutosPorTermo(termo);
+    } else {
+        carregarProdutos();
+    }
+});
+
+// Exemplo de uso para search.html:
+// buscarProdutosPorTermo('termo pesquisado pelo usuário');

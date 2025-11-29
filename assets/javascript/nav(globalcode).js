@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			</div>
 			<ul id="menuList">
 				<li><a href="./index.html" id="op1"></a></li>
-				<li><a href="#ProdutosDestaque" id="op2"></a></li>
+				<li><a href="./index.html#ProdutosDestaque" id="op2"></a></li>
 				<li><a href="" id="op3"></a></li>
 				<li><a href="" id="op4"></a></li>
 				<li><a href="" id="op5"></a></li>
@@ -294,20 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inserir no header
     header.insertAdjacentHTML('afterbegin', navHtml);
-
-    // Ajuste de hrefs para funcionar tanto na raiz quanto dentro da pasta "pages"
-    (function fixMenuHrefs() {
-        const inPagesFolder = location.pathname.split('/').includes('pages');
-        const menuList = header.querySelector('#menuList');
-        if (!menuList) return;
-        const op1 = menuList.querySelector('#op1');
-        const op2 = menuList.querySelector('#op2');
-        // op1: link para a página inicial
-        if (op1) op1.href = inPagesFolder ? '../index.html' : './index.html';
-        // op2: link para âncora ProdutosDestaque na página inicial
-        if (op2) op2.href = inPagesFolder ? '../index.html#ProdutosDestaque' : '#ProdutosDestaque';
-        // outros links podem ficar relativos ou ser ajustados conforme necessário
-    })();
 
     // Notifica outros scripts (pr-def.js) que o nav foi injetado
     document.dispatchEvent(new Event('navInjected'));

@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-
+    <link rel="stylesheet" href="./assets/styles/produtos-destaques.css">
     <!-- CORREÇÃO: apontar para o arquivo correto de estilos da página de busca -->
     <link rel="stylesheet" href="./assets/styles/searchpage.css">
 
@@ -38,12 +38,20 @@
         <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
     </form>
 
+    <div class="container">
+        <div id="produtosContainer" class="produtos-container" role="list"></div>
+        <div id="produtosErro" class="produtos-erro" role="status" aria-live="polite" hidden>
+            Não foi possível carregar os produtos no momento.
+        </div>
+    </div>
+
     <!-- pr-def deve ser carregado antes de nav.js -->
     <script src="./assets/javascript/pr-def.js"></script>
     <!-- injeta o markup da nav (com ajustes de href e estilos injetados) -->
     <script src="./assets/javascript/nav(globalcode).js"></script>
     <!-- lógica do menu/search que depende de pr-def.js -->
     <script src="./assets/javascript/nav.js"></script>
+    <script src="./assets/javascript/produto-destaque.js"></script>
 
     <!-- Container para os cartões de produto (será preenchido pelo script abaixo) -->
     <main id="searchResultsContainer" class="products-grid" aria-live="polite"></main>
