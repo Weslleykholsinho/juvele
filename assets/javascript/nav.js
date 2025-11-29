@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadProducts() {
         try {
             // ajuste o caminho se necessário
-            const resp = await fetch('data/produtos.json', { cache: 'no-store' });
+            const resp = await fetch('./data/produtos.json', { cache: 'no-store' });
             if (!resp.ok) throw new Error('fetch error ' + resp.status);
             const data = await resp.json();
             // aceita array raiz ou { products: [...] }
@@ -63,9 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Sempre mostra overlay quando menu é aberto, mesmo se foi fechado antes
                 menuOverlay.classList.add('menu-open');
                 menuOverlay.style.display = 'block';
+                menuOverlay.setAttribute('aria-hidden', 'false');
             } else {
                 menuOverlay.classList.remove('menu-open');
                 menuOverlay.style.display = 'none';
+                menuOverlay.setAttribute('aria-hidden', 'true');
             }
         }
 
@@ -89,7 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
             menuList.classList.remove('open');
             setIconOpen(false);
             // Esconde overlay
-            if (menuOverlay) menuOverlay.classList.remove('menu-open');
+            if (menuOverlay) {
+                menuOverlay.classList.remove('menu-open');
+                menuOverlay.style.display = 'none';
+                menuOverlay.setAttribute('aria-hidden', 'true');
+            }
         }
     });
 
@@ -98,7 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
         menuOverlay.addEventListener('click', () => {
             menuList.classList.remove('open');
             setIconOpen(false);
+            // Esconde overlay
             menuOverlay.classList.remove('menu-open');
+            menuOverlay.style.display = 'none';
+            menuOverlay.setAttribute('aria-hidden', 'true');
         });
     }
 
@@ -117,6 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (menuList.classList.contains('open')) {
                     menuList.classList.remove('open');
                     setIconOpen(false);
+                    // GUARDA: ao fechar o menu para abrir a busca, esconda o overlay também
+                    if (menuOverlay) {
+                        menuOverlay.classList.remove('menu-open');
+                        menuOverlay.style.display = 'none';
+                        menuOverlay.setAttribute('aria-hidden', 'true');
+                    }
+                    // também remove a marca de menu-aberto no body
+                    document.body.classList.remove('menu-aberto');
                 }
             }
 
@@ -125,6 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 results.classList.remove('open');
                 results.setAttribute('aria-hidden', 'true');
                 input.blur(); // NOVO: força perder foco ao fechar, fecha teclado virtual
+                // garantir overlay fechado ao fechar a busca
+                if (menuOverlay) {
+                    menuOverlay.classList.remove('menu-open');
+                    menuOverlay.style.display = 'none';
+                    menuOverlay.setAttribute('aria-hidden', 'true');
+                }
             } else {
                 results.setAttribute('aria-hidden', 'false');
                 input.focus();
@@ -136,7 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
             submit.addEventListener('click', (e) => {
                 const q = (input.value || '').trim();
                 if (!q) return;
-                window.location.href = `./search.html?q=${encodeURIComponent(q)}`;
+                // usa getSearchUrl para garantir caminho correto de qualquer página
+                window.location.href = getSearchUrl(q);
             });
         }
 
@@ -150,7 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (menuList) {
                     menuList.classList.remove('open');
                     setIconOpen(false);
-                    if (menuOverlay) menuOverlay.classList.remove('menu-open');
+                    if (menuOverlay) {
+                        menuOverlay.classList.remove('menu-open');
+                        menuOverlay.style.display = 'none';
+                        menuOverlay.setAttribute('aria-hidden', 'true');
+                    }
                 }
             }
         });
@@ -171,6 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
             results.classList.remove('open');
             results.setAttribute('aria-hidden', 'true');
             input.blur();
+            // também garante overlay escondido
+            if (menuOverlay) {
+                menuOverlay.classList.remove('menu-open');
+                menuOverlay.style.display = 'none';
+                menuOverlay.setAttribute('aria-hidden', 'true');
+            }
         });
     }
 
@@ -285,7 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const link = getProductLink(m.p);
             // Altera: ao clicar, redireciona para search.html com o termo da sugestão
             div.addEventListener('click', () => {
-                window.location.href = `./search.html?q=${encodeURIComponent(m.rawName)}`;
+                // usa getSearchUrl para garantir caminho correto de qualquer página
+                window.location.href = getSearchUrl(m.rawName);
             });
             results.appendChild(div);
         });
@@ -331,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (menuOverlay) {
                 menuOverlay.classList.remove('menu-open');
                 menuOverlay.style.display = 'none';
+                menuOverlay.setAttribute('aria-hidden', 'true');
             }
         }
     });
@@ -347,7 +383,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (menuOverlay) {
                 menuOverlay.classList.remove('menu-open');
                 menuOverlay.style.display = 'none';
+                menuOverlay.setAttribute('aria-hidden', 'true');
             }
         }
     });
+
+    // Helper: constrói URL correta para a página de busca dentro da pasta "pages"
+    function getSearchUrl(q) {
+        // resolve 'pages/search.html' em relação ao document.baseURI (respeita <base>)
+        const url = new URL('./pages/search.html', document.baseURI);
+        if (q && q.toString().trim()) {
+            url.search = 'q=' + encodeURIComponent(q.toString().trim());
+        } else {
+            url.search = '';
+        }
+        return url.href;
+    }
 });

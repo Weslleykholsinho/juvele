@@ -493,26 +493,7 @@
 <body>
     <!--PARTE DE CIMA Titulo, logotipo e Navbar-->
     <header>
-        <nav>
-            <div class="logo">
-                <h1>JUVELE</h1>
-            </div>
-            <ul id="menuList">
-                <li><a href="./index.html" id="op1"></a></li>
-                <li><a href="#ProdutosDestaque" id="op2"></a></li>
-                <li><a href="" id="op3"></a></li>
-                <li><a href="" id="op4"></a></li>
-                <li><a href="" id="op5"></a></li>
-            </ul>
-            <div class="search-icon">
-                <i class="fa-solid fa-search"></i>
-            </div>
-            <div class="menu-icon">
-                <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
-            </div>
-        </nav>
-        <!-- Overlay para escurecimento em mobile -->
-        <div id="menuOverlay" class="menu-overlay"></div>
+        <!-- nav HTML removido daqui; será injetado por nav(globalcode).js -->
     </header>
 
 
@@ -566,15 +547,14 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity=""
         crossorigin="anonymous">
+    <!-- Incluir script que injeta a nav antes do nav.js -->
+    <script src="./nav(globalcode).js"></script>
+    <!-- pr-def deve ser carregado antes de nav.js -->
+    <script src="./assets/javascript/pr-def.js"></script>
     <script src="./assets/javascript/nav.js"></script>
     <script src="./assets/javascript/produto-destaque.js"></script>
-    <script src="./assets/javascript/pr-def.js"></script>
     <script src="./assets/javascript/faixatop.js"></script>
     <script>
-        // Estado para controlar se a barra de pesquisa está aberta
-        let searchBarOpen = false;
-        let menuJustOpened = false; // NOVO: flag para ignorar scroll logo após abrir menu
-
         // Carregar categorias dinamicamente de categorias.json
         fetch('./data/categorias.json')
             .then(response => response.json())
@@ -603,81 +583,7 @@
                 categoriasList.innerHTML = '<span style="color:red;">Não foi possível carregar as categorias.</span>';
             });
 
-        // Função para abrir/fechar o menu
-        function toggleMenu() {
-            // Se a barra de pesquisa estiver aberta, feche-a antes de abrir o menu
-            if (searchBarOpen) {
-                searchBarOpen = false;
-                searchInput.blur();
-                document.getElementById('searchResults').setAttribute('aria-hidden', 'true');
-            }
-            // Alterna a classe do body para abrir/fechar o menu
-            document.body.classList.toggle('menu-aberto');
-            // Atualiza overlay conforme estado do menu
-            if (document.body.classList.contains('menu-aberto')) {
-                menuOverlay.style.display = 'block';
-                menuJustOpened = true; // Sinaliza que menu foi aberto manualmente
-                setTimeout(() => { menuJustOpened = false; }, 500); // Reseta após 500ms
-            } else {
-                menuOverlay.style.display = 'none';
-            }
-        }
-
-        // Fecha o menu automaticamente ao clicar fora ou rolar a página
-        document.addEventListener('click', (e) => {
-            if (
-                document.body.classList.contains('menu-aberto') &&
-                !e.target.closest('nav') &&
-                !e.target.closest('.menu-icon')
-            ) {
-                document.body.classList.remove('menu-aberto');
-                menuOverlay.style.display = 'none';
-            }
-        });
-
-        window.addEventListener('scroll', () => {
-            if (menuJustOpened) {
-                // Ignora o primeiro scroll após abrir menu
-                menuJustOpened = false;
-                return;
-            }
-            if (document.body.classList.contains('menu-aberto')) {
-                document.body.classList.remove('menu-aberto');
-                menuOverlay.style.display = 'none';
-            }
-        });
-
-        const searchInput = document.getElementById('searchInput');
-        const searchBar = document.getElementById('siteSearch');
-        const searchSubmit = document.getElementById('searchSubmit');
-        const menuOverlay = document.getElementById('menuOverlay');
-
-        // Quando a barra de pesquisa é focada, feche o menu e o overlay
-        searchInput.addEventListener('focus', () => {
-            searchBarOpen = true;
-            document.body.classList.remove('menu-aberto');
-            // Situação específica: se o menu estava aberto, o overlay deve sumir imediatamente
-            menuOverlay.style.display = 'none';
-        });
-
-        // Quando o botão de busca é clicado, feche o menu e o overlay
-        searchSubmit.addEventListener('click', () => {
-            searchBarOpen = false;
-            document.body.classList.remove('menu-aberto');
-            // Situação específica: se o menu estava aberto, o overlay deve sumir imediatamente
-            menuOverlay.style.display = 'none';
-        });
-
-        // ATENÇÃO PARA O OVERLAY:
-        // Quando a barra de pesquisa está aberta e o usuário chama o menu,
-        // o sistema automaticamente fecha a barra de pesquisa e abre o menu.
-        // Nessa situação, o overlay pode aparecer normalmente, sem medo:
-        // isso significa que o menu está realmente aberto e a pesquisa foi fechada.
-        // O overlay só deve sumir imediatamente quando a pesquisa for ativada
-        // enquanto o menu estava aberto (caso inverso).
-
         // Lista de exceções: dias da semana em que a loja está fechada
-        // 0 = Domingo, 6 = Sábado (exemplo: fechado aos domingos)
         const diasFechados = [0, 4]; // Adicione outros dias se necessário, ex: [0, 6] para domingo e sábado
 
         // Status da loja (aberta/fechada) - horário: 8h às 18h, exceto dias fechados
@@ -686,6 +592,7 @@
             const hora = agora.getHours();
             const diaSemana = agora.getDay(); // 0 = domingo, 1 = segunda, ..., 6 = sábado
             const statusText = document.getElementById('statusText');
+            if (!statusText) return;
             // Verifica se hoje é um dia fechado
             if (diasFechados.includes(diaSemana)) {
                 statusText.innerHTML =
@@ -712,7 +619,7 @@
             }
         }
         atualizarStatusLoja();
-        // Atualizar status a cada segundo para evitar qualquer atraso
+        // Atualizar status a cada 2 segundos (mantido)
         setInterval(atualizarStatusLoja, 2000);
     </script>
 
