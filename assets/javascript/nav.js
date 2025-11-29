@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadProducts() {
         try {
             // ajuste o caminho se necessário
-            const resp = await fetch('../data/produtos.json', { cache: 'no-store' });
+            const resp = await fetch('./data/produtos.json', { cache: 'no-store' });
             if (!resp.ok) throw new Error('fetch error ' + resp.status);
             const data = await resp.json();
             // aceita array raiz ou { products: [...] }
