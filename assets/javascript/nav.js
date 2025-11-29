@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadProducts() {
         try {
             // ajuste o caminho se necessário
-            const resp = await fetch('./data/produtos.json', { cache: 'no-store' });
+            const resp = await fetch('../data/produtos.json', { cache: 'no-store' });
             if (!resp.ok) throw new Error('fetch error ' + resp.status);
             const data = await resp.json();
             // aceita array raiz ou { products: [...] }
@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Helper: constrói URL correta para a página de busca dentro da pasta "pages"
     function getSearchUrl(q) {
         // resolve 'pages/search.html' em relação ao document.baseURI (respeita <base>)
-        const url = new URL('./pages/search.html', document.baseURI);
+        const url = new URL('./search.html', document.baseURI);
         if (q && q.toString().trim()) {
             url.search = 'q=' + encodeURIComponent(q.toString().trim());
         } else {

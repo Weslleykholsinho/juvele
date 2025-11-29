@@ -12,7 +12,7 @@
         rel="stylesheet">
 
     <!-- CORREÇÃO: apontar para o arquivo correto de estilos da página de busca -->
-    <link rel="stylesheet" href="./assets/styles/search-page.css">
+    <link rel="stylesheet" href="./assets/styles/searchpage.css">
 
     <!-- mover Font Awesome para o head -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -39,11 +39,11 @@
     </form>
 
     <!-- pr-def deve ser carregado antes de nav.js -->
-    <script src="../assets/javascript/pr-def.js"></script>
+    <script src="./assets/javascript/pr-def.js"></script>
     <!-- injeta o markup da nav (com ajustes de href e estilos injetados) -->
-    <script src="../nav(globalcode).js"></script>
+    <script src="./assets/javascript/nav(globalcode).js"></script>
     <!-- lógica do menu/search que depende de pr-def.js -->
-    <script src="../assets/javascript/nav.js"></script>
+    <script src="./assets/javascript/nav.js"></script>
 
     <!-- Container para os cartões de produto (será preenchido pelo script abaixo) -->
     <main id="searchResultsContainer" class="products-grid" aria-live="polite"></main>
