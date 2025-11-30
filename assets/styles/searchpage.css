@@ -12,5 +12,57 @@ html,
 body {
     height: 100%;
     width: 100%;
-    background: none;
 }
+
+ body {
+            background: #faf9f6;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .search-header {
+            text-align: center;
+            /* centraliza título e descrição */
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .search-title {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #5b3142;
+            margin: 0.5rem 0;
+            font-family: 'Montserrat', sans-serif;
+            margin-left: 0;
+            /* remove margem à esquerda */
+        }
+
+        .search-description {
+            color: #222222;
+            font-size: 0.9rem;
+            max-width: 600px;
+            /* aumenta largura para melhor leitura quando centralizado */
+            margin: 15px auto 15px;
+            /* centraliza horizontalmente */
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #d16e8d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link i {
+            margin-right: 6px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 1rem;
+            max-width: 1100px;
+            margin-top: -70px;
+        }
