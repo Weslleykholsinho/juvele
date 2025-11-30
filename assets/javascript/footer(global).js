@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="footer-dev" aria-label="Desenvolvido por">
                 <div class="dev-brand">
-                    <img src="assets/images/dev-logo.png" alt="Logo Desenvolvedor" />
+                    <img src="assets/images/dev/dev-logo.png" alt="Logo Desenvolvedor" />
                 </div>
             </div>
 
@@ -64,4 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     document.body.insertAdjacentHTML('beforeend', footerHtml);
+
+    // Redireciona ao clicar em "ver todos os produtos"
+    const verTodosBtn = document.querySelector('.ver-todos-btn');
+    if (verTodosBtn) {
+        verTodosBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = 'search.html';
+        });
+    }
 });

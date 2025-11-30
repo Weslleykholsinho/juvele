@@ -36,7 +36,7 @@
         "descricao": "Calça jeans skinny com lavagem escura, ideal para looks do dia a dia.",
         "preco": 179.90,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x04.png",
-        "destaque": false,
+        "destaque": true,
         "categoria": "Calças"
     },
     {
@@ -55,7 +55,7 @@
         "preco": 219.00,
         "oldprice": 243.33,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x06.png",
-        "destaque": false,
+        "destaque": true,
         "categoria": "Macacões",
         "desconto": 10
     }

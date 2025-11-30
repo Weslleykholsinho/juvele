@@ -81,6 +81,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    /* Garante que o conteúdo ocupe o espaço e o botão vá para a base */
 }
 
 .produto-nome {
@@ -124,6 +125,8 @@
     transition: background 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin-top: auto;
+    /* Adicionado para alinhar o botão na base */
 }
 
 /* -------------------------

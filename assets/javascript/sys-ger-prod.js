@@ -4,8 +4,13 @@ async function carregarProdutos() {
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         const produtos = await response.json();
+        // Garante compatibilidade com diferentes capitalizações e tipos do campo destaque
+        const produtosDestaque = produtos.filter(p => {
+            const destaque = p.Destaque ?? p.destaque;
+            return destaque === true || destaque === "true";
+        });
         paginaAtual = 1;
-        renderizarProdutosPaginados(produtos);
+        renderizarProdutosPaginados(produtosDestaque);
     } catch (erro) {
         console.error('Erro:', erro);
         mostrarErro();
