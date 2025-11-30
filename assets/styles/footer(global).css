@@ -94,11 +94,10 @@
 }
 
 .site-footer .footer-dev .dev-brand img {
-    width: 200px;
+    width: 140px;
     height: 100px;
     border-radius: 6px;
     object-fit: cover;
-    background: #fff;
 }
 
 /* Em telas muito pequenas, empilha o texto "Desenvolvido por" acima da logo */
