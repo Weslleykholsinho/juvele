@@ -3,18 +3,29 @@ async function carregarProdutos() {
         const response = await fetch('./data/produtos.json');
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
-        const produtos = await response.json();
+        let produtos = await response.json();
         // Garante compatibilidade com diferentes capitalizações e tipos do campo destaque
         const produtosDestaque = produtos.filter(p => {
             const destaque = p.Destaque ?? p.destaque;
             return destaque === true || destaque === "true";
         });
+        // Embaralha os produtos em destaque
+        shuffleArray(produtosDestaque);
         paginaAtual = 1;
         renderizarProdutosPaginados(produtosDestaque);
     } catch (erro) {
         console.error('Erro:', erro);
         mostrarErro();
     }
+}
+
+// Função utilitária para embaralhar um array (Fisher-Yates)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 // Função para normalizar palavras (remove acentos, minúsculo, trata plural/singular simples)
@@ -31,7 +42,7 @@ async function buscarProdutosPorTermo(termo) {
         const response = await fetch('./data/produtos.json');
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
-        const produtos = await response.json();
+        let produtos = await response.json();
         // Divide termo em palavras e normaliza
         const palavrasBusca = termo.trim().split(/\s+/).map(normalizarPalavra);
 
@@ -46,6 +57,8 @@ async function buscarProdutosPorTermo(termo) {
             });
         });
 
+        // Embaralha os resultados da busca
+        shuffleArray(resultados);
         paginaAtual = 1;
         renderizarProdutosPaginados(resultados, true);
     } catch (erro) {
@@ -113,12 +126,27 @@ function renderizarProdutos(produtos, isBusca = false) {
     const erroDiv = document.getElementById('produtosErro');
 
     if (!produtos || produtos.length === 0) {
-        mostrarErro();
-        return;
+        if (isBusca) {
+            // mostra mensagem elegante de "sem resultados" apenas para buscas
+            mostrarSemResultados();
+            return;
+        } else {
+            mostrarErro();
+            return;
+        }
     }
 
-    container.innerHTML = produtos.map(produto => `
-        <article class="produto-card" role="listitem">
+    // se houver produtos, garante que a área "sem resultados" e o erro estejam ocultos
+    const noResultsEl = document.getElementById('noResults');
+    if (noResultsEl) noResultsEl.hidden = true;
+    if (erroDiv) erroDiv.hidden = true;
+
+    // garantir que data-price contenha número (se possível) para facilitar filtro/ordenacão
+    container.innerHTML = produtos.map(produto => {
+        const precoNum = parseFloat(String(produto.preco).replace(',', '.'));
+        const dataPrice = Number.isFinite(precoNum) ? precoNum : '';
+        return `
+        <article class="produto-card" role="listitem" data-price="${dataPrice}">
             <div class="produto-imagem-wrapper">
                 <img src="${produto.imagem}" alt="${produto.nome}" class="produto-imagem" loading="lazy" />
                 ${!isBusca && produto.desconto ? `<div class="desconto-badge">${produto.desconto}% OFF</div>` : ''}
@@ -134,9 +162,63 @@ function renderizarProdutos(produtos, isBusca = false) {
                 </button>
             </div>
         </article>
-    `).join('');
+        `;
+    }).join('');
 
     erroDiv.hidden = true;
+}
+
+function mostrarSemResultados() {
+    const container = document.getElementById('produtosContainer');
+    const erroDiv = document.getElementById('produtosErro');
+    if (container) {
+        container.innerHTML = `
+            <div class="sem-resultados">
+                <p class="sem-resultados-texto">Ops, nenhum resultado foi encontrado para sua pesquisa.</p>
+                <img src="./assets/images/avatars/searchnotfound.png" alt="Nenhum resultado encontrado" class="imagem-sem-resultados" />
+            </div>
+        `;
+        // Centraliza o conteúdo do container usando flexbox
+        container.style.display = 'flex';
+        container.style.justifyContent = 'center';
+        container.style.alignItems = 'center';
+        container.style.minHeight = '60vh'; // altura mínima para centralizar melhor
+    }
+    if (erroDiv) erroDiv.hidden = true; // Esconde mensagem de erro
+
+    // Remove estilos antigos se já existirem
+    const oldStyle = document.getElementById('sem-resultados-style');
+    if (oldStyle) oldStyle.remove();
+
+    // Adiciona estilos diretamente na página
+    const style = document.createElement('style');
+    style.id = 'sem-resultados-style';
+    style.textContent = `
+        .sem-resultados { 
+            width: 350px;
+            flex-direction: column;
+            display: flex;
+            padding: 20px;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            background-color: none;
+            border-radius: 8px;
+        }
+        .sem-resultados-texto {
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            font-family: Montserrat, sans-serif;
+            font-weight: 300;  
+            color: #000000ff;
+        }
+        .imagem-sem-resultados {
+            width: 100%;
+            height: auto;
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 function formatarPreco(preco) {
@@ -149,8 +231,9 @@ function formatarPreco(preco) {
 function mostrarErro() {
     const container = document.getElementById('produtosContainer');
     const erroDiv = document.getElementById('produtosErro');
-    container.innerHTML = '';
-    erroDiv.hidden = false;
+    if (container) container.innerHTML = '';
+    // Removido: lógica para ocultar "noResults"
+    if (erroDiv) erroDiv.hidden = false;
 }
 
 function adicionarAoCarrinho(produtoId) {

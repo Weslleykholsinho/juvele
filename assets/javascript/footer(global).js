@@ -3,6 +3,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.site-footer')) return;
 
     const footerHtml = `
+    <style>
+        .footer-payments .payments-icons img {
+            height: 20px;
+            width: auto;
+            margin-right: 4px;
+            vertical-align: middle;
+            max-width: 32px;
+        }
+        .footer-payments .payments-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+            margin-top: 6px;
+        }
+    </style>
 
      <div class="ver-todos-wrapper" aria-hidden="false">
         <a href="#" class="ver-todos-btn" role="button" aria-label="Ver todos os produtos">VER TODOS
@@ -25,6 +41,22 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <div class="footer-body">
+            <div class="footer-payments">
+                <strong>Meios de pagamento:</strong>
+                <span class="payments-icons">
+                    <img src="assets/images/payments/visa@2x.png" alt="Visa" />
+                    <img src="assets/images/payments/mastercard@2x.png" alt="Mastercard" />
+                    <img src="assets/images/payments/elo@2x.png" alt="Elo" />
+                    <img src="assets/images/payments/pix@2x.png" alt="Pix" />
+                    <img src="assets/images/payments/hipercard@2x.png" alt="Hipercard" />
+                    <img src="assets/images/payments/discover@2x.png" alt="Discover" />
+                    <img src="assets/images/payments/amex@2x.png" alt="American Express" />
+                    <img src="assets/images/payments/diners@2x.png" alt="Diners Club" />
+                     <img src="assets/images/payments/aura@2x.png" alt="Boleto" />
+                    <!-- Adicione outros ícones conforme necessário -->
+                </span>
+            </div>
+
             <div class="footer-social">
                 <strong>Redes Sociais:</strong>
                 <span>
