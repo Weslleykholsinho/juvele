@@ -1,26 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
-}
-
-html,
-body {
-    height: 100%;
-    width: 100%;
-    background: none;
-}
-
-/* NAV STYLES MOVED:
-   All navigation-related styles (variables, nav, .logo, nav ul, .menu-icon,
-   .search-icon, .search-bar, .menu-overlay and mobile media queries) were
-   removed from this file and injected dynamically by
-   nav(globalcode).js to keep markup + styles colocated.
-*/
 
 /* promoção, faixatop e demais estilos não relacionados à nav permanecem abaixo */
 .promotion {
