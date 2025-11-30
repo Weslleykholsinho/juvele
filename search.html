@@ -148,6 +148,12 @@
             font-size: 0.9rem;
         }
 
+        .price-filter-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            user-select: none;
+        }
+
         /* pequenos ajustes responsivos */
         @media (max-width: 520px) {
             .price-filter-wrapper {
@@ -169,6 +175,53 @@
                 padding: 0 32px;
             }
         }
+
+        /* Substituído: .filter-no-results-msg continua absoluta, mas usamos um spacer para reservar espaço */
+        .filter-no-results-msg {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: #fff6f6;
+            border: 1px solid #ffd6d6;
+            border-radius: 8px;
+            font-size: 1.15rem;
+            color: #b23c3c;
+            font-family: Montserrat, sans-serif;
+            font-weight: 400;
+            box-shadow: 0 2px 8px 0 rgba(200, 0, 0, 0.04);
+
+            /* Mantém posição absoluta (solicitado) */
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 16px;
+            /* distância do topo do container */
+            width: calc(100% - 40px);
+            max-width: 1100px;
+            box-sizing: border-box;
+            z-index: 20;
+        }
+
+        /* Spacer que reserva espaço no fluxo quando a mensagem está visível */
+        .filter-no-results-spacer {
+            display: none;
+            /* será ativado via JS quando necessário */
+            width: 100%;
+            height: 0;
+            box-sizing: border-box;
+            pointer-events: none;
+            visibility: hidden;
+            /* não deve ser perceptível, apenas reserva espaço */
+        }
+
+        /* Garante que os containers sirvam de referência para o absolute */
+        .produtos-container,
+        .products-grid {
+            position: relative;
+        }
     </style>
 
     <!-- Script para filtrar por categoria (exemplo básico) -->
@@ -176,10 +229,41 @@
         // Adicionado: lógica de filtragem por preço e ordenação
         (function () {
             const select = document.getElementById('priceFilter');
+            const wrapper = document.querySelector('.price-filter-wrapper');
             if (!select) return;
+
+            // Função para contar produtos "brutos" (antes de filtro de preço)
+            function getRawProductItems() {
+                const containers = [
+                    document.getElementById('produtosContainer'),
+                    document.getElementById('searchResultsContainer')
+                ].filter(Boolean);
+                let items = [];
+                containers.forEach(container => {
+                    items = items.concat(Array.from(container.querySelectorAll('[data-price], .produto-card, .product-card, .produto, [role="listitem"]')));
+                });
+                return items;
+            }
+
+            // Torna filtro inacessível se só houver 1 produto bruto (antes de filtro de preço)
+            function updatePriceFilterAccessibility() {
+                const items = getRawProductItems();
+                // conta apenas produtos realmente presentes (não display:none)
+                const visibleItems = items.filter(it => it.offsetParent !== null);
+                if (visibleItems.length === 1) {
+                    select.disabled = true;
+                    wrapper.classList.add('price-filter-disabled');
+                } else {
+                    select.disabled = false;
+                    wrapper.classList.remove('price-filter-disabled');
+                }
+            }
+
             select.addEventListener('change', applyPriceFilter);
+
             // aplica filtro/ordenação ao mudar e no carregamento
             applyPriceFilter();
+            updatePriceFilterAccessibility();
 
             function applyPriceFilter() {
                 const value = select.value;
@@ -188,12 +272,22 @@
                     document.getElementById('searchResultsContainer')
                 ].filter(Boolean);
 
+                // Remove todas as mensagens de filtro antes de processar
+                containers.forEach(container => {
+                    container.querySelectorAll('#filterNoResultsMsg').forEach(el => el.remove());
+                    const spacer = container.querySelector('.filter-no-results-spacer');
+                    if (spacer) {
+                        spacer.style.display = 'none';
+                        spacer.style.height = '0';
+                    }
+                });
+
+                // Aplica filtro e ordenação normalmente
                 containers.forEach(container => {
                     // coletar itens (preservando apenas os elementos de produto)
-                    // inclui .produto-card (renderizado por sys-ger-prod.js) e também procura por data-price
                     const items = Array.from(container.querySelectorAll('[data-price], .produto-card, .product-card, .produto, [role="listitem"]'));
 
-                    // primeiro: aplicar filtro de faixa (se aplicável)
+                    // aplicar filtro de faixa (se aplicável)
                     items.forEach(item => {
                         let price = getPrice(item);
                         let visible = true;
@@ -220,6 +314,45 @@
                         visibleItems.forEach(it => container.appendChild(it));
                     }
                 });
+
+                // Após aplicar o filtro, verifica se há pelo menos UM produto visível em TODOS os containers
+                let anyVisible = false;
+                containers.forEach(container => {
+                    const items = Array.from(container.querySelectorAll('[data-price], .produto-card, .product-card, .produto, [role="listitem"]'));
+                    if (items.some(it => it.style.display !== 'none')) {
+                        anyVisible = true;
+                    }
+                });
+
+                if (!anyVisible) {
+                    // Exibe a mensagem apenas no primeiro container
+                    const container = containers[0];
+                    const items = Array.from(container.querySelectorAll('[data-price], .produto-card, .product-card, .produto, [role="listitem"]'));
+                    // Esconde todos os produtos
+                    items.forEach(it => it.style.display = 'none');
+                    // cria/garante spacer que reserva espaço no fluxo
+                    let spacer = container.querySelector('.filter-no-results-spacer');
+                    if (!spacer) {
+                        spacer = document.createElement('div');
+                        spacer.className = 'filter-no-results-spacer';
+                        container.appendChild(spacer);
+                    }
+                    // cria a mensagem absoluta
+                    const filterMsgEl = document.createElement('div');
+                    filterMsgEl.id = 'filterNoResultsMsg';
+                    filterMsgEl.className = 'filter-no-results-msg';
+                    filterMsgEl.textContent = 'Nenhum resultado encontrado para esse filtro.';
+                    container.appendChild(filterMsgEl);
+                    filterMsgEl.hidden = false;
+                    if (!container.style.position) container.style.position = container.style.position;
+                    requestAnimationFrame(() => {
+                        const h = filterMsgEl.getBoundingClientRect().height;
+                        spacer.style.height = h + 'px';
+                        spacer.style.display = 'block';
+                        spacer.style.visibility = 'hidden';
+                    });
+                }
+                // Se houver algum produto visível, a mensagem já foi removida acima
             }
 
             function getPrice(item) {
@@ -238,6 +371,19 @@
                 }
                 return null;
             }
+
+            // Monitora mudanças de pesquisa para atualizar acessibilidade do filtro
+            // (hook simples para search-results.js ou outros scripts que atualizem os produtos)
+            const observer = new MutationObserver(() => {
+                updatePriceFilterAccessibility();
+            });
+            const mainContainers = [
+                document.getElementById('produtosContainer'),
+                document.getElementById('searchResultsContainer')
+            ].filter(Boolean);
+            mainContainers.forEach(mainContainer => {
+                observer.observe(mainContainer, { childList: true, subtree: true });
+            });
         })();
     </script>
     <script src="./assets/javascript/categorias0x1.js"></script>

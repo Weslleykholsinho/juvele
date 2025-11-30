@@ -216,6 +216,7 @@ function mostrarSemResultados() {
         .imagem-sem-resultados {
             width: 100%;
             height: auto;
+            opacity: 0.7;
         }
     `;
     document.head.appendChild(style);
