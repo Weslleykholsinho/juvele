@@ -58,6 +58,16 @@
     </div>
     <!-- Fim: filtro de preço -->
 
+    <!-- Início: toggle Promoções -->
+    <div class="promo-toggle-wrapper" aria-hidden="false">
+        <label for="promoToggle" class="promo-toggle-label">
+            <input type="checkbox" id="promoToggle" class="promo-toggle-checkbox" aria-label="Mostrar apenas promoções">
+            <span class="promo-toggle-custom"></span>
+            Priorizar promoções
+        </label>
+    </div>
+    <!-- Fim: toggle Promoções -->
+
     <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site" onsubmit="return false;">
         <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
         <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
@@ -176,6 +186,83 @@
             }
         }
 
+        /* Adicionado: estilos para o toggle de promoções */
+        .promo-toggle-wrapper {
+            margin: 8px auto 0 auto;
+            max-width: 1100px;
+            padding: 0 20px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+        }
+
+        .promo-toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.97rem;
+            color: #444;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .promo-toggle-checkbox {
+            display: none;
+        }
+
+        .promo-toggle-custom {
+            width: 36px;
+            height: 20px;
+            border-radius: 12px;
+            background: #e0e0e0;
+            position: relative;
+            transition: background 0.2s;
+            margin-right: 4px;
+            display: inline-block;
+        }
+
+        .promo-toggle-custom::before {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+            transition: left 0.2s;
+        }
+
+        .promo-toggle-checkbox:checked+.promo-toggle-custom {
+            background: #54d354;
+        }
+
+        .promo-toggle-checkbox:checked+.promo-toggle-custom::before {
+            left: 18px;
+            background: #ffffff;
+        }
+
+        .promo-toggle-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        @media (max-width: 520px) {
+            .promo-toggle-wrapper {
+                padding: 0 12px;
+                max-width: 100%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .promo-toggle-wrapper {
+                max-width: 1200px;
+                padding: 0 32px;
+            }
+        }
+
         /* Substituído: .filter-no-results-msg continua absoluta, mas usamos um spacer para reservar espaço */
         .filter-no-results-msg {
             display: flex;
@@ -226,10 +313,10 @@
 
     <!-- Script para filtrar por categoria (exemplo básico) -->
     <script>
-        // Adicionado: lógica de filtragem por preço e ordenação
         (function () {
             const select = document.getElementById('priceFilter');
             const wrapper = document.querySelector('.price-filter-wrapper');
+            const promoToggle = document.getElementById('promoToggle');
             if (!select) return;
 
             // Função para contar produtos "brutos" (antes de filtro de preço)
@@ -248,13 +335,11 @@
             // Torna filtro inacessível se só houver 1 produto bruto (antes de filtro de preço)
             function updatePriceFilterAccessibility() {
                 const items = getRawProductItems();
-                // conta apenas produtos realmente presentes (não display:none)
-                const visibleItems = items.filter(it => it.offsetParent !== null);
-                // NOVO: se não houver nenhum produto visível, desabilita o filtro
-                if (visibleItems.length === 0) {
+                // Se não houver nenhum produto bruto, desabilita o filtro
+                if (items.length === 0) {
                     select.disabled = true;
                     wrapper.classList.add('price-filter-disabled');
-                } else if (visibleItems.length === 1) {
+                } else if (items.length === 1) {
                     select.disabled = true;
                     wrapper.classList.add('price-filter-disabled');
                 } else {
@@ -388,6 +473,23 @@
             mainContainers.forEach(mainContainer => {
                 observer.observe(mainContainer, { childList: true, subtree: true });
             });
+
+            if (promoToggle) {
+                promoToggle.addEventListener('change', function () {
+                    // Resetar filtro de preço ao mudar o toggle de promoções
+                    select.value = 'all';
+                    // Não aplique filtro/ocultação de promoções aqui, apenas dispare a busca
+                    const pathname = window.location.pathname;
+                    if (pathname.endsWith('search.html')) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const termo = urlParams.get('q') || '';
+                        // Chama a busca que já faz a ordenação correta
+                        window.buscarProdutosPorTermo ? buscarProdutosPorTermo(termo) : null;
+                    } else {
+                        window.carregarProdutos ? carregarProdutos() : null;
+                    }
+                });
+            }
         })();
     </script>
     <script src="./assets/javascript/categorias0x1.js"></script>

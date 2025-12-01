@@ -4,13 +4,16 @@ async function carregarProdutos() {
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         let produtos = await response.json();
-        // Garante compatibilidade com diferentes capitalizações e tipos do campo destaque
+        // Ordena todos os produtos se o toggle promo estiver ativo
+        if (isPromoToggleAtivo()) {
+            produtos = ordenarPromocionaisPrimeiro(produtos);
+        }
+        // Filtra apenas os produtos em destaque
         const produtosDestaque = produtos.filter(p => {
             const destaque = p.Destaque ?? p.destaque;
             return destaque === true || destaque === "true";
         });
-        // Embaralha os produtos em destaque
-        shuffleArray(produtosDestaque);
+        // Não embaralhe aqui, pois a ordenação já foi feita
         paginaAtual = 1;
         renderizarProdutosPaginados(produtosDestaque);
     } catch (erro) {
@@ -28,6 +31,24 @@ function shuffleArray(array) {
     return array;
 }
 
+// Função para verificar se o produto está em promoção
+function isProdutoPromocao(produto) {
+    // Considera promoção se tiver desconto, oldprice, ou campo promocao/destaque
+    return !!(produto.desconto || produto.oldprice || produto.promocao === true || produto.promocao === "true" || produto.destaque === "promocao");
+}
+
+// Modifique o comportamento do toggle promo para ordenar, não ocultar
+function ordenarPromocionaisPrimeiro(produtos) {
+    return produtos.slice().sort((a, b) => {
+        const aPromo = isProdutoPromocao(a) ? 1 : 0;
+        const bPromo = isProdutoPromocao(b) ? 1 : 0;
+        // Promocionais primeiro, embaralhados entre si
+        if (aPromo !== bPromo) return bPromo - aPromo;
+        // Se ambos são do mesmo tipo, embaralhe
+        return Math.random() < 0.5 ? -1 : 1;
+    });
+}
+
 // Função para normalizar palavras (remove acentos, minúsculo, trata plural/singular simples)
 function normalizarPalavra(palavra) {
     return palavra
@@ -43,22 +64,22 @@ async function buscarProdutosPorTermo(termo) {
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         let produtos = await response.json();
+        // Ordena todos os produtos se o toggle promo estiver ativo
+        if (isPromoToggleAtivo()) {
+            produtos = ordenarPromocionaisPrimeiro(produtos);
+        }
         // Divide termo em palavras e normaliza
         const palavrasBusca = termo.trim().split(/\s+/).map(normalizarPalavra);
 
         const resultados = produtos.filter(produto => {
-            // Normaliza apenas o nome/título do produto
             const nomeProduto = (produto.nome || '')
                 .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-
-            // Para cada palavra da busca, verifica se está presente no nome do produto
             return palavrasBusca.every(palavra => {
                 return nomeProduto.includes(palavra) || nomeProduto.includes(palavra + 's');
             });
         });
 
-        // Embaralha os resultados da busca
-        shuffleArray(resultados);
+        // Não embaralhe aqui, pois a ordenação já foi feita
         paginaAtual = 1;
         renderizarProdutosPaginados(resultados, true);
     } catch (erro) {
@@ -121,9 +142,38 @@ function handlePaginationEvents() {
     };
 }
 
+// Função utilitária para controlar o estado do toggle promo
+function setPromoToggleState(enabled) {
+    const promoToggle = document.getElementById('promoToggle');
+    const promoLabel = promoToggle ? promoToggle.closest('label') : null;
+    if (promoToggle) {
+        promoToggle.disabled = !enabled;
+        // Remove inline opacity, usa classe CSS
+        if (promoLabel) {
+            if (!enabled) {
+                promoLabel.classList.add('promo-toggle-disabled');
+                promoToggle.checked = false;
+            } else {
+                promoLabel.classList.remove('promo-toggle-disabled');
+            }
+        }
+    }
+}
+
 function renderizarProdutos(produtos, isBusca = false) {
     const container = document.getElementById('produtosContainer');
     const erroDiv = document.getElementById('produtosErro');
+
+    // Corrige bug visual: sempre limpa estilos do container antes de renderizar
+    if (container) {
+        container.style.display = '';
+        container.style.justifyContent = '';
+        container.style.alignItems = '';
+        container.style.minHeight = '';
+    }
+
+    // Controle do toggle promo: habilita se houver resultados, desabilita se não houver
+    setPromoToggleState(produtos && produtos.length > 0);
 
     if (!produtos || produtos.length === 0) {
         if (isBusca) {
@@ -186,6 +236,9 @@ function mostrarSemResultados() {
     }
     if (erroDiv) erroDiv.hidden = true; // Esconde mensagem de erro
 
+    // Desabilita o toggle promo
+    setPromoToggleState(false);
+
     // Remove estilos antigos se já existirem
     const oldStyle = document.getElementById('sem-resultados-style');
     if (oldStyle) oldStyle.remove();
@@ -242,17 +295,39 @@ function adicionarAoCarrinho(produtoId) {
     // Implementar lógica do carrinho aqui
 }
 
+// Função para saber se o toggle de promoções está ativado
+function isPromoToggleAtivo() {
+    const promoToggle = document.getElementById('promoToggle');
+    return promoToggle && promoToggle.checked;
+}
+
 // Detecta a página e executa a função correta ao carregar
 document.addEventListener('DOMContentLoaded', function () {
     const pathname = window.location.pathname;
     paginacaoAtiva = pathname.endsWith('search.html');
     handlePaginationEvents();
+    const promoToggle = document.getElementById('promoToggle');
+    if (promoToggle) {
+        promoToggle.addEventListener('change', function () {
+            const pathname = window.location.pathname;
+            if (pathname.endsWith('search.html')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const termo = urlParams.get('q') || '';
+                buscarProdutosPorTermo(termo);
+            } else {
+                carregarProdutos();
+            }
+        });
+    }
     if (paginacaoAtiva) {
         const urlParams = new URLSearchParams(window.location.search);
         const termo = urlParams.get('q') || '';
         buscarProdutosPorTermo(termo);
+        // Ao entrar no search.html, controle o toggle conforme resultado inicial
+        // O controle será feito via renderizarProdutos/buscarProdutosPorTermo
     } else {
         carregarProdutos();
+        // O controle será feito via renderizarProdutos/carregarProdutos
     }
 });
 
