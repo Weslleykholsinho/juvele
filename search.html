@@ -250,7 +250,11 @@
                 const items = getRawProductItems();
                 // conta apenas produtos realmente presentes (não display:none)
                 const visibleItems = items.filter(it => it.offsetParent !== null);
-                if (visibleItems.length === 1) {
+                // NOVO: se não houver nenhum produto visível, desabilita o filtro
+                if (visibleItems.length === 0) {
+                    select.disabled = true;
+                    wrapper.classList.add('price-filter-disabled');
+                } else if (visibleItems.length === 1) {
                     select.disabled = true;
                     wrapper.classList.add('price-filter-disabled');
                 } else {

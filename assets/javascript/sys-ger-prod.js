@@ -149,7 +149,7 @@ function renderizarProdutos(produtos, isBusca = false) {
         <article class="produto-card" role="listitem" data-price="${dataPrice}">
             <div class="produto-imagem-wrapper">
                 <img src="${produto.imagem}" alt="${produto.nome}" class="produto-imagem" loading="lazy" />
-                ${!isBusca && produto.desconto ? `<div class="desconto-badge">${produto.desconto}% OFF</div>` : ''}
+                ${produto.desconto ? `<div class="desconto-badge">${produto.desconto}% OFF</div>` : ''}
             </div>
             <div class="produto-info">
                 <h3 class="produto-nome">${produto.nome}</h3>
