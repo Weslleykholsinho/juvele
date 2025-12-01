@@ -32,3 +32,5 @@
             // Mantém a atualização inicial quando a página é aberta com ?q=
             updateSearchText(q);
         }
+
+        

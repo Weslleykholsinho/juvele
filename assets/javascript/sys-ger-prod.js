@@ -13,9 +13,8 @@ async function carregarProdutos() {
             const destaque = p.Destaque ?? p.destaque;
             return destaque === true || destaque === "true";
         });
-        // Não embaralhe aqui, pois a ordenação já foi feita
-        paginaAtual = 1;
-        renderizarProdutosPaginados(produtosDestaque);
+        // Chama renderizarProdutos diretamente, sem paginação
+        renderizarProdutos(produtosDestaque);
     } catch (erro) {
         console.error('Erro:', erro);
         mostrarErro();
@@ -64,7 +63,6 @@ async function buscarProdutosPorTermo(termo) {
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         let produtos = await response.json();
-        // Ordena todos os produtos se o toggle promo estiver ativo
         if (isPromoToggleAtivo()) {
             produtos = ordenarPromocionaisPrimeiro(produtos);
         }
@@ -79,67 +77,12 @@ async function buscarProdutosPorTermo(termo) {
             });
         });
 
-        // Não embaralhe aqui, pois a ordenação já foi feita
-        paginaAtual = 1;
-        renderizarProdutosPaginados(resultados, true);
+        // Chama renderizarProdutos diretamente, sem paginação
+        renderizarProdutos(resultados, true);
     } catch (erro) {
         console.error('Erro:', erro);
         mostrarErro();
     }
-}
-
-// PAGINAÇÃO
-const PRODUTOS_POR_PAGINA = 6;
-let produtosAtuais = [];
-let paginaAtual = 1;
-let totalPaginas = 1;
-let paginacaoAtiva = false;
-
-function atualizarPaginacao() {
-    if (!paginacaoAtiva) return;
-    const pagInfo = document.getElementById('paginationInfo');
-    const btnPrev = document.getElementById('prevPage');
-    const btnNext = document.getElementById('nextPage');
-    pagInfo.textContent = `${paginaAtual} de ${totalPaginas}`;
-    btnPrev.disabled = paginaAtual <= 1;
-    btnNext.disabled = paginaAtual >= totalPaginas;
-}
-
-function renderizarProdutosPaginados(produtos, isBusca = false) {
-    if (!paginacaoAtiva) {
-        renderizarProdutos(produtos, isBusca);
-        return;
-    }
-    produtosAtuais = produtos || [];
-    totalPaginas = Math.max(1, Math.ceil(produtosAtuais.length / PRODUTOS_POR_PAGINA));
-    if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
-
-    const inicio = (paginaAtual - 1) * PRODUTOS_POR_PAGINA;
-    const fim = inicio + PRODUTOS_POR_PAGINA;
-    const produtosPagina = produtosAtuais.slice(inicio, fim);
-
-    renderizarProdutos(produtosPagina, isBusca);
-    atualizarPaginacao();
-}
-
-function handlePaginationEvents() {
-    if (!paginacaoAtiva) return;
-    const btnPrev = document.getElementById('prevPage');
-    const btnNext = document.getElementById('nextPage');
-    if (!btnPrev || !btnNext) return;
-
-    btnPrev.onclick = () => {
-        if (paginaAtual > 1) {
-            paginaAtual--;
-            renderizarProdutosPaginados(produtosAtuais);
-        }
-    };
-    btnNext.onclick = () => {
-        if (paginaAtual < totalPaginas) {
-            paginaAtual++;
-            renderizarProdutosPaginados(produtosAtuais);
-        }
-    };
 }
 
 // Função utilitária para controlar o estado do toggle promo
@@ -303,31 +246,26 @@ function isPromoToggleAtivo() {
 
 // Detecta a página e executa a função correta ao carregar
 document.addEventListener('DOMContentLoaded', function () {
-    const pathname = window.location.pathname;
-    paginacaoAtiva = pathname.endsWith('search.html');
-    handlePaginationEvents();
     const promoToggle = document.getElementById('promoToggle');
     if (promoToggle) {
         promoToggle.addEventListener('change', function () {
             const pathname = window.location.pathname;
+            const urlParams = new URLSearchParams(window.location.search);
+            const termo = urlParams.get('q') || '';
             if (pathname.endsWith('search.html')) {
-                const urlParams = new URLSearchParams(window.location.search);
-                const termo = urlParams.get('q') || '';
                 buscarProdutosPorTermo(termo);
             } else {
                 carregarProdutos();
             }
         });
     }
-    if (paginacaoAtiva) {
+    const pathname = window.location.pathname;
+    if (pathname.endsWith('search.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const termo = urlParams.get('q') || '';
         buscarProdutosPorTermo(termo);
-        // Ao entrar no search.html, controle o toggle conforme resultado inicial
-        // O controle será feito via renderizarProdutos/buscarProdutosPorTermo
     } else {
         carregarProdutos();
-        // O controle será feito via renderizarProdutos/carregarProdutos
     }
 });
 
