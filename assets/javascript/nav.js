@@ -195,15 +195,25 @@ document.addEventListener('DOMContentLoaded', () => {
             form.appendChild(closeBtn);
         }
         closeBtn.addEventListener('click', () => {
-            form.classList.remove('open');
-            results.classList.remove('open');
-            results.setAttribute('aria-hidden', 'true');
-            input.blur();
-            // também garante overlay escondido
-            if (menuOverlay) {
-                menuOverlay.classList.remove('menu-open');
-                menuOverlay.style.display = 'none';
-                menuOverlay.setAttribute('aria-hidden', 'true');
+            if (input.value && input.value.trim()) {
+                // Limpa o campo e os resultados, mantém a barra aberta
+                input.value = '';
+                results.innerHTML = '';
+                results.classList.remove('open');
+                results.setAttribute('aria-hidden', 'true');
+                input.focus();
+            } else {
+                // Fecha normalmente a barra de pesquisa
+                form.classList.remove('open');
+                results.classList.remove('open');
+                results.setAttribute('aria-hidden', 'true');
+                input.blur();
+                // também garante overlay escondido
+                if (menuOverlay) {
+                    menuOverlay.classList.remove('menu-open');
+                    menuOverlay.style.display = 'none';
+                    menuOverlay.setAttribute('aria-hidden', 'true');
+                }
             }
         });
     }
