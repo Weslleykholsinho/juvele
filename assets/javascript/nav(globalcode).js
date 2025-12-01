@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             /* mobile adjustments */
-            @media (max-width:700px) {
+            @media (max-width:820px) {
                 nav ul {
                     position: absolute;
                     top: var(--nav-height);
