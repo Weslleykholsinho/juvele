@@ -56,7 +56,67 @@ function normalizarPalavra(palavra) {
         .replace(/(oes|aes|aos|is|ns|s)$/i, ''); // remove plurais comuns
 }
 
-// Nova função para buscar produtos por termo (singular/plural e ordem flexível)
+// Variáveis de paginação (apenas para search.html)
+let paginaAtual = 1;
+const itensPorPagina = 2;
+let resultadosBusca = [];
+let totalPaginas = 1;
+let filtroPrecoSelecionado = "all";
+
+// Atualiza os controles de paginação
+function atualizarPaginacao() {
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    const info = document.getElementById('paginationInfo');
+    prevBtn.disabled = paginaAtual <= 1;
+    nextBtn.disabled = paginaAtual >= totalPaginas;
+    info.textContent = `${paginaAtual} de ${totalPaginas}`;
+}
+
+// Função para filtrar e ordenar resultados de busca conforme filtro de preço
+function filtrarEOrdenarPorPreco(produtos, filtro) {
+    let filtrados = produtos.slice();
+    switch (filtro) {
+        case "0-50":
+            filtrados = filtrados.filter(p => parseFloat(p.preco) <= 50);
+            break;
+        case "50-100":
+            filtrados = filtrados.filter(p => parseFloat(p.preco) > 50 && parseFloat(p.preco) <= 100);
+            break;
+        case "100-200":
+            filtrados = filtrados.filter(p => parseFloat(p.preco) > 100 && parseFloat(p.preco) <= 200);
+            break;
+        case "200+":
+            filtrados = filtrados.filter(p => parseFloat(p.preco) > 200);
+            break;
+        case "price-asc":
+            filtrados.sort((a, b) => parseFloat(a.preco) - parseFloat(b.preco));
+            break;
+        case "price-desc":
+            filtrados.sort((a, b) => parseFloat(b.preco) - parseFloat(a.preco));
+            break;
+        default:
+            // "all" não filtra nem ordena
+            break;
+    }
+    // Se for faixa de preço, mantém ordem original; se for asc/desc, já está ordenado
+    return filtrados;
+}
+
+// Renderiza página específica dos resultados de busca
+function renderizarPaginaBusca() {
+    // Aplica filtro de preço antes de paginar
+    const filtrados = filtrarEOrdenarPorPreco(resultadosBusca, filtroPrecoSelecionado);
+    totalPaginas = Math.max(1, Math.ceil(filtrados.length / itensPorPagina));
+    if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
+    const inicio = (paginaAtual - 1) * itensPorPagina;
+    const fim = inicio + itensPorPagina;
+    const paginaResultados = filtrados.slice(inicio, fim);
+    renderizarProdutos(paginaResultados, true);
+    atualizarPaginacao();
+}
+
+// Modifica buscarProdutosPorTermo para usar filtro de preço
 async function buscarProdutosPorTermo(termo) {
     try {
         const response = await fetch('./data/produtos.json');
@@ -77,29 +137,16 @@ async function buscarProdutosPorTermo(termo) {
             });
         });
 
-        // Chama renderizarProdutos diretamente, sem paginação
-        renderizarProdutos(resultados, true);
+        // Salva resultados e configura paginação
+        resultadosBusca = resultados;
+        paginaAtual = 1;
+        // Aplica filtro de preço antes de calcular totalPaginas
+        const filtrados = filtrarEOrdenarPorPreco(resultadosBusca, filtroPrecoSelecionado);
+        totalPaginas = Math.max(1, Math.ceil(filtrados.length / itensPorPagina));
+        renderizarPaginaBusca();
     } catch (erro) {
         console.error('Erro:', erro);
         mostrarErro();
-    }
-}
-
-// Função utilitária para controlar o estado do toggle promo
-function setPromoToggleState(enabled) {
-    const promoToggle = document.getElementById('promoToggle');
-    const promoLabel = promoToggle ? promoToggle.closest('label') : null;
-    if (promoToggle) {
-        promoToggle.disabled = !enabled;
-        // Remove inline opacity, usa classe CSS
-        if (promoLabel) {
-            if (!enabled) {
-                promoLabel.classList.add('promo-toggle-disabled');
-                promoToggle.checked = false;
-            } else {
-                promoLabel.classList.remove('promo-toggle-disabled');
-            }
-        }
     }
 }
 
@@ -244,6 +291,24 @@ function isPromoToggleAtivo() {
     return promoToggle && promoToggle.checked;
 }
 
+// Função utilitária para controlar o estado do toggle promo
+function setPromoToggleState(enabled) {
+    const promoToggle = document.getElementById('promoToggle');
+    const promoLabel = promoToggle ? promoToggle.closest('label') : null;
+    if (promoToggle) {
+        promoToggle.disabled = !enabled;
+        // Remove inline opacity, usa classe CSS
+        if (promoLabel) {
+            if (!enabled) {
+                promoLabel.classList.add('promo-toggle-disabled');
+                promoToggle.checked = false;
+            } else {
+                promoLabel.classList.remove('promo-toggle-disabled');
+            }
+        }
+    }
+}
+
 // Detecta a página e executa a função correta ao carregar
 document.addEventListener('DOMContentLoaded', function () {
     const promoToggle = document.getElementById('promoToggle');
@@ -264,6 +329,32 @@ document.addEventListener('DOMContentLoaded', function () {
         const urlParams = new URLSearchParams(window.location.search);
         const termo = urlParams.get('q') || '';
         buscarProdutosPorTermo(termo);
+        // Listeners de paginação
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', function () {
+                if (paginaAtual > 1) {
+                    paginaAtual--;
+                    renderizarPaginaBusca();
+                }
+            });
+            nextBtn.addEventListener('click', function () {
+                if (paginaAtual < totalPaginas) {
+                    paginaAtual++;
+                    renderizarPaginaBusca();
+                }
+            });
+        }
+        // Listener do filtro de preço
+        const priceFilter = document.getElementById('priceFilter');
+        if (priceFilter) {
+            priceFilter.addEventListener('change', function () {
+                filtroPrecoSelecionado = priceFilter.value;
+                paginaAtual = 1;
+                renderizarPaginaBusca();
+            });
+        }
     } else {
         carregarProdutos();
     }

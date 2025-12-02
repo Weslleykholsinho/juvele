@@ -288,8 +288,3 @@
             /* não deve ser perceptível, apenas reserva espaço */
         }
 
-        /* Garante que os containers sirvam de referência para o absolute */
-        .produtos-container,
-        .products-grid {
-            position: relative;
-        }
