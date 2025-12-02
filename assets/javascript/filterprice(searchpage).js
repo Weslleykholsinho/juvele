@@ -120,6 +120,14 @@
         promoToggle.addEventListener('change', function () {
             // Resetar filtro de preço ao mudar o toggle de promoções
             select.value = 'all';
+            // Resetar variável global do filtro de preço
+            if (typeof filtroPrecoSelecionado !== 'undefined') {
+                filtroPrecoSelecionado = 'all';
+            }
+            // Resetar paginação para a primeira página, se variável global existir
+            if (typeof paginaAtual !== 'undefined') {
+                paginaAtual = 1;
+            }
             // Não aplique filtro/ocultação de promoções aqui, apenas dispare a busca
             const pathname = window.location.pathname;
             if (pathname.endsWith('search.html')) {

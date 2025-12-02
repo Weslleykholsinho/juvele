@@ -1,6 +1,6 @@
 [
     {
-        "id": 1,
+        "id": 2,
         "nome": "Vestido Floral Primavera",
         "descricao": "Vestido leve com estampa floral, perfeito para ocasiões casuais e festas de verão.",
         "preco": 199.90,
@@ -11,7 +11,7 @@
         "desconto": 15
     },
     {
-        "id": 2,
+        "id": 1,
         "nome": "Blusa de Linho Bege",
         "descricao": "Blusa feminina em linho com corte oversized, confortável e elegante.",
         "preco": 129.50,

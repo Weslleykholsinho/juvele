@@ -4,6 +4,8 @@ async function carregarProdutos() {
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         let produtos = await response.json();
+        // Embaralha os produtos antes de qualquer filtragem/ordenação
+        produtos = shuffleArray(produtos);
         // Ordena todos os produtos se o toggle promo estiver ativo
         if (isPromoToggleAtivo()) {
             produtos = ordenarPromocionaisPrimeiro(produtos);
@@ -116,13 +118,15 @@ function renderizarPaginaBusca() {
     atualizarPaginacao();
 }
 
-// Modifica buscarProdutosPorTermo para usar filtro de preço
+// Modifica buscarProdutosPorTermo para embaralhar antes de filtrar
 async function buscarProdutosPorTermo(termo) {
     try {
         const response = await fetch('./data/produtos.json');
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         let produtos = await response.json();
+        // Embaralha os produtos antes de qualquer filtragem/ordenação
+        produtos = shuffleArray(produtos);
         if (isPromoToggleAtivo()) {
             produtos = ordenarPromocionaisPrimeiro(produtos);
         }
@@ -317,6 +321,19 @@ document.addEventListener('DOMContentLoaded', function () {
             const pathname = window.location.pathname;
             const urlParams = new URLSearchParams(window.location.search);
             const termo = urlParams.get('q') || '';
+            // Resetar paginação para a primeira página ao mudar promoções
+            if (typeof paginaAtual !== 'undefined') {
+                paginaAtual = 1;
+            }
+            // Resetar filtro de preço ao mudar promoções
+            if (typeof filtroPrecoSelecionado !== 'undefined') {
+                filtroPrecoSelecionado = 'all';
+            }
+            // Também resetar o select visualmente, se existir
+            const priceFilter = document.getElementById('priceFilter');
+            if (priceFilter) {
+                priceFilter.value = 'all';
+            }
             if (pathname.endsWith('search.html')) {
                 buscarProdutosPorTermo(termo);
             } else {
