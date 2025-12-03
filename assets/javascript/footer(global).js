@@ -21,9 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </style>
 
      <div class="ver-todos-wrapper" aria-hidden="false">
-        <a href="#" class="ver-todos-btn" role="button" aria-label="Ver todos os produtos">VER TODOS
-            OS
-            PRODUTOS</a>
+        <a href="#" class="ver-todos-btn" role="button" aria-label="Ver todos os produtos">VER TODOS OS PRODUTOS</a>
     </div>
 
     <!-- PARÁGRAFO DE DESCRIÇÃO DA EMPRESA-->
@@ -35,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e beleza, sem comprometer a singularidade da moda feminina modesta e evangélica. É um prazer ser parte da sua
         jornada, ajudando você a se sentir confiante e iluminada</p>
         
-    <footer class="site-footer" role="contentinfo">
+    <footer class="site-footer" role="contentinfo" id="footer">
         <div class="footer-logo">
             <h1>JUVELE</h1>
         </div>
