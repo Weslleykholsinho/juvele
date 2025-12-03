@@ -154,6 +154,12 @@ async function buscarProdutosPorTermo(termo) {
     }
 }
 
+// Função para limitar o número de caracteres do título
+function limitarTitulo(titulo, limite = 30) {
+    if (typeof titulo !== 'string') return '';
+    return titulo.length > limite ? titulo.slice(0, limite - 1) + '…' : titulo;
+}
+
 function renderizarProdutos(produtos, isBusca = false) {
     const container = document.getElementById('produtosContainer');
     const erroDiv = document.getElementById('produtosErro');
@@ -196,7 +202,7 @@ function renderizarProdutos(produtos, isBusca = false) {
                 ${produto.desconto ? `<div class="desconto-badge">${produto.desconto}% OFF</div>` : ''}
             </div>
             <div class="produto-info">
-                <h3 class="produto-nome">${produto.nome}</h3>
+                <h3 class="produto-nome">${limitarTitulo(produto.nome)}</h3>
                 <div class="produto-preco-wrapper">
                     ${produto.oldprice ? `<div class="produto-preco-original">R$ ${formatarPreco(produto.oldprice)}</div>` : ''}
                     <div class="produto-preco-atual">R$ ${formatarPreco(produto.preco)}</div>
