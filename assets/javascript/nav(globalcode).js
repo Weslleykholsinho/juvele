@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				<li><a href="./index.html" id="op1"></a></li>
 				<li><a href="./index.html#ProdutosDestaque" id="op2"></a></li>
 				<li><a href="./categorias.html" id="op3"></a></li>
-				<li><a href="" id="op4"></a></li>
+				<li><a href="./search.html" id="op4"></a></li>
 				<li><a href="" id="op5"></a></li>
 			</ul>
 			<div class="search-icon">
