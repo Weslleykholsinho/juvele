@@ -20,12 +20,11 @@
     <header>
 
     </header>
-    <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site"
-                onsubmit="return false;">
-                <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
-                <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
-                <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
-            </form>
+    <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site" onsubmit="return false;">
+        <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
+        <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
+        <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
+    </form>
     <div class="Titulocategorias">
         <h1>Todas as categorias</h1>
         <p> Explore nossa seleção completa e encontre exatamente o que você procura. Qualidade e variedade em um só
@@ -35,12 +34,18 @@
     <div class="categorias-wrapper" aria-label="Categorias de produtos">
         <div id="categoriasList" class="categorias" role="list" tabindex="0"
             aria-label="Categorias (deslize para ver mais)">
+        </div>
+        <!-- As categorias serão inseridas aqui dinamicamente -->
+    </div>
 
-            
-            <script src="./assets/javascript/nav(globalcode).js"></script>
-            <script src="./assets/javascript/nav.js"></script>
-            <script src="./assets/javascript/pr-def.js"></script>
-            <script src="./assets/javascript/categorias0x1.js"></script>
+    <!-- Seções de categorias serão inseridas aqui -->
+    <div id="categorias-sections"></div>
+
+    <script src="./assets/javascript/nav(globalcode).js"></script>
+    <script src="./assets/javascript/nav.js"></script>
+    <script src="./assets/javascript/pr-def.js"></script>
+    <script src="./assets/javascript/categorias0x1.js"></script>
+    <script src="./assets/javascript/sys-ger-prod(categr).js"></script>
 </body>
 
 </html>

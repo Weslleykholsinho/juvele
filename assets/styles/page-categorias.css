@@ -10,12 +10,242 @@
 }
 
 .Titulocategorias {
- text-align: center;
- z-index: 1;
+    text-align: center;
+    z-index: 1;
 }
 
-.Titulocategorias p{
+.Titulocategorias p {
     margin-top: 10px;
     font-size: 14px;
     color: #3c3c3c;
+}
+
+/* === Produtos em categorias: mesmo layout da pesquisa === */
+/* Produtos em linha única com rolagem horizontal */
+.produtos-categoria-list {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 24px;
+    padding: 4px 20px 40px 20px;
+    max-width: 100%;
+    margin: 0 auto 24px auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.produtos-categoria-list::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Opera */
+}
+
+.produto-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    max-width: 26px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+.produto-imagem-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 133%;
+    overflow: hidden;
+    background: #f5f5f5;
+    aspect-ratio: 3 / 4;
+}
+
+.produto-imagem {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.desconto-badge {
+    position: absolute;
+    top: 6px;
+    left: 1px;
+    background: #ff497d;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10;
+}
+
+.produto-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.produto-nome {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    text-align: center;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.produto-preco-wrapper {
+    text-align: center;
+}
+
+.produto-preco-original {
+    font-size: 13px;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 4px;
+}
+
+.produto-preco-atual {
+    font-size: 18px;
+    font-weight: 600;
+    color: #48875a;
+}
+
+.produto-botao {
+    width: 100%;
+    padding: 12px 16px;
+    background: #000;
+    color: #ededed;
+    border: none;
+    font-size: 14px;
+    font-weight: 200;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: auto;
+}
+
+/* Estilo minimalista e elegante para os títulos das categorias */
+
+
+.categoria-section h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #454545;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    background: none;
+    border: none;
+    margin-top: -39px;
+    /* sem espaço abaixo do título */
+    padding: 0 18px;
+    line-height: 1.3;
+    transition: color 0.2s;
+    /* Minimalista: sem sombra, sem borda, cor suave */
+}
+
+.categoria-section h2::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 2px;
+    background: #cd66a0;
+    border-radius: 1px;
+    margin: 2px 0 0 0;
+    /* mínimo espaço abaixo da linha */
+}
+
+/* Espaço extra acima do primeiro título de categoria */
+.categoria-section:first-of-type h2 {
+    margin-top: 1px;
+}
+
+/* Reduz ainda mais o espaçamento entre seções em telas grandes */
+@media (min-width: 1024px) {
+    .categoria-section {
+        margin-bottom: -8px;
+        /* sobrepõe o padrão para juntar mais as seções */
+    }
+}
+
+/* Responsivo: cards menores em telas pequenas */
+@media (max-width: 768px) {
+    .produtos-categoria-list {
+        gap: 12px;
+        padding: 8px 12px 24px 12px;
+    }
+
+    .produto-card {
+        min-width: 160px;
+        max-width: 180px;
+    }
+
+    .produto-imagem-wrapper {
+        padding-bottom: 0;
+        aspect-ratio: 3 / 4;
+    }
+
+    .produto-nome {
+        font-size: clamp(12px, 2.6vw, 13px);
+    }
+
+    .produto-preco-original {
+        font-size: clamp(11px, 2.4vw, 12px);
+    }
+
+    .produto-preco-atual {
+        font-size: clamp(14px, 4vw, 16px);
+    }
+
+    .produto-botao {
+        padding: clamp(8px, 2.6vw, 10px) clamp(10px, 3.2vw, 12px);
+        font-size: clamp(12px, 3.2vw, 13px);
+    }
+
+    .desconto-badge {
+        padding: clamp(6px, 2.4vw, 8px) clamp(8px, 3vw, 10px);
+        font-size: clamp(11px, 2.6vw, 12px);
+    }
+}
+
+@media (max-width: 360px) {
+    .produtos-categoria-list {
+        gap: 8px;
+        padding: 8px 8px 16px 8px;
+    }
+
+    .produto-card {
+        min-width: 120px;
+        max-width: 140px;
+    }
+
+    .produto-imagem-wrapper {
+        aspect-ratio: 4 / 5;
+    }
+
+    .produto-nome {
+        font-size: clamp(11px, 3.2vw, 12px);
+    }
+
+    .produto-preco-atual {
+        font-size: clamp(13px, 4.2vw, 15px);
+    }
+
+    .produto-botao {
+        font-size: clamp(11px, 3.6vw, 12px);
+        padding: 8px 8px;
+    }
 }
