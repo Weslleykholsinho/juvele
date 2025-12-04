@@ -20,6 +20,12 @@
     <header>
 
     </header>
+    <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site"
+                onsubmit="return false;">
+                <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
+                <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
+                <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
+            </form>
     <div class="Titulocategorias">
         <h1>Todas as categorias</h1>
         <p> Explore nossa seleção completa e encontre exatamente o que você procura. Qualidade e variedade em um só
@@ -30,12 +36,7 @@
         <div id="categoriasList" class="categorias" role="list" tabindex="0"
             aria-label="Categorias (deslize para ver mais)">
 
-            <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site"
-                onsubmit="return false;">
-                <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
-                <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
-                <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
-            </form>
+            
             <script src="./assets/javascript/nav(globalcode).js"></script>
             <script src="./assets/javascript/nav.js"></script>
             <script src="./assets/javascript/pr-def.js"></script>
