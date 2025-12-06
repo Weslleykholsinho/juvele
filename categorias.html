@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="assets/styles/base-fundamental.css">
     <link rel="stylesheet" href="assets/styles/categorias0x1.css">
     <link rel="stylesheet" href="assets/styles/catg-pord-card.css">
+    <link rel="stylesheet" href="assets/styles/faixatop.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,11 +36,18 @@
     <!-- Seções de categorias serão inseridas aqui -->
     <div id="categorias-sections" class="categorias-sections"></div>
 
+    <div class="faixatop" id="ProdutosDestaque">
+        <p class="faixa-item active">PAGUE PARCELADO EM ATÉ 6X SEM JUROS</p>
+        <p class="faixa-item">FRETE GRÁTIS PARA TODOS OS PRODUTOS DA LOJA.</p>
+        <p class="faixa-item">COMPRA 100% SEGURA</p>
+    </div>
+
     <script src="./assets/javascript/nav(globalcode).js"></script>
     <script src="./assets/javascript/nav.js"></script>
     <script src="./assets/javascript/pr-def.js"></script>
     <script src="./assets/javascript/categorias0x1.js"></script>
     <script src="./assets/javascript/sys-ger-prod(catg).js"></script>
+    <script src="./assets/javascript/faixatop.js"></script>
     <script>
         fetch('./data/categorias.json')
             .then(response => {
@@ -54,8 +62,6 @@
                 <div class="categorias-grid">
                     ${categorias.map(cat => `
                         <div class="categoria-card" tabindex="0" role="button" aria-label="${cat.nome}">
-                            <!-- Adicione uma imagem padrão se não houver propriedade "imagem" -->
-                            <img src="${cat.imagem || 'assets/images/categorias/default.jpg'}" alt="${cat.nome}" class="categoria-img"/>
                             <div class="categoria-nome">${cat.nome}</div>
                         </div>
                     `).join('')}
@@ -73,75 +79,121 @@
             });
     </script>
     <style>
-        /* Estilo básico para grid e cards, ajuste conforme necessário */
+        :root {
+            /* cores e estilos básicos */
+            --page-bg: #f7f7f9;
+            --container-bg: #ffffff;
+            --muted: #8a8f98;
+            --accent: #5a6cff;
+            --card-border: rgba(231, 73, 73, 0.673);
+            --card-shadow: 0 8px 2px rgba(32, 40, 60, 0.06);
+            --radius: 14px;
+            --gap-v: 32px;
+            --gap-h: 20px;
+            --transition: 240ms cubic-bezier(.2, .9, .2, 1);
+
+            /* Variáveis editáveis para largura/altura dos containers */
+            --grid-max-width: 980px;
+            /* largura máxima da grid de categorias */
+            --card-min-height: 60px;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--page-bg), #ffffff 60%);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
         .categorias-sections {
             display: flex;
             justify-content: center;
-            margin-top: 32px;
+            padding: 24px 2px 6px;
         }
 
         .categorias-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 32px 24px;
-            max-width: 900px;
+            gap: var(--gap-v) var(--gap-h);
+            max-width: var(--grid-max-width);
             width: 100%;
+            align-items: start;
         }
 
         .categoria-card {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-            padding: 18px 8px 12px 8px;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(250, 250, 253, 0.95));
+            border-radius: var(--radius);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 22px 16px;
             cursor: pointer;
-            transition: box-shadow 0.2s;
-        }
-
-        .categoria-card:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
-        }
-
-        .categoria-img {
-            width: 160px;
-            height: 210px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 12px;
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+            min-height: var(--card-min-height);
+            text-align: center;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
         }
 
         .categoria-nome {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.1rem;
+            font-family: 'Montserrat', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            font-size: 1.02rem;
             font-weight: 600;
-            text-align: center;
-            margin-top: 4px;
-            color: #333;
-            letter-spacing: 1px;
+            letter-spacing: 0.6px;
+            color: #222;
+            margin-top: 2px;
+            margin-bottom: 4px;
         }
 
-        @media (max-width: 700px) {
-            .categorias-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 18px 10px;
+        .categoria-sub {
+            font-size: 0.88rem;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        /* pequenos ícones/chevrons alinhados à direita (opcional quando adicionar interatividade) */
+        .categoria-card .chev {
+            margin-left: 8px;
+            color: var(--accent);
+            opacity: 0.95;
+            transition: transform var(--transition);
+        }
+
+        .categoria-card:hover .chev {
+            transform: translateX(4px);
+        }
+
+        /* Responsividade: redefinindo variáveis para breakpoints */
+        @media (max-width: 900px) {
+            :root {
+                --grid-max-width: 760px;
+                --card-img-size: var(--card-img-size-sm);
             }
 
-            .categoria-img {
-                width: 120px;
-                height: 160px;
+            .categorias-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 22px 14px;
             }
         }
 
         @media (max-width: 480px) {
-            .categorias-grid {
-                grid-template-columns: 1fr;
+            :root {
+                --grid-max-width: 420px;
+                --card-min-height: 100px;
+                --card-img-size: var(--card-img-size-xs);
             }
 
-            .categoria-img {
-                width: 100%;
-                height: 140px;
+            /* Alterado: agora mostra 2 colunas em telas pequenas */
+            .categorias-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px 10px;
+                max-width: var(--grid-max-width);
+            }
+
+            .categoria-card {
+                padding: 18px 14px;
             }
         }
     </style>
