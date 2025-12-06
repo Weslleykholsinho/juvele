@@ -37,7 +37,7 @@
         "preco": 179.90,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x04.png",
         "destaque": true,
-        "categoria": "Calças"
+        "categoria": "Vestidos"
     },
     {
         "id": 5,
@@ -46,7 +46,7 @@
         "preco": 249.90,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x05.png",
         "destaque": true,
-        "categoria": "Jaquetas"
+        "categoria": "Vestidos"
     },
     {
         "id": 6,

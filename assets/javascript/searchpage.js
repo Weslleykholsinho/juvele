@@ -15,7 +15,16 @@ function updateSearchText(q) {
 }
 
 // Atualiza apenas ao clicar no botão Buscar
-searchSubmit.addEventListener('click', () => updateSearchText(searchInput.value));
+searchSubmit.addEventListener('click', () => {
+    // Mantém o parâmetro categoria na URL se existir
+    const params = new URLSearchParams(window.location.search);
+    const categoriaParam = params.get('categoria');
+    let url = `search.html?q=${encodeURIComponent(searchInput.value)}`;
+    if (categoriaParam) {
+        url += `&categoria=${categoriaParam}`;
+    }
+    window.location.href = url;
+});
 
 // Evita que a tecla Enter dispare alguma atualização (somente botão deve atualizar)
 searchInput.addEventListener('keydown', (e) => {

@@ -12,8 +12,8 @@ fetch('./data/categorias.json')
             a.href = "#"; // previne navegação padrão
             a.addEventListener('click', function (e) {
                 e.preventDefault();
-                // Redireciona para search.html?q=<categoria>
-                window.location.href = `search.html?q=${encodeURIComponent(cat.nome.trim())}`;
+                // Redireciona para search.html?q=<categoria>&categoria=1
+                window.location.href = `search.html?q=${encodeURIComponent(cat.nome.trim())}&categoria=1`;
             });
             categoriasList.appendChild(a);
         });

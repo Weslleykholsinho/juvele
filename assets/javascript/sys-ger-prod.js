@@ -125,26 +125,45 @@ async function buscarProdutosPorTermo(termo) {
         if (!response.ok) throw new Error('Erro ao carregar produtos');
 
         let produtos = await response.json();
-        // Embaralha os produtos antes de qualquer filtragem/ordenação
         produtos = shuffleArray(produtos);
         if (isPromoToggleAtivo()) {
             produtos = ordenarPromocionaisPrimeiro(produtos);
         }
-        // Divide termo em palavras e normaliza
-        const palavrasBusca = termo.trim().split(/\s+/).map(normalizarPalavra);
 
-        const resultados = produtos.filter(produto => {
-            const nomeProduto = (produto.nome || '')
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-            return palavrasBusca.every(palavra => {
-                return nomeProduto.includes(palavra) || nomeProduto.includes(palavra + 's');
+        // Detecta se é busca por categoria
+        const urlParams = new URLSearchParams(window.location.search);
+        const isCategoriaBusca = urlParams.get('categoria') === '1';
+
+        let resultados;
+        if (isCategoriaBusca) {
+            // Busca por categoria (campo categoria ou categorias)
+            const termoNormalizado = normalizarPalavra(termo);
+            resultados = produtos.filter(produto => {
+                // Suporta campo categoria (string) ou categorias (array)
+                let categorias = [];
+                if (typeof produto.categoria === 'string') {
+                    categorias = [produto.categoria];
+                } else if (Array.isArray(produto.categorias)) {
+                    categorias = produto.categorias;
+                }
+                return categorias.some(cat =>
+                    normalizarPalavra(cat || '').includes(termoNormalizado)
+                );
             });
-        });
+        } else {
+            // Busca por nome (comportamento padrão)
+            const palavrasBusca = termo.trim().split(/\s+/).map(normalizarPalavra);
+            resultados = produtos.filter(produto => {
+                const nomeProduto = (produto.nome || '')
+                    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                return palavrasBusca.every(palavra => {
+                    return nomeProduto.includes(palavra) || nomeProduto.includes(palavra + 's');
+                });
+            });
+        }
 
-        // Salva resultados e configura paginação
         resultadosBusca = resultados;
         paginaAtual = 1;
-        // Aplica filtro de preço antes de calcular totalPaginas
         const filtrados = filtrarEOrdenarPorPreco(resultadosBusca, filtroPrecoSelecionado);
         totalPaginas = Math.max(1, Math.ceil(filtrados.length / itensPorPagina));
         renderizarPaginaBusca();
