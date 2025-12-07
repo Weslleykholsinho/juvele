@@ -52,26 +52,10 @@ function ordenarPromocionaisPrimeiro(produtos) {
 
 // Função para normalizar palavras (remove acentos, minúsculo, trata plural/singular simples)
 function normalizarPalavra(palavra) {
-    return (palavra || '')
+    return palavra
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
         .toLowerCase()
-        .replace(/^#/, '') // remove hash inicial
         .replace(/(oes|aes|aos|is|ns|s)$/i, ''); // remove plurais comuns
-}
-
-// Função para detectar se a hash ou termo indica "Promoções"
-function indicaPromocoes(valor) {
-    const normalized = normalizarPalavra(valor)
-        .replace(/[^a-z0-9]/g, ''); // remove caracteres não alfanuméricos
-    // Aceita variações como "promo", "promocao", "promocoes"
-    return ['promo', 'promocao', 'promocoes'].some(k =>
-        normalized === k || normalized.startsWith(k)
-    );
-}
-
-// Função para detectar se a hash atual indica "Promoções"
-function hashIndicaPromocoes() {
-    return indicaPromocoes(window.location.hash || '');
 }
 
 // Variáveis de paginação (apenas para search.html)
@@ -86,9 +70,9 @@ function atualizarPaginacao() {
     const prevBtn = document.getElementById('prevPage');
     const nextBtn = document.getElementById('nextPage');
     const info = document.getElementById('paginationInfo');
-    prevBtn.disabled = paginaAtual <= 1;
-    nextBtn.disabled = paginaAtual >= totalPaginas;
-    info.textContent = `${paginaAtual} de ${totalPaginas}`;
+    if (prevBtn) prevBtn.disabled = paginaAtual <= 1;
+    if (nextBtn) nextBtn.disabled = paginaAtual >= totalPaginas;
+    if (info) info.textContent = `${paginaAtual} de ${totalPaginas}`;
 }
 
 // Função para filtrar e ordenar resultados de busca conforme filtro de preço
@@ -117,13 +101,11 @@ function filtrarEOrdenarPorPreco(produtos, filtro) {
             // "all" não filtra nem ordena
             break;
     }
-    // Se for faixa de preço, mantém ordem original; se for asc/desc, já está ordenado
     return filtrados;
 }
 
 // Renderiza página específica dos resultados de busca
 function renderizarPaginaBusca() {
-    // Aplica filtro de preço antes de paginar
     const filtrados = filtrarEOrdenarPorPreco(resultadosBusca, filtroPrecoSelecionado);
     totalPaginas = Math.max(1, Math.ceil(filtrados.length / itensPorPagina));
     if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
@@ -134,7 +116,7 @@ function renderizarPaginaBusca() {
     atualizarPaginacao();
 }
 
-// Modifica buscarProdutosPorTermo para identificar buscas por promoções no termo
+// Modifica buscarProdutosPorTermo para embaralhar antes de filtrar
 async function buscarProdutosPorTermo(termo) {
     try {
         const response = await fetch('./data/produtos.json');
@@ -151,18 +133,14 @@ async function buscarProdutosPorTermo(termo) {
         const isCategoriaBusca = urlParams.get('categoria') === '1';
 
         let resultados;
-        // Se o termo indica promoções, busca produtos em promoção
-        if (indicaPromocoes(termo)) {
-            resultados = produtos.filter(p => isProdutoPromocao(p));
-        } else if (isCategoriaBusca) {
-            // Busca por categoria (campo categoria pode ser string ou array)
+        if (isCategoriaBusca) {
+            // Busca por categoria (campo categoria ou categorias)
             const termoNormalizado = normalizarPalavra(termo);
             resultados = produtos.filter(produto => {
+                // Suporta campo categoria (string) ou categorias (array)
                 let categorias = [];
                 if (typeof produto.categoria === 'string') {
                     categorias = [produto.categoria];
-                } else if (Array.isArray(produto.categoria)) {
-                    categorias = produto.categoria;
                 } else if (Array.isArray(produto.categorias)) {
                     categorias = produto.categorias;
                 }
@@ -199,8 +177,34 @@ function limitarTitulo(titulo, limite = 30) {
     return titulo.length > limite ? titulo.slice(0, limite - 1) + '…' : titulo;
 }
 
+// NOVA UTILITÁRIA: busca ou cria um container para produtos (suporta categorias page)
+function getOrCreateProdutosContainer() {
+    // Prioridade: elemento com id 'produtosContainer'
+    let container = document.getElementById('produtosContainer');
+    if (container) return container;
+
+    // Tenta inserir dentro de #sugestoes-produtos (categories page)
+    const sugestoes = document.getElementById('sugestoes-produtos');
+    const categoriasSections = document.getElementById('categorias-sections');
+
+    const parent = sugestoes || categoriasSections || document.body;
+    container = document.createElement('div');
+    container.id = 'produtosContainer';
+    container.className = 'produtos-grid'; // pode usar estilos já existentes
+    parent.appendChild(container);
+
+    // Cria um elemento para mensagens de erro se não existir
+    if (!document.getElementById('produtosErro')) {
+        const erroDiv = document.createElement('div');
+        erroDiv.id = 'produtosErro';
+        erroDiv.hidden = true;
+        parent.appendChild(erroDiv);
+    }
+    return container;
+}
+
 function renderizarProdutos(produtos, isBusca = false) {
-    const container = document.getElementById('produtosContainer');
+    const container = getOrCreateProdutosContainer();
     const erroDiv = document.getElementById('produtosErro');
 
     // Corrige bug visual: sempre limpa estilos do container antes de renderizar
@@ -216,7 +220,6 @@ function renderizarProdutos(produtos, isBusca = false) {
 
     if (!produtos || produtos.length === 0) {
         if (isBusca) {
-            // mostra mensagem elegante de "sem resultados" apenas para buscas
             mostrarSemResultados();
             return;
         } else {
@@ -225,12 +228,10 @@ function renderizarProdutos(produtos, isBusca = false) {
         }
     }
 
-    // se houver produtos, garante que a área "sem resultados" e o erro estejam ocultos
     const noResultsEl = document.getElementById('noResults');
     if (noResultsEl) noResultsEl.hidden = true;
     if (erroDiv) erroDiv.hidden = true;
 
-    // garantir que data-price contenha número (se possível) para facilitar filtro/ordenacão
     container.innerHTML = produtos.map(produto => {
         const precoNum = parseFloat(String(produto.preco).replace(',', '.'));
         const dataPrice = Number.isFinite(precoNum) ? precoNum : '';
@@ -254,11 +255,11 @@ function renderizarProdutos(produtos, isBusca = false) {
         `;
     }).join('');
 
-    erroDiv.hidden = true;
+    if (erroDiv) erroDiv.hidden = true;
 }
 
 function mostrarSemResultados() {
-    const container = document.getElementById('produtosContainer');
+    const container = getOrCreateProdutosContainer();
     const erroDiv = document.getElementById('produtosErro');
     if (container) {
         container.innerHTML = `
@@ -267,22 +268,18 @@ function mostrarSemResultados() {
                 <img src="./assets/images/avatars/searchnotfound.png" alt="Nenhum resultado encontrado" class="imagem-sem-resultados" />
             </div>
         `;
-        // Centraliza o conteúdo do container usando flexbox
         container.style.display = 'flex';
         container.style.justifyContent = 'center';
         container.style.alignItems = 'center';
-        container.style.minHeight = '60vh'; // altura mínima para centralizar melhor
+        container.style.minHeight = '60vh';
     }
-    if (erroDiv) erroDiv.hidden = true; // Esconde mensagem de erro
+    if (erroDiv) erroDiv.hidden = true;
 
-    // Desabilita o toggle promo
     setPromoToggleState(false);
 
-    // Remove estilos antigos se já existirem
     const oldStyle = document.getElementById('sem-resultados-style');
     if (oldStyle) oldStyle.remove();
 
-    // Adiciona estilos diretamente na página
     const style = document.createElement('style');
     style.id = 'sem-resultados-style';
     style.textContent = `
@@ -325,7 +322,6 @@ function mostrarErro() {
     const container = document.getElementById('produtosContainer');
     const erroDiv = document.getElementById('produtosErro');
     if (container) container.innerHTML = '';
-    // Removido: lógica para ocultar "noResults"
     if (erroDiv) erroDiv.hidden = false;
 }
 
@@ -358,30 +354,6 @@ function setPromoToggleState(enabled) {
     }
 }
 
-// Nova função: busca somente produtos em promoção e renderiza como busca (com paginação)
-async function buscarProdutosPromocoes() {
-    try {
-        const response = await fetch('./data/produtos.json');
-        if (!response.ok) throw new Error('Erro ao carregar produtos');
-
-        let produtos = await response.json();
-        produtos = shuffleArray(produtos);
-
-        // Filtra apenas produtos em promoção
-        const promocionais = produtos.filter(p => isProdutoPromocao(p));
-
-        resultadosBusca = promocionais;
-        paginaAtual = 1;
-        const filtrados = filtrarEOrdenarPorPreco(resultadosBusca, filtroPrecoSelecionado);
-        totalPaginas = Math.max(1, Math.ceil(filtrados.length / itensPorPagina));
-
-        renderizarPaginaBusca();
-    } catch (erro) {
-        console.error('Erro:', erro);
-        mostrarErro();
-    }
-}
-
 // Detecta a página e executa a função correta ao carregar
 document.addEventListener('DOMContentLoaded', function () {
     const promoToggle = document.getElementById('promoToggle');
@@ -404,41 +376,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 priceFilter.value = 'all';
             }
             if (pathname.endsWith('search.html')) {
-                // Se a hash indica Promoções, mostrar apenas promocionais
-                if (hashIndicaPromocoes()) {
-                    buscarProdutosPromocoes();
-                } else {
-                    buscarProdutosPorTermo(termo);
-                }
+                buscarProdutosPorTermo(termo);
             } else {
                 carregarProdutos();
             }
         });
     }
+
     const pathname = window.location.pathname;
+    const isCategoriasPage = pathname.endsWith('categorias.html') || !!document.getElementById('sugestoes-produtos');
+
     if (pathname.endsWith('search.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const termo = urlParams.get('q') || '';
-
-        // Se a hash atual indica promoções, carregar apenas promocionais
-        if (hashIndicaPromocoes()) {
-            buscarProdutosPromocoes();
-        } else {
-            buscarProdutosPorTermo(termo);
-        }
-
-        // Reage a mudanças de hash (ex.: clique em categoria que aponta para #Promoções)
-        window.addEventListener('hashchange', function () {
-            if (hashIndicaPromocoes()) {
-                buscarProdutosPromocoes();
-            } else {
-                // volta ao comportamento padrão: re-executa busca normal (mantém query 'q' se existir)
-                const params = new URLSearchParams(window.location.search);
-                const termoHash = params.get('q') || '';
-                buscarProdutosPorTermo(termoHash);
-            }
-        });
-
+        buscarProdutosPorTermo(termo);
         // Listeners de paginação
         const prevBtn = document.getElementById('prevPage');
         const nextBtn = document.getElementById('nextPage');
@@ -465,6 +416,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 renderizarPaginaBusca();
             });
         }
+    } else if (isCategoriasPage) {
+        // Se estivermos na página de categorias (ou existir #sugestoes-produtos), carrega produtos em destaque
+        carregarProdutos();
     } else {
         carregarProdutos();
     }

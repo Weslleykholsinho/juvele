@@ -87,8 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="footer-copyright">
-                &copy; 2025 JUVELE. Todos os direitos reservados.
-            </div>
+                &copy; 2025 JUVELE. Todos os direitos reservados. </div>
         </div>
     </footer>
     `;

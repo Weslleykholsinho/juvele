@@ -14,9 +14,7 @@ function updateSearchText(q) {
     }
 }
 
-// Atualiza apenas ao clicar no botão Buscar
-searchSubmit.addEventListener('click', () => {
-    // Mantém o parâmetro categoria na URL se existir
+function performSearch() {
     const params = new URLSearchParams(window.location.search);
     const categoriaParam = params.get('categoria');
     let url = `search.html?q=${encodeURIComponent(searchInput.value)}`;
@@ -24,14 +22,28 @@ searchSubmit.addEventListener('click', () => {
         url += `&categoria=${categoriaParam}`;
     }
     window.location.href = url;
+}
+
+// Atualiza ao clicar no botão Buscar
+searchSubmit.addEventListener('click', () => {
+    performSearch();
 });
 
-// Evita que a tecla Enter dispare alguma atualização (somente botão deve atualizar)
+// Permite Enter ou ícone de pesquisa do teclado disparar a busca
 searchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         e.preventDefault();
+        performSearch();
     }
 });
+
+// Permite submmit do formulário (caso exista)
+if (searchInput.form) {
+    searchInput.form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        performSearch();
+    });
+}
 
 // Preenche a busca a partir da query string (ex.: ?q=vestido) ao carregar a página
 const params = new URLSearchParams(window.location.search);

@@ -2,43 +2,44 @@
     "categorias": [
         {
             "id": 1,
-            "nome": " Vestidos",
-            "imagem": "assets/images/categorias/vestidos.jpg"
+            "nome": "#Promoções"
         },
         {
             "id": 2,
-            "nome": " Blusas",
-            "imagem": "assets/images/categorias/blusas.jpg"
+            "nome": " Vestidos"
+           
         },
         {
             "id": 3,
-            "nome": " Saias",
-            "imagem": "assets/images/categorias/saias.jpg"
+            "nome": " Blusas"
+           
         },
         {
             "id": 4,
-            "nome": " Calças",
-            "imagem": "assets/images/categorias/calcas.jpg"
+            "nome": " Calças"
+           
         },
         {
             "id": 5,
-            "nome": " Jaquetas",
-            "imagem": "assets/images/categorias/jaquetas.jpg"
+            "nome": " Jaquetas"
         },
         {
             "id": 6,
-            "nome": " Macacões",
-            "imagem": "assets/images/categorias/macacoes.jpg"
+            "nome": " Macacões"
         },
         {
             "id": 7,
-            "nome": " Camisetas",
-            "imagem": "assets/images/categorias/camisetas.jpg"
+            "nome": " Camisetas"
         },
         {
             "id": 8,
-            "nome": " Shorts",
-            "imagem": "assets/images/categorias/shorts.jpg"
+            "nome": " Shorts"
+      
+        },
+        {
+            "id": 9,
+            "nome": "Saias"
+          
         }
     ]
 }

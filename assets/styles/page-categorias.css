@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 
 .Titulocategorias h1 {
@@ -21,5 +23,23 @@
 }
 
 .faixatop {
-   margin-top: 20px;
+    margin-top: 20px;
 }
+
+#p-dest-title {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #3c3c3c;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.Titulocategorias h1 i {
+    color: #708f88;
+    margin-right: 8px;
+    font-size: 20px;
+    vertical-align: middle;
+    /* Espaço entre o texto e o ícone */
+}
+
+/* Estilização específica para o ícone Font Awesome na seção de título */

@@ -1,0 +1,117 @@
+  :root {
+            /* cores e estilos básicos */
+            --page-bg: #f7f7f9;
+            --container-bg: #ffffff;
+            --muted: #8a8f98;
+            --accent: #5a6cff;
+            --card-border: rgba(60, 56, 56, 0.537);
+            --card-shadow: 0 8px 2px rgba(32, 40, 60, 0.06);
+            --radius: 14px;
+            --gap-v: 32px;
+            --gap-h: 20px;
+            --transition: 240ms cubic-bezier(.2, .9, .2, 1);
+
+            /* Variáveis editáveis para largura/altura dos containers */
+            --grid-max-width: 980px;
+            /* largura máxima da grid de categorias */
+            --card-min-height: 60px;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--page-bg), #ffffff 60%);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .categorias-sections {
+            display: flex;
+            justify-content: center;
+            padding: 24px 2px 6px;
+        }
+
+        .categorias-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--gap-v) var(--gap-h);
+            max-width: var(--grid-max-width);
+            width: 100%;
+            align-items: start;
+        }
+
+        .categoria-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(250, 250, 253, 0.95));
+            border-radius: var(--radius);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 22px 16px;
+            cursor: pointer;
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+            min-height: var(--card-min-height);
+            text-align: center;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        .categoria-nome {
+            font-family: 'Montserrat', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            font-size: 1.02rem;
+            font-weight: 400;
+            letter-spacing: 0.6px;
+            color: #222;
+            margin-top: 2px;
+            margin-bottom: 4px;
+        }
+
+        .categoria-sub {
+            font-size: 0.88rem;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        /* pequenos ícones/chevrons alinhados à direita (opcional quando adicionar interatividade) */
+        .categoria-card .chev {
+            margin-left: 8px;
+            color: var(--accent);
+            opacity: 0.95;
+            transition: transform var(--transition);
+        }
+
+        .categoria-card:hover .chev {
+            transform: translateX(4px);
+        }
+
+        /* Responsividade: redefinindo variáveis para breakpoints */
+        @media (max-width: 900px) {
+            :root {
+                --grid-max-width: 760px;
+                --card-img-size: var(--card-img-size-sm);
+            }
+
+            .categorias-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 22px 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --grid-max-width: 420px;
+                --card-min-height: 100px;
+                --card-img-size: var(--card-img-size-xs);
+            }
+
+            /* Alterado: agora mostra 2 colunas em telas pequenas */
+            .categorias-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px 10px;
+                max-width: var(--grid-max-width);
+            }
+
+            .categoria-card {
+                padding: 18px 14px;
+            }
+        }

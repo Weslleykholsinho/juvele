@@ -7,7 +7,9 @@
         "oldprice": 235.18,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x01.png",
         "destaque": true,
-        "categoria": "Vestidos",
+        "categoria": [
+            "Vestidos", "#Promoções"
+        ],
         "desconto": 15
     },
     {
@@ -17,7 +19,9 @@
         "preco": 129.50,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x02.png",
         "destaque": true,
-        "categoria": "Vestidos"
+        "categoria": [
+            "Blusas"
+        ]
     },
     {
         "id": 3,
@@ -27,7 +31,9 @@
         "oldprice": 248.33,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x03.png",
         "destaque": true,
-        "categoria": "Vestidos",
+        "categoria": [
+            "Saias", "#Promoções"
+        ],
         "desconto": 40
     },
     {
@@ -37,7 +43,9 @@
         "preco": 179.90,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x04.png",
         "destaque": true,
-        "categoria": "Vestidos"
+        "categoria": [
+            "Calças"
+        ]
     },
     {
         "id": 5,
@@ -46,7 +54,9 @@
         "preco": 249.90,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x05.png",
         "destaque": true,
-        "categoria": "Vestidos"
+        "categoria": [
+            "Jaquetas"
+        ]
     },
     {
         "id": 6,
@@ -56,7 +66,9 @@
         "oldprice": 243.33,
         "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x06.png",
         "destaque": true,
-        "categoria": "Macacões",
+        "categoria": [
+            "Macacões", "#Promoções"
+        ],
         "desconto": 10
     }
 ]
