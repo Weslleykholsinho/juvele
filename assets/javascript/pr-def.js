@@ -14,7 +14,7 @@
         try {
             if (op1) op1.innerText = "Início";
             if (op2) op2.innerText = "Produtos em Destaque";
-            if (op3) op3.innerText = "Categorias";
+            if (op3) op3.innerText = "Categorias e Sugestões";
             if (op4) op4.innerText = "Ver todos os produtos";
             if (op5) op5.innerText = "Contato";
             return true;

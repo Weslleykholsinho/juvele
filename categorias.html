@@ -11,48 +11,19 @@
     <link rel="stylesheet" href="assets/styles/page-categorias.css">
     <link rel="stylesheet" href="assets/styles/base-fundamental.css">
     <link rel="stylesheet" href="assets/styles/categorias0x1.css">
-    <link rel="stylesheet" href="assets/styles/catg-pord-card.css">
     <link rel="stylesheet" href="assets/styles/prods-suges-catpage.css">
     <link rel="stylesheet" href="assets/styles/footer(global).css">
-    <link rel="stylesheet" href="assets/styles/cat-catpage.css">
-    <link rel="stylesheet" href="assets/styles/faixatop.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap"
         rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    <!-- ADDED: estilo minimalista e elegante para o título de sugestões -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
     <style>
-        /* Estilo minimalista e elegante para "Sugestões de produtos" */
-        .sugestoes-titulo {
-            font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            font-weight: 400;
-            font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-            letter-spacing: 0.06em;
-            color: #222;
-            /* tom neutro e elegante */
-            margin: 0 0 0.5rem 0;
-            display: inline-block;
-            position: relative;
-        }
 
-        .sugestoes-titulo::after {
-            content: "";
-            display: block;
-            height: 2px;
-            width: 36%;
-            background: linear-gradient(90deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.25));
-            margin-top: 0.6rem;
-            border-radius: 2px;
-            opacity: 0.75;
-        }
-
-        /* ajuste opcional do container para alinhamento e espaço */
-        #sugestoes-produtos {
-            padding: 1.25rem 1rem;
-        }
     </style>
 </head>
 
@@ -72,14 +43,16 @@
     </div>
 
     <!-- Seções de categorias serão inseridas aqui -->
-    <div id="categorias-sections" class="categorias-sections"></div>
-  <div class="faixatop" id="ProdutosDestaque">
-        <p class="faixa-item active">PAGUE PARCELADO EM ATÉ 6X SEM JUROS</p>
-        <p class="faixa-item">FRETE GRÁTIS PARA TODOS OS PRODUTOS DA LOJA.</p>
-        <p class="faixa-item">COMPRA 100% SEGURA</p>
+    <div class="categorias-wrapper" aria-label="Categorias de produtos">
+        <div id="categoriasList" class="categorias" role="list" tabindex="0"
+            aria-label="Categorias (deslize para ver mais)">
+            <!-- Categorias serão inseridas dinamicamente -->
+        </div>
     </div>
 
- <section id="destaques" class="produtos-destaque" aria-labelledby="destaques-title">
+    </div>
+
+    <section id="destaques" class="produtos-destaque" aria-labelledby="destaques-title">
         <h2 id="destaques-title"><i class="fas fa-thumbs-up"></i> Sugestões de produtos </i></h2>
         <p id="p-dest-title">Veja nossas sugestões selecionadas especialmente para você.</p>
         <div class="container">
@@ -94,9 +67,7 @@
     <script src="./assets/javascript/pr-def.js"></script>
     <script src="./assets/javascript/categorias0x1.js"></script>
     <script src="./assets/javascript/sys-ger-prod(catg).js"></script>
-    <script src="./assets/javascript/cat-ger-catpage.js"></script>
-    <script src="./assets/javascript/faixatop.js"></script>
-     <script src="./assets/javascript/footer(global).js"></script>
+    <script src="./assets/javascript/footer(global).js"></script>
     <script src="./assets/javascript/sys-ger-prod(catpag).js"></script>
     <script>
 
