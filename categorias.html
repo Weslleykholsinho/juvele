@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="assets/styles/page-categorias.css">
     <link rel="stylesheet" href="assets/styles/base-fundamental.css">
-    <link rel="stylesheet" href="assets/styles/categorias0x1.css">
-    <link rel="stylesheet" href="assets/styles/prods-suges-catpage.css">
     <link rel="stylesheet" href="assets/styles/footer(global).css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +21,82 @@
         href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
     <style>
+        .categorias-section {
+            padding: 32px 0 0 0;
+            text-align: center;
+        }
 
+        .categorias-title {
+            font-size: 32px;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 8px;
+            color: #4a4a4a;
+            font-weight: 500;
+            margin-inline: 5px;
+        }
+
+        .categorias-desc {
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            color: #444;
+            font-family: 'Arimo', sans-serif;
+            font-size: 14px;
+            margin-inline: 10px;
+        }
+
+        .categorias-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto;
+            padding-left: 16px;
+            padding-right: 16px;
+            box-sizing: border-box;
+        }
+
+        .categoria-card {
+            background: #fafbfc;
+            border: 1px solid #5d88c0;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px 0 #0002;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 140px;
+            justify-content: center;
+            transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .categoria-card:hover {
+            box-shadow: 0 4px 24px 0 #0003;
+            border-color: #bfc8d6;
+            transform: translateY(-2px) scale(1.03);
+            background: #f6f8fa;
+        }
+
+        .categoria-img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+
+        .categoria-nome {
+            font-size: 1.25rem;
+            font-weight: 500;
+            font-family: 'Montserrat', 'Arimo', sans-serif;
+            text-align: center;
+            width: 100%;
+            color: #222;
+            letter-spacing: 0.5px;
+            padding: 0 12px;
+            /* Remove margin-top */
+            margin-top: 0;
+            /* Minimalista: sem decoração extra */
+        }
     </style>
 </head>
 
@@ -36,41 +109,47 @@
         <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
         <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
     </form>
-    <div class="Titulocategorias">
-        <h1><i class="fas fa-list-ul"></i> Todas as categorias</h1>
-        <p> Explore nossa seleção completa e encontre exatamente o que você procura. Qualidade e variedade em um só
-            lugar!</p>
-    </div>
-
-    <!-- Seções de categorias serão inseridas aqui -->
-    <div class="categorias-wrapper" aria-label="Categorias de produtos">
-        <div id="categoriasList" class="categorias" role="list" tabindex="0"
-            aria-label="Categorias (deslize para ver mais)">
-            <!-- Categorias serão inseridas dinamicamente -->
-        </div>
-    </div>
-
-    </div>
-
-    <section id="destaques" class="produtos-destaque" aria-labelledby="destaques-title">
-        <h2 id="destaques-title"><i class="fas fa-thumbs-up"></i> Sugestões de produtos </i></h2>
-        <p id="p-dest-title">Veja nossas sugestões selecionadas especialmente para você.</p>
-        <div class="container">
-            <div id="produtosContainer" class="produtos-container" role="list"></div>
-            <div id="produtosErro" class="produtos-erro" role="status" aria-live="polite" hidden>
-                Não foi possível carregar os produtos no momento.
+    <main>
+        <section class="categorias-section">
+            <h1 class="categorias-title">Todas as categorias</h1>
+            <p class="categorias-desc">
+                Explore nossa seleção completa e encontre exatamente o que você procura.
+                Qualidade e variedade em um só lugar!
+            </p>
+            <div class="categorias-grid" id="categoriasGrid">
+                <!-- Containers de categorias serão gerados aqui -->
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
     <script src="./assets/javascript/nav(globalcode).js"></script>
     <script src="./assets/javascript/nav.js"></script>
     <script src="./assets/javascript/pr-def.js"></script>
     <script src="./assets/javascript/categorias0x1.js"></script>
     <script src="./assets/javascript/sys-ger-prod(catg).js"></script>
     <script src="./assets/javascript/footer(global).js"></script>
-    <script src="./assets/javascript/sys-ger-prod(catpag).js"></script>
     <script>
+        // Função para gerar cor HSL distinta por índice
+        function getDistinctColor(index, total) {
+            const hue = Math.round((360 / total) * index);
+            return `hsl(${hue}, 60%, 60%)`;
+        }
 
+        fetch('data/categorias.json')
+            .then(response => response.json())
+            .then(data => {
+                const grid = document.getElementById('categoriasGrid');
+                grid.innerHTML = '';
+                const total = data.categorias.length;
+                data.categorias.forEach((cat, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'categoria-card';
+                    // Aplica cor de borda distinta
+                    card.style.borderColor = getDistinctColor(idx, total);
+                    const nome = cat.nome.trim();
+                    card.innerHTML = `<span class="categoria-nome">${nome}</span>`;
+                    grid.appendChild(card);
+                });
+            });
     </script>
 </body>
 

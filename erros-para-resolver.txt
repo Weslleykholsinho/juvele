@@ -1,0 +1,29 @@
+#FRase de abertura para esse arquivo:
+ "Quando eu escrevi esse código, só eu e Deus
+  sabia sabia como funcionava. Agora só Deus sabe..."
+
+  erros/bugs encontrados 07/12/25
+  >>>>
+*** é necessario otimizar a forma com que a barra de pesquisa puxa os dados
+  do produtos.json e sugere para o usuário - o processo atual é considerado lento.
+
+*** Important! Quando eu clico na categoria '#Promoções' ele me
+ direciona à página de pesquisa e mostra produtos com descontos na loja.
+ Porém, quando vou a barra de pesquisa e digito 'a', e clico em buscar, 1 um produto
+ em específico sempre desaparece.
+ produto >... 
+  "id": 2,
+        "nome": "Vestido Floral Primavera",
+        "descricao": "Vestido leve com estampa floral, perfeito para ocasiões casuais e festas de verão.",
+        "preco": 199.90,
+        "oldprice": 235.18,
+        "imagem": "https://weslleykholsinho.github.io/juvele-imd/cp000x01.png",
+        "destaque": true,
+        "categoria": [
+            "Vestidos", "#Promoções"
+        ],
+        "desconto": 15
+
+
+      *** limitar a quantidade de categorias que são redenrizadas
+      para evitar travamentos.
