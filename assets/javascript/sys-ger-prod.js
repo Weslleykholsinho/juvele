@@ -447,12 +447,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (paginaAtual > 1) {
                     paginaAtual--;
                     renderizarPaginaBusca();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
             nextBtn.addEventListener('click', function () {
                 if (paginaAtual < totalPaginas) {
                     paginaAtual++;
                     renderizarPaginaBusca();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
         }
@@ -465,6 +467,65 @@ document.addEventListener('DOMContentLoaded', function () {
                 renderizarPaginaBusca();
             });
         }
+
+        // Sticky filter logic
+        const priceFilterWrapper = document.querySelector('.price-filter-wrapper');
+        const promoToggleWrapper = document.querySelector('.promo-toggle-wrapper');
+
+        // Cria spacer para evitar sobreposição do conteúdo
+        let stickySpacer = document.querySelector('.sticky-filter-spacer');
+        if (!stickySpacer && priceFilterWrapper) {
+            stickySpacer = document.createElement('div');
+            stickySpacer.className = 'sticky-filter-spacer';
+            priceFilterWrapper.parentNode.insertBefore(stickySpacer, priceFilterWrapper.nextSibling);
+        }
+
+        // Calcula o limite inferior para desafixar (quando filtros voltam à posição original)
+        function getUnstickLimit() {
+            const grid = document.querySelector('.products-grid');
+            if (!grid) return Infinity;
+            const gridTop = grid.getBoundingClientRect().top + window.scrollY;
+            let stickyHeight = 0;
+            if (priceFilterWrapper) stickyHeight += priceFilterWrapper.offsetHeight;
+            if (promoToggleWrapper) stickyHeight += promoToggleWrapper.offsetHeight;
+            // Pequena margem extra
+            return gridTop - stickyHeight - 16;
+        }
+
+        function updateStickyFilters() {
+            const scrollY = window.scrollY || window.pageYOffset;
+            const stickyStart = (priceFilterWrapper ? priceFilterWrapper.offsetTop : 0) - 30;
+            const unstickLimit = getUnstickLimit();
+
+            // Desafixa antes do topo (por exemplo, 40px antes do topo original)
+            const earlyUnstick = (priceFilterWrapper ? priceFilterWrapper.offsetTop : 0) + 100;
+            const shouldStick = scrollY > stickyStart && scrollY < unstickLimit && scrollY > earlyUnstick;
+
+            // Novo: desafixa se scrollY > 600
+            const unstickThreshold = 600;
+            const shouldUnstickByScroll = scrollY > unstickThreshold;
+
+            if (priceFilterWrapper) {
+                if (shouldStick && !shouldUnstickByScroll) {
+                    priceFilterWrapper.classList.add('sticky-filter');
+                    if (stickySpacer) stickySpacer.classList.add('active');
+                } else {
+                    priceFilterWrapper.classList.remove('sticky-filter');
+                    if (stickySpacer) stickySpacer.classList.remove('active');
+                }
+            }
+            if (promoToggleWrapper) {
+                if (shouldStick && !shouldUnstickByScroll) {
+                    promoToggleWrapper.classList.add('sticky-filter');
+                } else {
+                    promoToggleWrapper.classList.remove('sticky-filter');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', updateStickyFilters, { passive: true });
+        window.addEventListener('resize', updateStickyFilters);
+        updateStickyFilters();
     } else {
         carregarProdutos();
     }

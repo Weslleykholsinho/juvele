@@ -97,6 +97,12 @@
             });
         }
         // Se houver algum produto visível, a mensagem já foi removida acima
+
+        // Sempre que um filtro é aplicado/desaplicado, vai para o topo e paginação para 1
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (typeof paginaAtual !== 'undefined') {
+            paginaAtual = 1;
+        }
     }
 
     function getPrice(item) {
@@ -128,6 +134,7 @@
             if (typeof paginaAtual !== 'undefined') {
                 paginaAtual = 1;
             }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             // Não aplique filtro/ocultação de promoções aqui, apenas dispare a busca
             const pathname = window.location.pathname;
             if (pathname.endsWith('search.html')) {

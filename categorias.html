@@ -97,6 +97,44 @@
             margin-top: 0;
             /* Minimalista: sem decoração extra */
         }
+
+        /* Paginação de categorias - igual ao searchpage */
+        #categoriasPagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 10px 0 30px 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        #categoriasPagination .pagination-btn {
+            background: #fff;
+            border: 1px solid #d1d1d1;
+            color: #4173c3;
+            padding: 0.5em 1.2em;
+            border-radius: 24px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+
+        #categoriasPagination .pagination-btn:disabled {
+            background: #f5f5f5;
+            color: #bbb;
+            border-color: #eee;
+            cursor: not-allowed;
+        }
+
+        #categoriasPagination .pagination-btn:not(:disabled):hover {
+            text-decoration: underline;
+        }
+
+        #categoriasPagination .pagination-info {
+            font-weight: 500;
+            font-size: 1.05rem;
+            color: #444;
+        }
     </style>
 </head>
 
@@ -119,6 +157,7 @@
             <div class="categorias-grid" id="categoriasGrid">
                 <!-- Containers de categorias serão gerados aqui -->
             </div>
+            <div id="categoriasPagination" style="margin-top:24px; text-align:center;"></div>
         </section>
     </main>
     <script src="./assets/javascript/nav(globalcode).js"></script>
@@ -134,21 +173,69 @@
             return `hsl(${hue}, 60%, 60%)`;
         }
 
+        // Paginação de categorias
+        const CATEGORIAS_POR_PAGINA = 6;
+        let categoriasData = [];
+        let paginaAtual = 1;
+
+        function renderCategoriasPagina(pagina) {
+            const grid = document.getElementById('categoriasGrid');
+            grid.innerHTML = '';
+            const total = categoriasData.length;
+            const inicio = (pagina - 1) * CATEGORIAS_POR_PAGINA;
+            const fim = Math.min(inicio + CATEGORIAS_POR_PAGINA, total);
+            for (let idx = inicio; idx < fim; idx++) {
+                const cat = categoriasData[idx];
+                const card = document.createElement('div');
+                card.className = 'categoria-card';
+                card.style.borderColor = getDistinctColor(idx, total);
+                const nome = cat.nome.trim();
+                card.innerHTML = `<span class="categoria-nome">${nome}</span>`;
+                grid.appendChild(card);
+            }
+            renderPaginacao(pagina, Math.ceil(total / CATEGORIAS_POR_PAGINA));
+        }
+
+        function renderPaginacao(pagina, totalPaginas) {
+            const pagDiv = document.getElementById('categoriasPagination');
+            pagDiv.innerHTML = '';
+            if (totalPaginas <= 1) return;
+            const anterior = document.createElement('button');
+            anterior.textContent = 'Anterior';
+            anterior.className = 'pagination-btn';
+            anterior.disabled = pagina === 1;
+            anterior.onclick = () => {
+                if (pagina > 1) {
+                    paginaAtual--;
+                    renderCategoriasPagina(paginaAtual);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+            const proximo = document.createElement('button');
+            proximo.textContent = 'Próximo';
+            proximo.className = 'pagination-btn';
+            proximo.disabled = pagina === totalPaginas;
+            proximo.onclick = () => {
+                if (pagina < totalPaginas) {
+                    paginaAtual++;
+                    renderCategoriasPagina(paginaAtual);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+            const info = document.createElement('span');
+            info.className = 'pagination-info';
+            info.textContent = ` ${pagina} de ${totalPaginas} `;
+            pagDiv.appendChild(anterior);
+            pagDiv.appendChild(info);
+            pagDiv.appendChild(proximo);
+        }
+
         fetch('data/categorias.json')
             .then(response => response.json())
             .then(data => {
-                const grid = document.getElementById('categoriasGrid');
-                grid.innerHTML = '';
-                const total = data.categorias.length;
-                data.categorias.forEach((cat, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'categoria-card';
-                    // Aplica cor de borda distinta
-                    card.style.borderColor = getDistinctColor(idx, total);
-                    const nome = cat.nome.trim();
-                    card.innerHTML = `<span class="categoria-nome">${nome}</span>`;
-                    grid.appendChild(card);
-                });
+                categoriasData = data.categorias;
+                paginaAtual = 1;
+                renderCategoriasPagina(paginaAtual);
             });
     </script>
 </body>
