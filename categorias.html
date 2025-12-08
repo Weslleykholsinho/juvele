@@ -191,6 +191,11 @@
                 card.style.borderColor = getDistinctColor(idx, total);
                 const nome = cat.nome.trim();
                 card.innerHTML = `<span class="categoria-nome">${nome}</span>`;
+                // Redirecionamento ao clicar, igual categorias0x1.js
+                card.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.location.href = `search.html?q=${encodeURIComponent(nome)}&categoria=1`;
+                });
                 grid.appendChild(card);
             }
             renderPaginacao(pagina, Math.ceil(total / CATEGORIAS_POR_PAGINA));
