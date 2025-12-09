@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="./assets/styles/searchpage.css">
     <link rel="stylesheet" href="./assets/styles/footer(global).css">
     <link rel="stylesheet" href="./assets/styles/categorias0x1.css">
+    <link rel="stylesheet" href="./assets/styles/pagination(globalstyle).css">
 
     <!-- mover Font Awesome para o head -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -132,7 +133,10 @@
 
     <!-- Script para filtrar por categoria (exemplo básico) -->
     <script>
-
+   // Remover ocultação da barra de pesquisa após o carregamento dos estilos
+        window.addEventListener('load', function () {
+            document.getElementById('siteSearch').classList.remove('search-bar--hidden');
+        });
     </script>
     <script src="./assets/javascript/categorias0x1.js"></script>
     <script src="./assets/javascript/searchpage.js"></script>

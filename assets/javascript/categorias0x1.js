@@ -23,15 +23,28 @@ fetch('./data/categorias.json')
         // Adiciona botão "Ver mais" se houver mais categorias
         if (data.categorias.length > maxCategorias) {
             const verMaisBtn = document.createElement('a');
-            verMaisBtn.className = 'categoria';
+            verMaisBtn.className = 'categoria ver-mais-btn';
             verMaisBtn.setAttribute('role', 'button');
             verMaisBtn.textContent = 'Ver mais >';
             verMaisBtn.href = 'categorias.html';
-            verMaisBtn.style.marginLeft = '-9px';
+            verMaisBtn.style.marginLeft = '0';
+            verMaisBtn.style.padding = '6px 18px';
+            verMaisBtn.style.borderRadius = '20px';
             verMaisBtn.style.color = '#1976d2';
-            verMaisBtn.style.textDecoration = 'underline';
-            verMaisBtn.style.background = 'none';
-            verMaisBtn.style.border = 'none';
+            verMaisBtn.style.background = 'transparent';
+            verMaisBtn.style.border = '1px solid #1976d2';
+            verMaisBtn.style.fontWeight = '500';
+            verMaisBtn.style.fontSize = '15px';
+            verMaisBtn.style.textDecoration = 'none';
+            verMaisBtn.style.transition = 'background 0.2s, color 0.2s';
+            verMaisBtn.addEventListener('mouseover', function () {
+                verMaisBtn.style.background = '#1976d2';
+                verMaisBtn.style.color = '#fff';
+            });
+            verMaisBtn.addEventListener('mouseout', function () {
+                verMaisBtn.style.background = 'transparent';
+                verMaisBtn.style.color = '#1976d2';
+            });
             categoriasList.appendChild(verMaisBtn);
         }
         // Centralizar se poucas categorias

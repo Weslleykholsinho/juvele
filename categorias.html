@@ -29,6 +29,7 @@
     <!-- moved: load Font Awesome before local CSS so custom CSS can override styling -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="assets/styles/base-fundamental.css">
+    <link rel="stylesheet" href="assets/styles/pagination(globalstyle).css">
     <link rel="stylesheet" href="assets/styles/footer(global).css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,43 +110,7 @@
             /* Minimalista: sem decoração extra */
         }
 
-        /* Paginação de categorias - igual ao searchpage */
-        #categoriasPagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin: 10px 0 30px 0;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        #categoriasPagination .pagination-btn {
-            background: #fff;
-            border: 1px solid #d1d1d1;
-            color: #4173c3;
-            padding: 0.5em 1.2em;
-            border-radius: 24px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s, border 0.2s;
-        }
-
-        #categoriasPagination .pagination-btn:disabled {
-            background: #f5f5f5;
-            color: #bbb;
-            border-color: #eee;
-            cursor: not-allowed;
-        }
-
-        #categoriasPagination .pagination-btn:not(:disabled):hover {
-            text-decoration: underline;
-        }
-
-        #categoriasPagination .pagination-info {
-            font-weight: 500;
-            font-size: 1.05rem;
-            color: #444;
-        }
+    
     </style>
 </head>
 
@@ -169,7 +134,7 @@
             <div class="categorias-grid" id="categoriasGrid">
                 <!-- Containers de categorias serão gerados aqui -->
             </div>
-            <div id="categoriasPagination" style="margin-top:24px; text-align:center;"></div>
+            <div class="pagination" style="margin-top:24px; text-align:center;"></div>
         </section>
     </main>
     <script src="./assets/javascript/nav(globalcode).js"></script>
@@ -214,11 +179,11 @@
         }
 
         function renderPaginacao(pagina, totalPaginas) {
-            const pagDiv = document.getElementById('categoriasPagination');
+            const pagDiv = document.querySelector('.pagination');
             pagDiv.innerHTML = '';
             if (totalPaginas <= 1) return;
             const anterior = document.createElement('button');
-            anterior.textContent = 'Anterior';
+            anterior.textContent = '< Anterior';
             anterior.className = 'pagination-btn';
             anterior.disabled = pagina === 1;
             anterior.onclick = () => {
@@ -229,7 +194,7 @@
                 }
             };
             const proximo = document.createElement('button');
-            proximo.textContent = 'Próximo';
+            proximo.textContent = 'Próximo >';
             proximo.className = 'pagination-btn';
             proximo.disabled = pagina === totalPaginas;
             proximo.onclick = () => {
@@ -254,6 +219,11 @@
                 paginaAtual = 1;
                 renderCategoriasPagina(paginaAtual);
             });
+
+        // Remover ocultação da barra de pesquisa após o carregamento dos estilos
+        window.addEventListener('load', function () {
+            document.getElementById('siteSearch').classList.remove('search-bar--hidden');
+        });
     </script>
 </body>
 
