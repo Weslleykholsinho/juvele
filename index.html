@@ -14,6 +14,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
 
+        <script>
+            // Aplica Montserrat na logo assim que a fonte estiver carregada
+            if (document.fonts) {
+                document.fonts.ready.then(function () {
+                    var logo = document.querySelector('.logo');
+                    if (logo) logo.style.fontFamily = 'Montserrat, sans-serif';
+                });
+            }
+        </script>
+
     <!-- ============================
          ESTILOS PRINCIPAIS
          ============================ -->
