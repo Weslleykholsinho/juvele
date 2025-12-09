@@ -24,6 +24,10 @@
         ],
         "desconto": 15
 
+///////////// achei onde estava o bug, uahayyyyyy
+dá uma olhana na url, tem que remover o category=1 quando a pesquisa não for 
+proveniente de um click em uma categoria.
+
 
       *** limitar a quantidade de categorias que são redenrizadas
       para evitar travamentos.

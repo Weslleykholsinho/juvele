@@ -159,8 +159,19 @@ document.addEventListener('DOMContentLoaded', () => {
             submit.addEventListener('click', (e) => {
                 const q = (input.value || '').trim();
                 if (!q) return;
-                // usa getSearchUrl para garantir caminho correto de qualquer página
                 window.location.href = getSearchUrl(q);
+            });
+        }
+
+        // Permite disparar pesquisa ao pressionar Enter no campo de busca
+        if (input) {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const q = (input.value || '').trim();
+                    if (!q) return;
+                    window.location.href = getSearchUrl(q);
+                }
             });
         }
 
@@ -402,11 +413,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function getSearchUrl(q) {
         // resolve 'pages/search.html' em relação ao document.baseURI (respeita <base>)
         const url = new URL('./search.html', document.baseURI);
+
+        // Remove categoria=1 se existir
+        const params = new URLSearchParams(url.search);
+        params.delete('categoria');
+
         if (q && q.toString().trim()) {
-            url.search = 'q=' + encodeURIComponent(q.toString().trim());
+            params.set('q', q.toString().trim());
         } else {
-            url.search = '';
+            params.delete('q');
         }
+        url.search = params.toString();
+
         return url.href;
     }
 });

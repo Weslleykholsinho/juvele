@@ -297,7 +297,6 @@ body {
     right: 0;
     z-index: 100;
     background: #fff;
-    box-shadow: 0 2px 8px 0 rgba(80, 80, 80, 0.07);
     margin: 0 auto;
     width: 100%;
     max-width: 1100px;
@@ -308,7 +307,6 @@ body {
     padding-bottom: 18px;
     /* já existente: espaço na borda inferior */
     border-radius: 0 0 12px 12px;
-    transition: box-shadow 0.2s;
     /* Adicionado: espaço na borda inferior para separar dos filtros internos */
 }
 
@@ -331,7 +329,7 @@ body {
 
     .promo-toggle-wrapper.sticky-filter {
         /* Para mobile, ajuste o topo para considerar apenas o padding-bottom do filtro de preço */
-        top: calc(70px + 56px + 18px);
+        top: calc(70px + 56px + 21px);
         /* 18px = padding-bottom do filtro de preço */
     }
 }
