@@ -1,5 +1,3 @@
-
-
 /* promoção, faixatop e demais estilos não relacionados à nav permanecem abaixo */
 .promotion {
     position: relative;
@@ -85,4 +83,10 @@
     letter-spacing: 0.6px;
 }
 
-
+.destaques-desc {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #555555;
+    margin-bottom: 16px;
+    margin-inline: 20px;
+}

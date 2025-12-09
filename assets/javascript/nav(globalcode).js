@@ -287,7 +287,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			<div class="menu-icon">
 				<i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
 			</div>
+            
 		</nav>
+        
 		<!-- Overlay para escurecimento em mobile -->
 		<div id="menuOverlay" class="menu-overlay"></div>
 	`;

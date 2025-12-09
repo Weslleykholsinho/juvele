@@ -226,8 +226,8 @@ function renderizarProdutos(produtos, isBusca = false) {
     }
 
     // se houver produtos, garante que a área "sem resultados" e o erro estejam ocultos
-    const noResultsEl = document.getElementById('noResults');
-    if (noResultsEl) noResultsEl.hidden = true;
+    // Removido: const noResultsEl = document.getElementById('noResults');
+    // Removido: if (noResultsEl) noResultsEl.hidden = true;
     if (erroDiv) erroDiv.hidden = true;
 
     // garantir que data-price contenha número (se possível) para facilitar filtro/ordenacão

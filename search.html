@@ -5,6 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUVELE - Moda Feminina</title>
+
+     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background: #faf9f6;
+            font-family: sans-serif;
+        }
+
+        .search-bar--hidden {
+            display: none !important;
+        }
+    </style>
     <link rel="stylesheet" href="./assets/styles/base-fundamental.css">
     <link rel="shortcut icon" href="./assets/images/site-icon/fav.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +89,8 @@
     </div>
     <!-- Fim: toggle Promoções -->
 
-    <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site" onsubmit="return false;">
+     <form id="siteSearch" class="search-bar search-bar--hidden" role="search" aria-label="Pesquisar no site"
+        onsubmit="return false;">
         <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
         <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
         <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>

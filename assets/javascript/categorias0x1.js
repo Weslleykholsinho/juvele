@@ -3,7 +3,10 @@ fetch('./data/categorias.json')
     .then(data => {
         const categoriasList = document.getElementById('categoriasList');
         categoriasList.innerHTML = '';
-        data.categorias.forEach(cat => {
+        // Limita a 6 categorias
+        const maxCategorias = 6;
+        const categoriasExibir = data.categorias.slice(0, maxCategorias);
+        categoriasExibir.forEach(cat => {
             const nomeLimpo = cat.nome.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
             const a = document.createElement('a');
             a.className = 'categoria';
@@ -17,8 +20,22 @@ fetch('./data/categorias.json')
             });
             categoriasList.appendChild(a);
         });
+        // Adiciona botão "Ver mais" se houver mais categorias
+        if (data.categorias.length > maxCategorias) {
+            const verMaisBtn = document.createElement('a');
+            verMaisBtn.className = 'categoria';
+            verMaisBtn.setAttribute('role', 'button');
+            verMaisBtn.textContent = 'Ver mais >';
+            verMaisBtn.href = 'categorias.html';
+            verMaisBtn.style.marginLeft = '-9px';
+            verMaisBtn.style.color = '#1976d2';
+            verMaisBtn.style.textDecoration = 'underline';
+            verMaisBtn.style.background = 'none';
+            verMaisBtn.style.border = 'none';
+            categoriasList.appendChild(verMaisBtn);
+        }
         // Centralizar se poucas categorias
-        if (data.categorias.length <= 5) {
+        if (categoriasExibir.length <= 5) {
             categoriasList.classList.add('few-categories');
         } else {
             categoriasList.classList.remove('few-categories');

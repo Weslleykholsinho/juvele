@@ -2,44 +2,81 @@
 <html lang="pt-br">
 
 <head>
+    <!-- ============================
+         METADADOS E FONTES
+         ============================ -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUVELE - Moda Feminina</title>
-    <!--ICONE DA PÁGINA -->
-    <link rel="stylesheet" href="assets/styles/base-fundamental.css">
     <link rel="shortcut icon" href="assets/images/site-icon/fav.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- ============================
+         ESTILOS PRINCIPAIS
+         ============================ -->
+    <link rel="stylesheet" href="assets/styles/base-fundamental.css">
     <link rel="stylesheet" href="assets/styles/styles.css" />
     <link rel="stylesheet" href="assets/styles/faixatop.css" />
     <link rel="stylesheet" href="assets/styles/categorias0x1.css" />
     <link rel="stylesheet" href="assets/styles/footer(global).css" />
     <link rel="stylesheet" href="assets/styles/store(status-open-and-close).css" />
     <link rel="stylesheet" href="assets/styles/produtos-destaques.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity=""
+        crossorigin="anonymous">
 
+    <!-- ============================
+         ESTILO INLINE (AJUSTES RÁPIDOS)
+         ============================ -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
 
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background: #faf9f6;
+            font-family: sans-serif;
+        }
+
+        .search-bar--hidden {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body>
-    <!--PARTE DE CIMA Titulo, logotipo e Navbar-->
+    <!-- ============================
+         HEADER E NAVEGAÇÃO
+         ============================ -->
     <header>
         <!-- nav HTML removido daqui; será injetado por nav(globalcode).js -->
     </header>
+    <script src="./assets/javascript/nav(globalcode).js"></script>
 
-
+    <!-- ============================
+         BARRA DE PESQUISA
+         ============================ -->
     <div class="search-icon" aria-hidden="true">
         <!-- mantenha seu ícone atual aqui (ex.: <i class="fa fa-search"></i>) -->
     </div>
-
-
-    <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site" onsubmit="return false;">
+    <form id="siteSearch" class="search-bar search-bar--hidden" role="search" aria-label="Pesquisar no site"
+        onsubmit="return false;">
         <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
         <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
         <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
     </form>
-    <!--BANNER PROMOCIONAL-->
+
+    <!-- ============================
+         BANNER PROMOCIONAL E FAIXA TOP
+         ============================ -->
     <div class="promotion">
         <div class="promo-text">
             <h3>OFERTAS IMPERDÍVEIS!</h3>
@@ -54,10 +91,9 @@
 
     <!-- ============================
          SEÇÃO: PRODUTOS EM DESTAQUE
-         Será preenchida dinamicamente a partir de produtos.json
          ============================ -->
     <section id="destaques" class="produtos-destaque" aria-labelledby="destaques-title">
-        <!-- Indicador de status da loja (agora acima das categorias) -->
+        <!-- Indicador de status da loja -->
         <p id="lojaStatus">
             <span id="statusText"></span>
         </p>
@@ -69,6 +105,8 @@
             </div>
         </div>
         <h2 id="destaques-title">Produtos em Destaque</h2>
+        <p class="destaques-desc">
+            Selecionamos looks que combinam estilo, conforto e personalidade para você brilhar em qualquer ocasião.
         <div class="container">
             <div id="produtosContainer" class="produtos-container" role="list"></div>
             <div id="produtosErro" class="produtos-erro" role="status" aria-live="polite" hidden>
@@ -77,18 +115,17 @@
         </div>
     </section>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity=""
-        crossorigin="anonymous">
-    <!-- Incluir script que injeta a nav antes do nav.js -->
-    <script src="./assets/javascript/nav(globalcode).js"></script>
-    <!-- pr-def deve ser carregado antes de nav.js -->
+    <!-- ============================
+         SCRIPTS PRINCIPAIS (CARREGAMENTO OTIMIZADO)
+         ============================ -->
     <script src="./assets/javascript/pr-def.js"></script>
     <script src="./assets/javascript/nav.js"></script>
     <script src="./assets/javascript/sys-ger-prod.js"></script>
     <script src="./assets/javascript/faixatop.js"></script>
     <script>
-        // Carregar categorias dinamicamente de categorias.json
-
+        // ============================
+        // STATUS DA LOJA (DINÂMICO)
+        // ============================
         // Lista de exceções: dias da semana em que a loja está fechada
         const diasFechados = [0]; // Adicione outros dias se necessário, ex: [0, 6] para domingo e sábado
 
@@ -127,13 +164,14 @@
         atualizarStatusLoja();
         // Atualizar status a cada 2 segundos (mantido)
         setInterval(atualizarStatusLoja, 2000);
+
+        // Remover ocultação da barra de pesquisa após o carregamento dos estilos
+        window.addEventListener('load', function () {
+            document.getElementById('siteSearch').classList.remove('search-bar--hidden');
+        });
     </script>
-
-    <!-- INSERIDO: botão "Ver todos os produtos" (colocar imediatamente antes do footer) -->
-
     <script src="./assets/javascript/footer(global).js"></script>
     <script src="./assets/javascript/categorias0x1.js"></script>
-
 </body>
 
 </html>

@@ -1,19 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
-}
-
-html,
-body {
-    height: 100%;
-    width: 100%;
-    background: #faf9f6;
-}
 
 /* Remove o botão de limpar (x) nativo do input[type="search"] em todos os navegadores */
 input[type="search"]::-webkit-search-cancel-button,

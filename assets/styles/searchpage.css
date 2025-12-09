@@ -11,8 +11,8 @@ body {
 
 .search-title {
     font-size: 1.8rem;
-    font-weight: 400;
-    color: #5b3142;
+    font-weight: 300;
+    color: #353535;
     margin: 0.5rem 0;
     font-family: 'Montserrat', sans-serif;
     margin-left: 0;
@@ -21,12 +21,12 @@ body {
 
 .search-description {
     color: #222222;
-    font-size: 0.9rem;
-    max-width: 600px;
+    font-size: 0.8rem;
     /* aumenta largura para melhor leitura quando centralizado */
-    margin: 15px auto 15px;
+    margin: 15px 20px 15px;
     /* centraliza horizontalmente */
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
 }
 
 .back-link {

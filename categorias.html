@@ -5,10 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUVELE - Moda Feminina</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background: #faf9f6;
+            font-family: sans-serif;
+        }
+
+        .search-bar--hidden {
+            display: none !important;
+        }
+    </style>
     <link rel="shortcut icon" href="assets/images/site-icon/fav.ico" />
     <!-- moved: load Font Awesome before local CSS so custom CSS can override styling -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="assets/styles/page-categorias.css">
     <link rel="stylesheet" href="assets/styles/base-fundamental.css">
     <link rel="stylesheet" href="assets/styles/footer(global).css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,17 +49,16 @@
             font-size: 32px;
             font-family: 'Montserrat', sans-serif;
             margin-bottom: 8px;
-            color: #4a4a4a;
-            font-weight: 500;
+            color: #272727;
+            font-weight: 300;
             margin-inline: 5px;
         }
 
         .categorias-desc {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             margin-bottom: 32px;
             color: #444;
             font-family: 'Arimo', sans-serif;
-            font-size: 14px;
             margin-inline: 10px;
         }
 
@@ -68,13 +86,6 @@
             justify-content: center;
             transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
             cursor: pointer;
-        }
-
-        .categoria-card:hover {
-            box-shadow: 0 4px 24px 0 #0003;
-            border-color: #bfc8d6;
-            transform: translateY(-2px) scale(1.03);
-            background: #f6f8fa;
         }
 
         .categoria-img {
@@ -142,7 +153,8 @@
     <header>
 
     </header>
-    <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site" onsubmit="return false;">
+    <form id="siteSearch" class="search-bar search-bar--hidden" role="search" aria-label="Pesquisar no site"
+        onsubmit="return false;">
         <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
         <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
         <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
