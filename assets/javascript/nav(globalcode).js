@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inject nav-related CSS (moved from styles.css)
     (function injectNavStyles() {
         const css = `
+
+            nav .logo h1{
+            opacity: 0;}
+
+
                .logo {
                 color: #ffffffff;
             }
@@ -12,6 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 margin: 0;
                 font-size: 50px;
             }
+
+            nav .logo h1 {
+            opacity: 1;
+
+    }
 
             /* variável para controlar altura da nav */
             :root { --nav-height: 70px; }
