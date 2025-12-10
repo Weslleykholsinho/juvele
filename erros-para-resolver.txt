@@ -6,3 +6,24 @@
   >>>>
 *** é necessario otimizar a forma com que a barra de pesquisa puxa os dados
   do produtos.json e sugere para o usuário - o processo atual é considerado lento.
+
+
+
+
+
+
+## Plan: Busca eficiente para até 1000 produtos
+
+Com até 1000 produtos em `produtos.json`, é viável otimizar tudo no frontend sem backend. O foco deve ser em carregamento único, indexação e busca rápida usando JavaScript.
+
+### Steps
+1. Carregar `produtos.json` via fetch ao iniciar a página (ex.: em `searchpage.js`).
+2. Armazenar os produtos em um array/memória global para evitar múltiplos fetchs.
+3. Implementar busca e filtros usando métodos eficientes (`Array.filter`, `Array.sort`).
+4. Paginar resultados no frontend para evitar renderizar todos os produtos de uma vez.
+5. (Opcional) Usar Web Worker para buscas/filtros se notar lentidão na interface.
+
+### Further Considerations
+1. Busca textual deve ser case-insensitive e tolerante a erros?
+2. Precisa de filtros combinados (ex.: preço + promoção + categoria)?
+3. Deseja cache local (ex.: localStorage) para navegação mais rápida?

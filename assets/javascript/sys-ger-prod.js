@@ -15,6 +15,10 @@ async function carregarProdutos() {
             const destaque = p.Destaque ?? p.destaque;
             return destaque === true || destaque === "true";
         });
+
+        // Garante cache das imagens dos produtos em destaque
+        garantirImagensPagina(produtosDestaque);
+
         // Chama renderizarProdutos diretamente, sem paginação
         renderizarProdutos(produtosDestaque);
     } catch (erro) {
@@ -379,6 +383,94 @@ async function buscarProdutosPromocoes() {
     } catch (erro) {
         console.error('Erro:', erro);
         mostrarErro();
+    }
+}
+
+// --- Funções de cache de imagens (copiadas do searchpage.js) ---
+const IMAGE_CACHE_KEY = 'imagemCacheV1';
+const IMAGE_CACHE_EXPIRATION = 4 * 60 * 60 * 1000; // 4 horas em ms
+
+function getImagemCache() {
+    const raw = localStorage.getItem(IMAGE_CACHE_KEY);
+    if (!raw) return {};
+    try {
+        const cache = JSON.parse(raw);
+        const now = Date.now();
+        Object.keys(cache).forEach(url => {
+            if (now - cache[url].timestamp > IMAGE_CACHE_EXPIRATION) {
+                delete cache[url];
+            }
+        });
+        return cache;
+    } catch {
+        return {};
+    }
+}
+
+function setImagemCache(cache) {
+    localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(cache));
+}
+
+function cacheImagem(url, dataURL) {
+    const cache = getImagemCache();
+    cache[url] = { dataURL, timestamp: Date.now() };
+    setImagemCache(cache);
+}
+
+// Baixa e adiciona ao cache apenas imagens de uma lista de produtos
+function garantirImagensPagina(produtosPagina) {
+    const cache = getImagemCache();
+    let baixadas = 0;
+    let jaNoCache = 0;
+    let ultimoTimestamp = 0;
+
+    produtosPagina.forEach(produto => {
+        if (produto.imagem && !cache[produto.imagem]?.dataURL) {
+            baixadas++;
+            fetch(produto.imagem)
+                .then(res => res.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        cacheImagem(produto.imagem, e.target.result);
+                        const img = new Image();
+                        img.src = e.target.result;
+                        window.imagemCache = window.imagemCache || new Map();
+                        window.imagemCache.set(produto.imagem, img);
+                        console.log(`[CACHE] Imagem baixada e adicionada ao cache: ${produto.imagem}`);
+                    };
+                    reader.readAsDataURL(blob);
+                })
+                .catch(() => {
+                    window.imagemCache = window.imagemCache || new Map();
+                    window.imagemCache.set(produto.imagem, null);
+                    console.log(`[ERRO] Falha ao baixar imagem: ${produto.imagem}`);
+                });
+        } else if (produto.imagem) {
+            jaNoCache++;
+            const img = new Image();
+            img.src = cache[produto.imagem].dataURL;
+            window.imagemCache = window.imagemCache || new Map();
+            window.imagemCache.set(produto.imagem, img);
+            if (cache[produto.imagem].timestamp > ultimoTimestamp) {
+                ultimoTimestamp = cache[produto.imagem].timestamp;
+            }
+        }
+    });
+
+    const cacheAtual = getImagemCache();
+    const totalCache = Object.keys(cacheAtual).length;
+    let ultimaSolicitacao = ultimoTimestamp ? new Date(ultimoTimestamp) : null;
+    let expiracaoCache = ultimaSolicitacao ? new Date(ultimoTimestamp + IMAGE_CACHE_EXPIRATION) : null;
+
+    console.log(`[CACHE] garantirImagensPagina chamada (produtos em destaque). Imagens já no cache: ${jaNoCache}, imagens a baixar: ${baixadas}`);
+    console.log(`[CACHE] Total de imagens no cache: ${totalCache}`);
+    if (ultimaSolicitacao) {
+        console.log(`[CACHE] Última solicitação/cache criada em: ${ultimaSolicitacao.toLocaleString()}`);
+        console.log(`[CACHE] Cache atual expira em: ${expiracaoCache.toLocaleString()}`);
+    }
+    if (baixadas === 0 && jaNoCache > 0) {
+        console.log('[CACHE] Todas as imagens dos destaques já estavam no cache.');
     }
 }
 
