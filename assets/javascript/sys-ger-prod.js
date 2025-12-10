@@ -271,11 +271,12 @@ function renderizarProdutos(produtos, isBusca = false) {
 function mostrarSemResultados() {
     const container = document.getElementById('produtosContainer');
     const erroDiv = document.getElementById('produtosErro');
+    const imgSrc = "./assets/images/avatars/searchnotfound.png";
     if (container) {
         container.innerHTML = `
             <div class="sem-resultados">
                 <p class="sem-resultados-texto">Ops, nenhum resultado foi encontrado para sua pesquisa.</p>
-                <img src="./assets/images/avatars/searchnotfound.png" alt="Nenhum resultado encontrado" class="imagem-sem-resultados" />
+                <img src="${imgSrc}" alt="Nenhum resultado encontrado" class="imagem-sem-resultados" />
             </div>
         `;
         // Centraliza o conteúdo do container usando flexbox
@@ -323,6 +324,34 @@ function mostrarSemResultados() {
         }
     `;
     document.head.appendChild(style);
+
+    // --- Cache da imagem de "nenhum resultado" ---
+    // Garante que a imagem seja baixada e armazenada no cache
+    const cache = window.getImagemCache();
+    if (!cache[imgSrc]?.dataURL) {
+        fetch(imgSrc)
+            .then(res => res.blob())
+            .then(blob => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    window.cacheImagem(imgSrc, e.target.result);
+                    const img = new Image();
+                    img.src = e.target.result;
+                    window.imagemCache = window.imagemCache || new Map();
+                    window.imagemCache.set(imgSrc, img);
+                };
+                reader.readAsDataURL(blob);
+            })
+            .catch(() => {
+                window.imagemCache = window.imagemCache || new Map();
+                window.imagemCache.set(imgSrc, null);
+            });
+    } else {
+        const img = new Image();
+        img.src = cache[imgSrc].dataURL;
+        window.imagemCache = window.imagemCache || new Map();
+        window.imagemCache.set(imgSrc, img);
+    }
 }
 
 function formatarPreco(preco) {
