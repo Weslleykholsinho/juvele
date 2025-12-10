@@ -14,15 +14,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
 
-        <script>
-            // Aplica Montserrat na logo assim que a fonte estiver carregada
-            if (document.fonts) {
-                document.fonts.ready.then(function () {
-                    var logo = document.querySelector('.logo');
-                    if (logo) logo.style.fontFamily = 'Montserrat, sans-serif';
-                });
-            }
-        </script>
+    <script>
+        // Aplica Montserrat na logo assim que a fonte estiver carregada
+        if (document.fonts) {
+            document.fonts.ready.then(function () {
+                var logo = document.querySelector('.logo');
+                if (logo) logo.style.fontFamily = 'Montserrat, sans-serif';
+            });
+        }
+    </script>
 
     <!-- ============================
          ESTILOS PRINCIPAIS
@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="assets/styles/categorias0x1.css" />
     <link rel="stylesheet" href="assets/styles/footer(global).css" />
     <link rel="stylesheet" href="assets/styles/store(status-open-and-close).css" />
-    <link rel="stylesheet" href="assets/styles/produtos-destaques.css" />
+    <link rel="stylesheet" href="assets/styles/estilos-para-card-de-produtos.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity=""
         crossorigin="anonymous">
 
@@ -179,6 +179,13 @@
         window.addEventListener('load', function () {
             document.getElementById('siteSearch').classList.remove('search-bar--hidden');
         });
+
+        function toggleMenu() {
+            const nav = document.querySelector('.nav');
+            if (nav) {
+                nav.classList.toggle('nav--open');
+            }
+        }
     </script>
     <script src="./assets/javascript/footer(global).js"></script>
     <script src="./assets/javascript/categorias0x1.js"></script>

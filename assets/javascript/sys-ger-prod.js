@@ -134,6 +134,10 @@ function renderizarPaginaBusca() {
     const inicio = (paginaAtual - 1) * itensPorPagina;
     const fim = inicio + itensPorPagina;
     const paginaResultados = filtrados.slice(inicio, fim);
+
+    // Garante cache das imagens dos produtos da página de busca
+    garantirImagensPagina(paginaResultados);
+
     renderizarProdutos(paginaResultados, true);
     atualizarPaginacao();
 }
@@ -206,6 +210,9 @@ function limitarTitulo(titulo, limite = 30) {
 function renderizarProdutos(produtos, isBusca = false) {
     const container = document.getElementById('produtosContainer');
     const erroDiv = document.getElementById('produtosErro');
+
+    // Garante cache das imagens dos produtos renderizados (útil para chamadas diretas)
+    garantirImagensPagina(produtos);
 
     // Corrige bug visual: sempre limpa estilos do container antes de renderizar
     if (container) {
@@ -386,18 +393,18 @@ async function buscarProdutosPromocoes() {
     }
 }
 
-// --- Funções de cache de imagens (copiadas do searchpage.js) ---
-const IMAGE_CACHE_KEY = 'imagemCacheV1';
-const IMAGE_CACHE_EXPIRATION = 4 * 60 * 60 * 1000; // 4 horas em ms
+// --- Sistema de cache de imagens unificado ---
+window.IMAGE_CACHE_KEY = 'imagemCacheV1';
+window.IMAGE_CACHE_EXPIRATION = 1 * 60 * 60 * 1000; // 1 hora em ms
 
-function getImagemCache() {
-    const raw = localStorage.getItem(IMAGE_CACHE_KEY);
+window.getImagemCache = function () {
+    const raw = localStorage.getItem(window.IMAGE_CACHE_KEY);
     if (!raw) return {};
     try {
         const cache = JSON.parse(raw);
         const now = Date.now();
         Object.keys(cache).forEach(url => {
-            if (now - cache[url].timestamp > IMAGE_CACHE_EXPIRATION) {
+            if (now - cache[url].timestamp > window.IMAGE_CACHE_EXPIRATION) {
                 delete cache[url];
             }
         });
@@ -405,74 +412,79 @@ function getImagemCache() {
     } catch {
         return {};
     }
-}
+};
 
-function setImagemCache(cache) {
-    localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(cache));
-}
+window.setImagemCache = function (cache) {
+    localStorage.setItem(window.IMAGE_CACHE_KEY, JSON.stringify(cache));
+};
 
-function cacheImagem(url, dataURL) {
-    const cache = getImagemCache();
+window.cacheImagem = function (url, dataURL) {
+    const cache = window.getImagemCache();
     cache[url] = { dataURL, timestamp: Date.now() };
-    setImagemCache(cache);
-}
+    window.setImagemCache(cache);
+};
 
 // Baixa e adiciona ao cache apenas imagens de uma lista de produtos
-function garantirImagensPagina(produtosPagina) {
-    const cache = getImagemCache();
-    let baixadas = 0;
-    let jaNoCache = 0;
-    let ultimoTimestamp = 0;
-
+window.garantirImagensPagina = function (produtosPagina) {
+    const cache = window.getImagemCache();
     produtosPagina.forEach(produto => {
         if (produto.imagem && !cache[produto.imagem]?.dataURL) {
-            baixadas++;
             fetch(produto.imagem)
                 .then(res => res.blob())
                 .then(blob => {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        cacheImagem(produto.imagem, e.target.result);
+                        window.cacheImagem(produto.imagem, e.target.result);
                         const img = new Image();
                         img.src = e.target.result;
                         window.imagemCache = window.imagemCache || new Map();
                         window.imagemCache.set(produto.imagem, img);
-                        console.log(`[CACHE] Imagem baixada e adicionada ao cache: ${produto.imagem}`);
                     };
                     reader.readAsDataURL(blob);
                 })
                 .catch(() => {
                     window.imagemCache = window.imagemCache || new Map();
                     window.imagemCache.set(produto.imagem, null);
-                    console.log(`[ERRO] Falha ao baixar imagem: ${produto.imagem}`);
                 });
         } else if (produto.imagem) {
-            jaNoCache++;
             const img = new Image();
             img.src = cache[produto.imagem].dataURL;
             window.imagemCache = window.imagemCache || new Map();
             window.imagemCache.set(produto.imagem, img);
-            if (cache[produto.imagem].timestamp > ultimoTimestamp) {
-                ultimoTimestamp = cache[produto.imagem].timestamp;
+        }
+    });
+};
+
+// Para usar a imagem cacheada em seu site:
+window.getImagemParaUso = function (url) {
+    const cache = window.getImagemCache();
+    return cache[url]?.dataURL || url;
+};
+
+// Log detalhado único ao entrar na página
+document.addEventListener('DOMContentLoaded', function () {
+    const cacheAtual = window.getImagemCache();
+    const totalCache = Object.keys(cacheAtual).length;
+    let cacheSizeBytes = 0;
+    let ultimoTimestamp = 0;
+    Object.values(cacheAtual).forEach(entry => {
+        if (entry.dataURL) {
+            cacheSizeBytes += entry.dataURL.length * 0.75;
+            if (entry.timestamp > ultimoTimestamp) {
+                ultimoTimestamp = entry.timestamp;
             }
         }
     });
-
-    const cacheAtual = getImagemCache();
-    const totalCache = Object.keys(cacheAtual).length;
+    const cacheSizeMB = (cacheSizeBytes / (1024 * 1024)).toFixed(2);
     let ultimaSolicitacao = ultimoTimestamp ? new Date(ultimoTimestamp) : null;
-    let expiracaoCache = ultimaSolicitacao ? new Date(ultimoTimestamp + IMAGE_CACHE_EXPIRATION) : null;
+    let expiracaoCache = ultimaSolicitacao ? new Date(ultimoTimestamp + window.IMAGE_CACHE_EXPIRATION) : null;
 
-    console.log(`[CACHE] garantirImagensPagina chamada (produtos em destaque). Imagens já no cache: ${jaNoCache}, imagens a baixar: ${baixadas}`);
-    console.log(`[CACHE] Total de imagens no cache: ${totalCache}`);
-    if (ultimaSolicitacao) {
-        console.log(`[CACHE] Última solicitação/cache criada em: ${ultimaSolicitacao.toLocaleString()}`);
-        console.log(`[CACHE] Cache atual expira em: ${expiracaoCache.toLocaleString()}`);
-    }
-    if (baixadas === 0 && jaNoCache > 0) {
-        console.log('[CACHE] Todas as imagens dos destaques já estavam no cache.');
-    }
-}
+    console.log(`[CACHE] Página: ${window.location.pathname}
+Imagens no cache: ${totalCache}
+Cache total: ${cacheSizeMB} MB
+Cache criado: ${ultimaSolicitacao ? ultimaSolicitacao.toLocaleString() : 'N/A'}
+Cache expira: ${expiracaoCache ? expiracaoCache.toLocaleString() : 'N/A'}`);
+});
 
 // Detecta a página e executa a função correta ao carregar
 document.addEventListener('DOMContentLoaded', function () {
@@ -559,69 +571,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 renderizarPaginaBusca();
             });
         }
-
-        // Sticky filter logic
-        const priceFilterWrapper = document.querySelector('.price-filter-wrapper');
-        const promoToggleWrapper = document.querySelector('.promo-toggle-wrapper');
-
-        // Cria spacer para evitar sobreposição do conteúdo
-        let stickySpacer = document.querySelector('.sticky-filter-spacer');
-        if (!stickySpacer && priceFilterWrapper) {
-            stickySpacer = document.createElement('div');
-            stickySpacer.className = 'sticky-filter-spacer';
-            priceFilterWrapper.parentNode.insertBefore(stickySpacer, priceFilterWrapper.nextSibling);
-        }
-
-        // Calcula o limite inferior para desafixar (quando filtros voltam à posição original)
-        function getUnstickLimit() {
-            const grid = document.querySelector('.products-grid');
-            if (!grid) return Infinity;
-            const gridTop = grid.getBoundingClientRect().top + window.scrollY;
-            let stickyHeight = 0;
-            if (priceFilterWrapper) stickyHeight += priceFilterWrapper.offsetHeight;
-            if (promoToggleWrapper) stickyHeight += promoToggleWrapper.offsetHeight;
-            // Pequena margem extra
-            return gridTop - stickyHeight - 16;
-        }
-
-        function updateStickyFilters() {
-            const scrollY = window.scrollY || window.pageYOffset;
-            const stickyStart = (priceFilterWrapper ? priceFilterWrapper.offsetTop : 0) - 30;
-            const unstickLimit = getUnstickLimit();
-
-            // Desafixa antes do topo (por exemplo, 40px antes do topo original)
-            const earlyUnstick = (priceFilterWrapper ? priceFilterWrapper.offsetTop : 0) + 100;
-            const shouldStick = scrollY > stickyStart && scrollY < unstickLimit && scrollY > earlyUnstick;
-
-            // Novo: desafixa se scrollY > 600
-            const unstickThreshold = 600;
-            const shouldUnstickByScroll = scrollY > unstickThreshold;
-
-            if (priceFilterWrapper) {
-                if (shouldStick && !shouldUnstickByScroll) {
-                    priceFilterWrapper.classList.add('sticky-filter');
-                    if (stickySpacer) stickySpacer.classList.add('active');
-                } else {
-                    priceFilterWrapper.classList.remove('sticky-filter');
-                    if (stickySpacer) stickySpacer.classList.remove('active');
-                }
-            }
-            if (promoToggleWrapper) {
-                if (shouldStick && !shouldUnstickByScroll) {
-                    promoToggleWrapper.classList.add('sticky-filter');
-                } else {
-                    promoToggleWrapper.classList.remove('sticky-filter');
-                }
-            }
-        }
-
-        window.addEventListener('scroll', updateStickyFilters, { passive: true });
-        window.addEventListener('resize', updateStickyFilters);
-        updateStickyFilters();
     } else {
         carregarProdutos();
     }
 });
-
-// Exemplo de uso para search.html:
-// buscarProdutosPorTermo('termo pesquisado pelo usuário');

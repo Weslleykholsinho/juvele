@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUVELE - Moda Feminina</title>
 
-     <style>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="./assets/styles/search-produto-card.css">
+    <link rel="stylesheet" href="./assets/styles/estilos-para-card-de-produtos.css">
     <!-- CORREÇÃO: apontar para o arquivo correto de estilos da página de busca -->
     <link rel="stylesheet" href="./assets/styles/searchpage.css">
     <link rel="stylesheet" href="./assets/styles/footer(global).css">
@@ -90,7 +90,7 @@
     </div>
     <!-- Fim: toggle Promoções -->
 
-     <form id="siteSearch" class="search-bar search-bar--hidden" role="search" aria-label="Pesquisar no site"
+    <form id="siteSearch" class="search-bar search-bar--hidden" role="search" aria-label="Pesquisar no site"
         onsubmit="return false;">
         <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
         <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
@@ -132,7 +132,7 @@
 
     <!-- Script para filtrar por categoria (exemplo básico) -->
     <script>
-   // Remover ocultação da barra de pesquisa após o carregamento dos estilos
+        // Remover ocultação da barra de pesquisa após o carregamento dos estilos
         window.addEventListener('load', function () {
             document.getElementById('siteSearch').classList.remove('search-bar--hidden');
         });
@@ -140,6 +140,16 @@
     <script src="./assets/javascript/categorias0x1.js"></script>
     <script src="./assets/javascript/searchpage.js"></script>
     <script src="./assets/javascript/filterprice(searchpage).js"></script>
+    <script src="./assets/javascript/filterfix(searchpage).js"></script>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.querySelector('.nav');
+            if (nav) {
+                nav.classList.toggle('nav--open');
+            }
+        }
+    </script>
 </body>
 
 </html>

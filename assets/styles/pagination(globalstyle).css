@@ -26,7 +26,9 @@
 }
 
 .pagination-btn:not(:disabled):hover {
-    font-weight: 600;
+    background: #4173c3;
+    color: #fff;
+    border-color: #4173c3;
 }
 
 .pagination-info {
