@@ -2,11 +2,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inject nav-related CSS (moved from styles.css)
     (function injectNavStyles() {
         const css = `
+               .logo {
+                color: #ffffffff;
+            }
+
+            nav .logo h1 {
+                font-family: 'Bebas Neue', Sans-serif;
+                font-weight: 400;
+                margin: 0;
+                font-size: 50px;
+            }
+
             /* variável para controlar altura da nav */
             :root { --nav-height: 70px; }
 
             /* mantém fluxo ao fixar a nav */
             body { padding-top: var(--nav-height); }
+
+            h1 {
+            font-size: 24px;}
 
             /* tornar a nav fixa */
             nav {
@@ -25,17 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 backdrop-filter: saturate(120%) blur(4px);
             }
 
-            .logo {
-                color: #fff;
-                font-size: 24px;
-            }
-
-            nav .logo h1 {
-                font-family: 'Bebas Neue', cursive;
-                font-weight: 400;
-                margin: 0;
-            }
-
+     
             nav ul {
                 display: flex;
                 gap: 30px;
@@ -159,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             /* mobile adjustments */
-            @media (max-width:820px) {
+            @media (max-width:890px) {
                 nav ul {
                     position: absolute;
                     top: var(--nav-height);
