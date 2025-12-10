@@ -2,10 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inject nav-related CSS (moved from styles.css)
     (function injectNavStyles() {
         const css = `
-
-            nav .logo h1{
-            opacity: 0;}
-
+           nav .logo h1 {
+            opacity: 0;
+            }
 
                .logo {
                 color: #ffffffff;
@@ -18,10 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 font-size: 50px;
             }
 
-            nav .logo h1 {
-            opacity: 1;
-
-    }
+         
 
             /* variável para controlar altura da nav */
             :root { --nav-height: 70px; }
@@ -267,6 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     pointer-events: auto;
                 }
             }
+                   nav .logo h1 {
+            opacity: 1;
+
+    }
         `;
         const styleEl = document.createElement('style');
         styleEl.setAttribute('data-injected-by', 'nav(globalcode).js');
@@ -287,6 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		<nav>
 			<div class="logo">
 				<h1>JUVELE</h1>
+
 			</div>
 			<ul id="menuList">
 				<li><a href="./index.html" id="op1"></a></li>
@@ -303,7 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			</div>
             
 		</nav>
-        
 		<!-- Overlay para escurecimento em mobile -->
 		<div id="menuOverlay" class="menu-overlay"></div>
 	`;
