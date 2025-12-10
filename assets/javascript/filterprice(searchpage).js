@@ -18,12 +18,9 @@
 
         // Remove todas as mensagens de filtro antes de processar
         containers.forEach(container => {
-            container.querySelectorAll('#filterNoResultsMsg').forEach(el => el.remove());
-            const spacer = container.querySelector('.filter-no-results-spacer');
-            if (spacer) {
-                spacer.style.display = 'none';
-                spacer.style.height = '0';
-            }
+            // Removido: container.querySelectorAll('#filterNoResultsMsg').forEach(el => el.remove());
+            // Removido: const spacer = container.querySelector('.filter-no-results-spacer');
+            // Removido: if (spacer) { spacer.style.display = 'none'; spacer.style.height = '0'; }
         });
 
         // Aplica filtro e ordenação normalmente
@@ -59,44 +56,8 @@
             }
         });
 
-        // Após aplicar o filtro, verifica se há pelo menos UM produto visível em TODOS os containers
-        let anyVisible = false;
-        containers.forEach(container => {
-            const items = Array.from(container.querySelectorAll('[data-price], .produto-card, .product-card, .produto, [role="listitem"]'));
-            if (items.some(it => it.style.display !== 'none')) {
-                anyVisible = true;
-            }
-        });
-
-        if (!anyVisible) {
-            // Exibe a mensagem apenas no primeiro container
-            const container = containers[0];
-            const items = Array.from(container.querySelectorAll('[data-price], .produto-card, .product-card, .produto, [role="listitem"]'));
-            // Esconde todos os produtos
-            items.forEach(it => it.style.display = 'none');
-            // cria/garante spacer que reserva espaço no fluxo
-            let spacer = container.querySelector('.filter-no-results-spacer');
-            if (!spacer) {
-                spacer = document.createElement('div');
-                spacer.className = 'filter-no-results-spacer';
-                container.appendChild(spacer);
-            }
-            // cria a mensagem absoluta
-            const filterMsgEl = document.createElement('div');
-            filterMsgEl.id = 'filterNoResultsMsg';
-            filterMsgEl.className = 'filter-no-results-msg';
-            filterMsgEl.textContent = 'Nenhum resultado encontrado para esse filtro.';
-            container.appendChild(filterMsgEl);
-            filterMsgEl.hidden = false;
-            if (!container.style.position) container.style.position = container.style.position;
-            requestAnimationFrame(() => {
-                const h = filterMsgEl.getBoundingClientRect().height;
-                spacer.style.height = h + 'px';
-                spacer.style.display = 'block';
-                spacer.style.visibility = 'hidden';
-            });
-        }
-        // Se houver algum produto visível, a mensagem já foi removida acima
+        // Após aplicar o filtro, não exibe mensagem se não houver produtos visíveis
+        // Removido: lógica de exibição da mensagem e spacer
 
         // Sempre que um filtro é aplicado/desaplicado, vai para o topo e paginação para 1
         window.scrollTo({ top: 0, behavior: 'smooth' });
