@@ -1,0 +1,338 @@
+/* Styles para a página de produto (PDP) inspirada nas imagens fornecidas */
+
+:root {
+    --muted: #f5f5f3;
+    --card: #ffffff;
+    /* Tamanhos ajustáveis para a imagem do produto */
+    --pdp-image-max-width: 420px;
+    /* largura máxima em telas grandes */
+    --pdp-image-max-width-sm: 320px;
+    /* largura máxima em telas pequenas */
+}
+
+.pdp-container {
+    max-width: 1100px;
+    margin: 28px auto;
+    padding: 0 18px 80px;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.pdp-breadcrumb {
+    color: #777;
+    margin-bottom: 18px;
+    font-size: 14px
+}
+
+.pdp-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    /* reduzido para evitar imagens grandes demais */
+    gap: 28px
+}
+
+.pdp-gallery .pdp-image-card {
+    background: var(--card);
+    border: 1px solid #e6e6e6;
+    padding: 18px;
+    position: relative;
+    max-width: var(--pdp-image-max-width);
+    margin: 0 auto;
+    /* centraliza quando não ocupar toda a coluna */
+}
+
+.pdp-gallery img {
+    width: 100%;
+    height: auto;
+    display: block
+}
+
+.pdp-zoom {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-radius: 4px
+}
+
+.pdp-thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px
+}
+
+.pdp-thumbs .thumb {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff
+}
+
+.pdp-thumbs img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover
+}
+
+.pdp-info {
+    padding: 6px 4px
+}
+
+.pdp-title {
+    font-size: 20px;
+    color: #3c3c3c;
+    margin-bottom: 8px
+}
+
+.pdp-description {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 14px
+}
+
+.pdp-price-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 10px
+}
+
+.pdp-price {
+    font-size: 36px;
+    font-weight: 800;
+    color: #48875a
+}
+
+.pdp-finance {
+    border: 1px solid #eee;
+    padding: 8px 12px;
+    background: #fff;
+    font-size: 13px
+}
+
+.pdp-payments {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0
+}
+
+.pdp-payments i {
+    font-size: 20px;
+    color: #4b4b4b
+}
+
+.pdp-payments .pay-link {
+    margin-left: 12px;
+    color: #c0a86b;
+    font-size: 13px;
+    text-decoration: none
+}
+
+.pdp-attributes {
+    display: flex;
+    gap: 12px;
+    margin: 18px 0
+}
+
+.pdp-attributes .attr {
+    border: 1px solid #e6e6e6;
+    padding: 12px;
+    background: #fff;
+    width: 160px
+}
+
+.pdp-attributes label {
+    display: block;
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 6px
+}
+
+.pdp-attributes .value {
+    font-weight: 600;
+    color: #333
+}
+
+.pdp-qty {
+    margin: 14px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px
+}
+
+.pdp-qty label {
+    font-size: 13px;
+    color: #666
+}
+
+.pdp-qty input {
+    width: 80px;
+    padding: 8px;
+    border: 1px solid #ddd
+}
+
+.btn-buy {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #3088e5;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 8px;
+    cursor: pointer
+}
+
+.shipping {
+    margin-top: 22px;
+    border-top: 1px solid #eee;
+    padding-top: 18px
+}
+
+.shipping h4 {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center
+}
+
+.cep-row {
+    display: flex;
+    gap: 12px
+}
+
+.cep-row input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd
+}
+
+.cep-row button {
+    padding: 10px 18px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer
+}
+
+.small-link {
+    display: inline-block;
+    margin-top: 8px;
+    color: #666;
+    font-size: 13px
+}
+
+.store-card {
+    margin-top: 18px;
+    border: 1px solid #eee;
+    padding: 14px;
+    background: var(--muted);
+    position: relative
+}
+
+.store-card h5 {
+    margin-bottom: 8px
+}
+
+.store-address {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.3
+}
+
+.store-free {
+    position: absolute;
+    right: 12px;
+    top: 18px;
+    color: var(--accent);
+    font-weight: 700
+}
+
+.whatsapp-float {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    background: #25D366;
+    color: #fff;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    z-index: 1000
+}
+
+.whatsapp-float i {
+    font-size: 22px
+}
+
+@media(max-width:900px) {
+    .pdp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pdp-container {
+        padding-bottom: 120px
+    }
+
+    /* Limita a largura da imagem em telas pequenas para evitar imagens excessivamente grandes */
+    .pdp-gallery .pdp-image-card {
+        max-width: var(--pdp-image-max-width-sm);
+        margin: 0 auto;
+    }
+}
+
+/* Zoom overlay */
+.pdp-zoom-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 18px
+}
+
+.pdp-zoom-inner {
+    position: relative;
+    max-width: 95%;
+    max-height: 95%;
+    overflow: hidden
+}
+
+.pdp-zoom-img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    transition: transform .12s ease;
+    border-radius: 4px;
+    cursor: zoom-in
+}
+
+.pdp-zoom-img.zoomed {
+    cursor: move
+}
+
+.pdp-zoom-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    background: #fff;
+    border-radius: 50%;
+    border: none;
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .2)
+}

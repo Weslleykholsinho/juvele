@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<!-- ============================
+		 METADADOS E FONTES
+		 ============================ -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>JUVELE - Moda Feminina</title>
+	<link rel="shortcut icon" href="assets/images/site-icon/fav.ico" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+		rel="stylesheet">
+
+
+
+	<script>
+		// Aplica Montserrat na logo assim que a fonte estiver carregada
+		if (document.fonts) {
+			document.fonts.ready.then(function() {
+				var logo = document.querySelector('.logo');
+				if (logo) logo.style.fontFamily = 'Montserrat, sans-serif';
+			});
+		}
+	</script>
+
+	<!-- ============================
+		 ESTILOS PRINCIPAIS
+		 ============================ -->
+	<link rel="stylesheet" href="./assets/styles/base-fundamental.css">
+	<link rel="stylesheet" href="./assets/styles/footer(global).css" />
+	<link rel="stylesheet" href="./pdp.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity=""
+		crossorigin="anonymous">
+
+	<!-- ============================
+		 ESTILO INLINE (AJUSTES RÁPIDOS)
+		 ============================ -->
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: sans-serif;
+		}
+
+		html,
+		body {
+			height: 100%;
+			width: 100%;
+			background: #faf9f6;
+			font-family: sans-serif;
+		}
+
+		.search-bar--hidden {
+			display: none !important;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- ============================
+		 HEADER E NAVEGAÇÃO
+		 ============================ -->
+	<header>
+		<!-- nav HTML removido daqui; será injetado por nav(globalcode).js -->
+	</header>
+	<script src="./assets/javascript/nav(globalcode).js"></script>
+
+	<!-- ============================
+		 BARRA DE PESQUISA
+		 ============================ -->
+	<div class="search-icon" aria-hidden="true">
+		<!-- mantenha seu ícone atual aqui (ex.: <i class="fa fa-search"></i>) -->
+	</div>
+	<form id="siteSearch" class="search-bar search-bar--hidden" role="search" aria-label="Pesquisar no site"
+		onsubmit="return false;">
+		<input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
+		<button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
+		<div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
+	</form>
+
+
+	<!-- ============================
+		 SCRIPTS PRINCIPAIS (CARREGAMENTO OTIMIZADO)
+		 ============================ -->
+	<script src="./assets/javascript/pr-def.js"></script>
+	<script src="./assets/javascript/nav.js"></script>
+
+	<script>
+		// Remover ocultação da barra de pesquisa após o carregamento dos estilos
+		window.addEventListener('load', function() {
+			document.getElementById('siteSearch').classList.remove('search-bar--hidden');
+		});
+
+		function toggleMenu() {
+			const nav = document.querySelector('.nav');
+			if (nav) {
+				nav.classList.toggle('nav--open');
+			}
+		}
+	</script>
+
+	<!-- ============================
+	     PRODUTO (PDP) - CONTEÚDO PRINCIPAL
+	     ============================ -->
+	<main class="pdp-container">
+
+		<section class="pdp-grid">
+			<div class="pdp-gallery">
+				<div class="pdp-image-card">
+					<img id="pdpMainImage" data-large="<?= htmlspecialchars($produto['imagem']) ?>" src="./assets/images/dev/cp000x02.png" alt="<?= htmlspecialchars($produto['nome']) ?>">
+					<button class="pdp-zoom" aria-label="Ampliar"><i class="fa fa-search-plus"></i></button>
+				</div>
+			</div>
+
+			<aside class="pdp-info">
+				<h1 class="pdp-title">Vestido floral primavera</h1>
+				<p class="pdp-description"><?= htmlspecialchars($produto['descricao'] ?? '') ?></p>
+
+				<div class="pdp-price-row">
+					<div class="pdp-price">R$199,99</div>
+					<div class="pdp-finance">6 x de <strong>R$33,33</strong> sem juros</div>
+				</div>
+
+				<div class="pdp-payments">
+					<i class="fa-brands fa-cc-visa"></i>
+					<i class="fa-brands fa-cc-mastercard"></i>
+					<i class="fa-solid fa-plus"></i>
+					<a class="pay-link" href="#">VER MEIOS DE PAGAMENTO</a>
+				</div>
+
+				<div class="pdp-attributes">
+					<div class="attr">
+						<label>COR:</label>
+						<div class="value">AZUL</div>
+					</div>
+					<div class="attr">
+						<label>TAMANHO:</label>
+						<div class="value">P</div>
+					</div>
+				</div>
+
+				<div class="pdp-qty">
+					<label>QUANTIDADE</label>
+					<input type="number" min="1" value="1" id="qtyInput">
+				</div>
+
+				<button class="btn-buy">COMPRAR</button>
+
+				<div class="shipping">
+					<h4><i class="fa-solid fa-truck"></i> Meios de envio</h4>
+					<div class="cep-row">
+						<input type="text" id="cep" placeholder="Seu CEP">
+						<button id="calcCep">CALCULAR</button>
+					</div>
+					<a class="small-link" href="#">Não sei meu CEP</a>
+				</div>
+
+				<div class="store-card">
+					<h5>Nossa loja</h5>
+					<p class="store-address">Loja Campo Grande Avenida Getúlio Vargas 98 Campo Grande 29146-070 Cariacica - Espirito Santo Atendimento Segunda á Sexta 9:00 ás 18:00 Sábado 09:00 as 14:00</p>
+					<span class="store-free">Grátis</span>
+				</div>
+			</aside>
+		</section>
+
+		<!-- botão WhatsApp flutuante -->
+		<a class="whatsapp-float" href="https://wa.me/5511999999999" target="_blank" aria-label="WhatsApp">
+			<i class="fa-brands fa-whatsapp"></i>
+		</a>
+	</main>
+	</main>
+
+	<script src="./assets/javascript/pdp-zoom.js"></script>
+</body>
+
+</html>
